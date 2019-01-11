@@ -1,0 +1,8 @@
+{
+    "watch": [
+        "src",
+        ".env",
+        "package.json",
+        "ormconfig.js"
+    ]
+}

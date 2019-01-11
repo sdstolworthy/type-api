@@ -1,0 +1,9 @@
+type Query {
+    photos: [Photo]
+    photo(id: Int): Photo
+}
+
+type Mutation {
+    photoSave(id: Int, filename: String, userId: Int): Photo
+    photoDelete(id: Int): Boolean
+}
