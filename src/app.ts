@@ -34,6 +34,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(passport.initialize())
 
 // error handler
+// don't use in production
 if (app.get('env') === 'development') {
   app.use(errorHandler())
 }
