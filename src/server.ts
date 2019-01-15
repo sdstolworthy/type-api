@@ -1,16 +1,8 @@
 /* tslint:disable no-console */
 import 'reflect-metadata'
 
-import * as errorHandler from 'errorhandler'
 import app from './app'
 import * as serverHandlers from './config/serverHandlers'
-
-/**
- * Error Handler. Provides full stack - remove for production
- */
-if (app.get('env') === 'development') {
-  app.use(errorHandler())
-}
 
 /**
  * Start Express server.
