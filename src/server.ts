@@ -1,16 +1,10 @@
-/* tslint:disable no-console */
 import 'reflect-metadata'
 
-import app from './app'
-import * as serverHandlers from './config/serverHandlers'
+import { IEnv, run } from './app'
+import Cron from './config/cron'
 
-/**
- * Start Express server.
- */
-const server = app.listen(app.get('port'))
+// cron
+Cron.init()
 
-// server handlers
-server.on('error', (error: Error) => serverHandlers.onError(error, app.get('port')))
-server.on('listening', serverHandlers.onListening.bind(server))
-
-export default server
+// express
+run(process.env as unknown as IEnv)
