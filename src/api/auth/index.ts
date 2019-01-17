@@ -36,7 +36,7 @@ router.post('/login',
 )
 
 /**
- * /auth/register
+ * POST /auth/register
  * Create a new user with:
  *  email: req.body.email
  *  password: req.body.password
@@ -60,7 +60,7 @@ router.post('/register',
 )
 
 /**
- * /auth/refresh
+ * POST /auth/refresh
  * Return a refreshed, valid, signed JWT.
  * https://stackoverflow.com/a/26834685
  */
@@ -153,6 +153,7 @@ router.get('/reset/:token', (req: Request, res: Response) => {
 
 /**
  * POST /auth/reset/:token
+ * Flow to reset a user's password given a token.
  */
 router.post('/reset/:token',
   requiredFields(['password']),
