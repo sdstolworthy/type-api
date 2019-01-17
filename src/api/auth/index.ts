@@ -164,12 +164,12 @@ router.post('/reset/:token',
     .getOne()
     .then((user) => {
       if (!user) {
-        res.send("Either that user doesn't exist or that token is invalid.")
+        return res.send("Either that user doesn't exist or that token is invalid.")
       }
 
       user.password = hashPassword(req.body.password)
-      user.resetPasswordToken = undefined
-      user.resetPasswordExpires = undefined
+      user.resetPasswordToken = null
+      user.resetPasswordExpires = null
 
       user.save().then((savedUser) => {
         const data = {
