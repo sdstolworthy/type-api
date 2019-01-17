@@ -1,6 +1,8 @@
 module.exports = {
-  type: 'sqljs',
-  location: './db.sql',
+  // type: 'sqljs',
+  // location: './db.sql',
+  type: 'postgres',
+  url: process.env.POSTGRES_URL,
   autoSave: true,
   synchronize: true,
   logging: true,

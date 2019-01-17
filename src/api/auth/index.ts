@@ -137,7 +137,7 @@ router.get('/reset/:token', (req: Request, res: Response) => {
   // res.send('todo: token reset')
   User.createQueryBuilder()
   .where('user.resetPasswordToken = :token', { token: req.params.token })
-  .andWhere('user.resetPasswordExpires > :now', { now: Date.now() })
+  .andWhere('user.resetPasswordExpires > :now', { now: new Date() })
   .getOne()
   .then((user) => {
     if (!user) {
@@ -160,7 +160,7 @@ router.post('/reset/:token',
     User.createQueryBuilder('user')
     .addSelect('user.password')
     .where('user.resetPasswordToken = :token', { token: req.params.token })
-    .andWhere('user.resetPasswordExpires > :now', { now: Date.now() })
+    .andWhere('user.resetPasswordExpires > :now', { now: new Date() })
     .getOne()
     .then((user) => {
       if (!user) {

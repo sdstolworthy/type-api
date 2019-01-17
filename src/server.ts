@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-
 import { IEnv, run } from './app'
 import Cron from './config/cron'
 

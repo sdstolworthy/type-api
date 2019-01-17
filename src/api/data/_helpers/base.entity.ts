@@ -4,14 +4,21 @@ export abstract class AltamirEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id: string
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    type: 'timestamp with time zone',
+  })
   public createdAt: Date
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    type: 'timestamp with time zone',
+  })
   public updatedAt: Date
 
   // soft delete
   // https://github.com/typeorm/typeorm/issues/534
-  @Column({ nullable: true })
+  @Column({
+    type: 'timestamp with time zone',
+    nullable: true,
+  })
   public deletedAt: Date
 }

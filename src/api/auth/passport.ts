@@ -40,13 +40,16 @@ passport.use(new JWT.Strategy({
     .where('user.id = :id', { id: data.id })
     .andWhere(new Brackets((qb) => {
       // prevent user auth if lastPasswordReset is after the jwt's iat value
-      qb.where('user.lastPasswordReset <= :iat', { iat: data.iat })
+      qb.where('user.lastPasswordReset < :iat', { iat: new Date(data.iat * 1000) })
       .orWhere('user.lastPasswordReset IS NULL')
     }))
     .getOne()
     .then((user) => {
-      logger.info(user)
       if (!user) { return done(null, false) }
+
+      logger.debug(`user.lastPasswordReset: ${user.lastPasswordReset}`)
+      logger.debug(`data.iat: ${new Date(data.iat * 1000)}`)
+
       return done(null, user)
     })
     .catch((err) => {

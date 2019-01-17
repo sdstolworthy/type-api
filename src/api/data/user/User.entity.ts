@@ -18,12 +18,14 @@ export class User extends AltamirEntity {
   public resetPasswordToken: string
 
   @Column({
+    type: 'timestamp with time zone',
     nullable: true,
     select: false,
   })
   public resetPasswordExpires: Date
 
   @Column({
+    type: 'timestamp with time zone',
     nullable: true,
     select: false,
   })
