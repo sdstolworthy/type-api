@@ -5,19 +5,19 @@ export abstract class AltamirEntity extends BaseEntity {
   public id: string
 
   @CreateDateColumn({
-    type: 'timestamp with time zone',
+    type: 'timestamptz',
   })
   public createdAt: Date
 
   @UpdateDateColumn({
-    type: 'timestamp with time zone',
+    type: 'timestamptz',
   })
   public updatedAt: Date
 
   // soft delete
   // https://github.com/typeorm/typeorm/issues/534
   @Column({
-    type: 'timestamp with time zone',
+    type: 'timestamptz',
     nullable: true,
   })
   public deletedAt: Date
