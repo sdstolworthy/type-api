@@ -23,6 +23,12 @@ export class User extends AltamirEntity {
   })
   public resetPasswordExpires: Date
 
+  @Column({
+    nullable: true,
+    select: false,
+  })
+  public lastPasswordReset: Date
+
   @OneToMany(() => Photo, (photo) => photo.user)
   public photos: Photo[]
 }

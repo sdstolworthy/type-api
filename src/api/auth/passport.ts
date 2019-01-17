@@ -1,6 +1,7 @@
 import * as passport from 'passport'
 import * as JWT from 'passport-jwt'
 import * as Local from 'passport-local'
+import { Brackets } from 'typeorm'
 import { logger } from '../../config/logger'
 import { User } from '../data/user/User.entity'
 import { validatePassword } from './helpers'
@@ -34,8 +35,17 @@ passport.use(new JWT.Strategy({
   secretOrKey: process.env.SECRET_KEY,
 }, async (data, done) => {
   try {
-    User.findOneOrFail({ id: data.id })
+    User.createQueryBuilder('user')
+    .addSelect('user.lastPasswordReset')
+    .where('user.id = :id', { id: data.id })
+    .andWhere(new Brackets((qb) => {
+      // prevent user auth if lastPasswordReset is after the jwt's iat value
+      qb.where('user.lastPasswordReset <= :iat', { iat: data.iat })
+      .orWhere('user.lastPasswordReset IS NULL')
+    }))
+    .getOne()
     .then((user) => {
+      logger.info(user)
       if (!user) { return done(null, false) }
       return done(null, user)
     })

@@ -170,6 +170,7 @@ router.post('/reset/:token',
       user.password = hashPassword(req.body.password)
       user.resetPasswordToken = null
       user.resetPasswordExpires = null
+      user.lastPasswordReset = new Date()
 
       user.save().then((savedUser) => {
         const data = {
