@@ -6,23 +6,23 @@ import {Photo} from '../photo/Photo.entity'
 export class User extends AltamirEntity {
   @Index({ unique: true })
   @Column()
-  email: string
+  public email: string
 
   @Column({ select: false })
-  password: string
+  public password: string
 
   @Column({
     nullable: true,
     select: false,
   })
-  resetPasswordToken: string
+  public resetPasswordToken: string
 
   @Column({
     nullable: true,
     select: false,
   })
-  resetPasswordExpires: Date
+  public resetPasswordExpires: Date
 
   @OneToMany(() => Photo, (photo) => photo.user)
-  photos: Photo[]
+  public photos: Photo[]
 }

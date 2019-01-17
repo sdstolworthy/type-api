@@ -2,16 +2,16 @@ import { BaseEntity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDat
 
 export abstract class AltamirEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number
+  public id: number
 
   @CreateDateColumn()
-  createdAt: Date
+  public createdAt: Date
 
   @UpdateDateColumn()
-  updatedAt: Date
+  public updatedAt: Date
 
   // soft delete
   // https://github.com/typeorm/typeorm/issues/534
   @Column({ nullable: true })
-  deletedAt: Date
+  public deletedAt: Date
 }

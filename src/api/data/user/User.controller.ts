@@ -11,7 +11,7 @@ export class UserController {
     }
 
     @Query()
-    users(args: IUsersArgs): Promise<User[]> {
+    public users(args: IUsersArgs): Promise<User[]> {
 
         const findOptions: FindManyOptions = {}
         if (args.limit) {
@@ -25,12 +25,12 @@ export class UserController {
     }
 
     @Query()
-    user({ id }: { id: number }): Promise<User> {
+    public user({ id }: { id: number }): Promise<User> {
         return this.entityManager.findOne(User, id)
     }
 
     @Mutation()
-    async userSave(args: IUserSaveArgs): Promise<User> {
+    public async userSave(args: IUserSaveArgs): Promise<User> {
         const user = args.id ? await this.entityManager.findOne(User, args.id) : new User()
         user.email = args.email
         user.password = args.password
@@ -38,7 +38,7 @@ export class UserController {
     }
 
     @Mutation()
-    async userDelete({ id }: { id: number }): Promise<boolean> {
+    public async userDelete({ id }: { id: number }): Promise<boolean> {
         const user = await this.entityManager.findOne(User, id)
         await this.entityManager.remove(user)
         return true

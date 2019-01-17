@@ -1,19 +1,17 @@
-import {Entity, PrimaryGeneratedColumn, ManyToOne, Column} from "typeorm";
-import {User} from "../user/User.entity";
+import { Column, Entity, ManyToOne } from 'typeorm'
+import { AltamirEntity } from '../_helpers/base.entity'
+import { User } from '../user/User.entity'
 
 @Entity()
-export class Photo {
-
-    @PrimaryGeneratedColumn()
-    id: number;
+export class Photo extends AltamirEntity {
 
     @Column()
-    filename: string;
+    public filename: string
 
     @Column()
-    userId: number;
+    public userId: number // must be declared before the ManyToOne field
 
-    @ManyToOne(() => User, user => user.photos)
-    user: User;
+    @ManyToOne(() => User, (user) => user.photos)
+    public user: User
 
 }
