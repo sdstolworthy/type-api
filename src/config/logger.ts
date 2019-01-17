@@ -1,4 +1,3 @@
-import * as path from 'path'
 import * as winston from 'winston'
 
 export const logger = winston.createLogger({
@@ -30,7 +29,7 @@ export const logger = winston.createLogger({
 
 // capture streamed info
 class Stream {
-  write(text: string) {
+  public write(text: string) {
     logger.info(text)
   }
 }
