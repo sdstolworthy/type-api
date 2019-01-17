@@ -66,7 +66,7 @@ router.post('/register',
  */
 router.post('/refresh', isAuthenticated, (req: any, res: Response) => {
   const token = jwt.sign(
-    { id: req.user._id },
+    { id: req.user.id },
     process.env.SECRET_KEY,
     { expiresIn: tokenExpirationPeriod },
   )
