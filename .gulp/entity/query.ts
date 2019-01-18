@@ -1,4 +1,6 @@
 import { gql } from 'apollo-server-express'
+import { getRepository } from 'typeorm'
+import { <%= entityName[0].toUpperCase() + entityName.slice(1) %> } from './<%= entityName %>.entity'
 
 const Query = gql`
  extend type Query {
