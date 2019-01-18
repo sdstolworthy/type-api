@@ -2,6 +2,7 @@ import { gql } from 'apollo-server-express'
 
 const Query = gql`
  extend type Query {
+  <%= entityName %>(id: ID!): <%= entityName[0].toUpperCase() + entityName.slice(1) %>
   <%= entityName %>s: [<%= entityName[0].toUpperCase() + entityName.slice(1) %>]
  }
 `

@@ -1,9 +1,10 @@
 import { gql } from 'apollo-server-express'
 
 const Query = gql`
- extend type Query {
-  posts: [Post]
- }
+  extend type Query {
+    post(id: ID!): Post
+    posts: [Post]
+  }
 `
 
 export const queryTypes = () => [ Query ]
