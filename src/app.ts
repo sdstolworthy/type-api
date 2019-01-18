@@ -10,11 +10,13 @@ import * as express from 'express'
 import * as helmet from 'helmet'
 import * as morgan from 'morgan'
 import * as passport from 'passport'
+import { Connection, createConnection, getConnectionOptions } from 'typeorm'
 import authRouter from './api/auth'
 import { StartGraphQL } from './api/data'
 import { HttpError } from './config/errorHandler'
 import httpErrorModule from './config/errorHandler/sendHttpError'
 import { stream } from './config/logger'
+import { TypeORMLogger } from './config/logger/typeorm'
 
 export const port = parseInt(process.env.PORT, 10) || 3100
 
@@ -28,6 +30,11 @@ export async function run({
   if (typeof PORT === 'string') {
     PORT = parseInt(PORT, 10)
   }
+
+  // database
+  let connectionOptions = await getConnectionOptions()
+  connectionOptions = {...connectionOptions, logger: new TypeORMLogger()}
+  const connection: Connection = await createConnection(connectionOptions)
 
   const app = express()
 

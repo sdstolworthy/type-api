@@ -5,7 +5,7 @@ module.exports = {
   url: process.env.POSTGRES_URL,
   autoSave: true,
   synchronize: true,
-  logging: true,
+  logging: 'all',
   entities: [
     'src/**/*.entity.ts',
   ],

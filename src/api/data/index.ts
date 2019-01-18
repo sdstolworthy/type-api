@@ -1,19 +1,16 @@
+import { ApolloServer } from 'apollo-server-express'
 import { Application } from 'express'
-import { bootstrap } from 'vesper'
 import { port } from '../../app'
 import { logger } from '../../config/logger'
+import { resolvers, typeDefs } from './schema'
 
 export async function StartGraphQL(app: Application) {
-  bootstrap({
-      port,
-      expressApp: app,
-      cors: true,
-      controllers: [__dirname + '/**/*.controller.ts'],
-      resolvers: [__dirname + '/**/*.resolver.ts'],
-      schemas: [__dirname + '/**/*.gql'],
-  }).then((vesper) => {
-      logger.info(`API listening on port ${port} 🚀`)
-  }).catch((error) => {
-      logger.error(error.stack ? error.stack : error)
+
+  const server = new ApolloServer({ typeDefs, resolvers })
+
+  server.applyMiddleware({ app }) // app is from an existing express app
+
+  app.listen({ port }, () => {
+    logger.info(`Server ready at http://127.0.0.1:${port}${server.graphqlPath} 🚀`)
   })
 }

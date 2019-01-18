@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt'
-import { User } from '../data/user/User.entity'
+import { User } from '../data/user/user.entity'
 
 const SALT_ROUNDS = 10
 

@@ -3,7 +3,7 @@ import * as JWT from 'passport-jwt'
 import * as Local from 'passport-local'
 import { Brackets } from 'typeorm'
 import { logger } from '../../config/logger'
-import { User } from '../data/user/User.entity'
+import { User } from '../data/user/user.entity'
 import { validatePassword } from './helpers'
 
 const tokenExpirationPeriod = '7d'

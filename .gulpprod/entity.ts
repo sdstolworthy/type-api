@@ -2,7 +2,7 @@ import { Column, Entity, Index, OneToMany } from 'typeorm'
 import { AltamirEntity } from '../_helpers/base.entity'
 
 @Entity()
-export class User extends AltamirEntity {
+export class yolo extends AltamirEntity {
   @Index({ unique: true })
   @Column()
   public email: string
