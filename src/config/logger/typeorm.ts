@@ -24,22 +24,22 @@ export class TypeORMLogger implements Logger {
   }
 
   public logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): any {
-    logger.debug(query, ...(parameters || []))
+    logger.debug('Executing query: ', query, ...(parameters || []))
   }
 
   public logMigration(message: string, queryRunner?: QueryRunner): any {
-    logger.debug(message)
+    logger.debug('Executing migration: ', message)
   }
 
   public logQueryError(error: string, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
-    logger.error(error, query, ...(parameters || []))
+    logger.error('Query error: ', error, query, ...(parameters || []))
   }
 
   public logQuerySlow(time: number, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
-    logger.warn(time.toString(), query, ...(parameters || []))
+    logger.warn('Slow query: ', time.toString(), query, ...(parameters || []))
   }
 
   public logSchemaBuild(message: string, queryRunner?: QueryRunner): any {
-    logger.debug(message)
+    logger.debug('Schema build: ', message)
   }
 }
