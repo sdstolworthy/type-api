@@ -11,9 +11,15 @@ export async function StartGraphQL(app: Application) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => {
-      // logger.debug('auth:')
-      // logger.debug(util.inspect(req.headers.authorization, {showHidden: false, depth: null}))
+    context: ({ req, res }) => {
+      let token = req.headers.authorization || ''
+      token = getDecodedJwt(token)
+
+      logger.debug(`ApolloServer context token - ${util.inspect(token, {showHidden: false, depth: null})}`)
+
+      return {
+        token,
+      }
     },
   })
 

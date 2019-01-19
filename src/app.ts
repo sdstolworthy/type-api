@@ -76,9 +76,6 @@ export async function run({
 
   app.use(morgan('tiny', { stream }))
 
-  // attach decoded jwt to res.locals.decodedToken
-  app.use(getDecodedJwt())
-
   // routes
   app.get('/', (req, res) => {
     res.send('Up and running.')

@@ -1,33 +1,32 @@
-import { NextFunction, Request, Response } from 'express'
 import * as jwt from 'jsonwebtoken'
+import * as util from 'util'
+import { logger } from '../../config/logger'
 
 const AUTH_HEADER = 'authorization'
 
 /**
- * Adds a decoded JWT from the Authorization Bearer header to the res.locals
- * object if the JWT exists. Otherwise, just next().
- * Decoded token will be accessible at res.locals.decodedToken
+ * Returns a decoded JWT from an auth HTTP bearer token.
  * https://www.thepolyglotdeveloper.com/2018/07/protect-graphql-properties-jwt-nodejs-application/
  * @function
+ * @param {String} bearerToken - The authorization bearer token in the format "Bearer <token>".
  */
-const getDecodedJwt = () => (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers[AUTH_HEADER]
-  if (authHeader) {
-    const bearerToken = authHeader.split(' ')
-    if (bearerToken.length === 2 && bearerToken[0].toLowerCase() === 'bearer') {
-      jwt.verify(bearerToken[1], process.env.SECRET_KEY, (err, decodedToken) => {
-        if (err) {
-          return res.status(401).send('Invalid authorization token')
-        }
-        res.locals.decodedToken = decodedToken
-        next()
-      })
-    } else {
-      next()
-    }
+const getDecodedJwt = (bearerToken: string) => {
+  let token = {}
+  const bearerTokenArray = bearerToken.split(' ')
+  if (bearerTokenArray.length === 2 && bearerTokenArray[0].toLowerCase() === 'bearer') {
+    jwt.verify(bearerTokenArray[1], process.env.SECRET_KEY, (err, decodedToken) => {
+      if (err) {
+        logger.debug('getDecodedJwt() - Invalid JWT')
+        return
+      }
+
+      logger.debug(`getDecodedJwt() - ${util.inspect(decodedToken, {showHidden: false, depth: null})}`)
+      token = decodedToken
+    })
   } else {
-    next()
+    logger.debug('getDecodedJwt() - Authorization bearer token was not formatted properly or did not exist.')
   }
+  return token
 }
 
 export default getDecodedJwt
