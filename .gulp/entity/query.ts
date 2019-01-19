@@ -3,17 +3,17 @@ import { getRepository } from 'typeorm'
 import { <%= entityName[0].toUpperCase() + entityName.slice(1) %> } from './<%= entityName %>.entity'
 
 const Query = gql`
- extend type Query {
-  <%= entityName %>(id: ID!): <%= entityName[0].toUpperCase() + entityName.slice(1) %>
-  <%= entityName %>s: [<%= entityName[0].toUpperCase() + entityName.slice(1) %>]
- }
+  extend type Query {
+    <%= entityName %>(id: ID!): <%= entityName[0].toUpperCase() + entityName.slice(1) %>
+    <%= entityName %>s: [<%= entityName[0].toUpperCase() + entityName.slice(1) %>]
+  }
 `
 
 export const queryTypes = () => [ Query ]
 
 export const queryResolvers = {
  Query: {
-  <%= entityName %>s: () => ([
+    <%= entityName %>s: () => ([
      {
        title: 'This is the first one',
        body: "Cause if we're talking body",

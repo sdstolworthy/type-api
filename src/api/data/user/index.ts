@@ -4,6 +4,6 @@ import { queryResolvers, queryTypes } from './user.query'
 import { typeResolvers, types } from './user.type'
 
 export default {
- types: () => [types, queryTypes, inputTypes, mutationTypes],
- resolvers: Object.assign(queryResolvers, mutationResolvers, typeResolvers),
+  types: () => [types, queryTypes, inputTypes, mutationTypes],
+  resolvers: Object.assign(queryResolvers, mutationResolvers, typeResolvers),
 }
