@@ -12,16 +12,16 @@ const Query = gql`
 export const queryTypes = () => [ Query ]
 
 export const queryResolvers = {
- Query: {
+  Query: {
     <%= entityName %>s: () => ([
-     {
-       title: 'This is the first one',
-       body: "Cause if we're talking body",
-     },
-     {
-       title: 'This is the second one',
-       body: "You've got a perfect one so put it on me",
-     },
-   ]),
- },
+      {
+        title: 'This is the first one',
+        body: "Cause if we're talking body",
+      },
+      {
+        title: 'This is the second one',
+        body: "You've got a perfect one so put it on me",
+      },
+    ]),
+  },
 }
