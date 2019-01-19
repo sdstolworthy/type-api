@@ -6,6 +6,6 @@ export class <%= entityName[0].toUpperCase() + entityName.slice(1) %> extends Al
   @Column()
   public title: string
 
-  @Column()
+  @Column({ nullable: true })
   public body: string
 }
