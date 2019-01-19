@@ -9,6 +9,9 @@ const AUTH_HEADER = 'authorization'
  * https://www.thepolyglotdeveloper.com/2018/07/protect-graphql-properties-jwt-nodejs-application/
  * @function
  * @param {String} bearerToken - The authorization bearer token in the format "Bearer <token>".
+ *
+ * TODO: should this function also check for existence of user and validity of
+ * JWT in comparison with user.lastPasswordReset?
  */
 const getDecodedJwt = (bearerToken: string) => {
   let token = {}
