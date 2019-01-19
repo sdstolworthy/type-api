@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express'
 
 const User = gql`
   type User {
-    id: String!
+    id: ID!
     email: String!
   }
 `
