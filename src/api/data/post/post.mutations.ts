@@ -13,7 +13,7 @@ export const mutationTypes = () => [ Mutation ]
 export const mutationResolvers = {
   Mutation: {
     async createPost(obj, { title }, context, info) {
-      return await Post.create({ title })
+      return await Post.create({ title }).save()
     },
   },
 }

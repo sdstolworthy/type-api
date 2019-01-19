@@ -13,7 +13,7 @@ export const mutationTypes = () => [ Mutation ]
 export const mutationResolvers = {
   Mutation: {
     async create<%= entityName[0].toUpperCase() + entityName.slice(1) %>(obj, { title }, context, info) {
-      return await <%= entityName[0].toUpperCase() + entityName.slice(1) %>.create({ title })
+      return await <%= entityName[0].toUpperCase() + entityName.slice(1) %>.create({ title }).save()
     },
   },
 }
