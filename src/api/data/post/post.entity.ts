@@ -6,6 +6,6 @@ export class Post extends AltamirEntity {
   @Column()
   public title: string
 
-  @Column()
+  @Column({ nullable: true })
   public body: string
 }

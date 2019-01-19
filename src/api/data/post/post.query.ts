@@ -1,4 +1,5 @@
 import { gql } from 'apollo-server-express'
+import { Post } from './post.entity'
 
 const Query = gql`
   extend type Query {
@@ -11,15 +12,12 @@ export const queryTypes = () => [ Query ]
 
 export const queryResolvers = {
   Query: {
-    posts: () => ([
-      {
-        title: 'This is the first one',
-        body: "Cause if we're talking body",
-      },
-      {
-        title: 'This is the second one',
-        body: "You've got a perfect one so put it on me",
-      },
-    ]),
+    async post(obj, { id }, context, info) {
+      return await Post.findOne({ id })
+    },
+
+    async posts() {
+      return await Post.find()
+    },
   },
 }

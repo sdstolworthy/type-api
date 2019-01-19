@@ -13,6 +13,7 @@ import * as passport from 'passport'
 import { Connection, createConnection, getConnectionOptions } from 'typeorm'
 import authRouter from './api/auth'
 import { StartGraphQL } from './api/data'
+import getDecodedJwt from './api/middleware/getDecodedJwt'
 import { HttpError } from './config/errorHandler'
 import httpErrorModule from './config/errorHandler/sendHttpError'
 import { stream } from './config/logger'
@@ -74,6 +75,9 @@ export async function run({
   })
 
   app.use(morgan('tiny', { stream }))
+
+  // attach decoded jwt to res.locals.decodedToken
+  app.use(getDecodedJwt())
 
   // routes
   app.get('/', (req, res) => {

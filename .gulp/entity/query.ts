@@ -1,5 +1,4 @@
 import { gql } from 'apollo-server-express'
-import { getRepository } from 'typeorm'
 import { <%= entityName[0].toUpperCase() + entityName.slice(1) %> } from './<%= entityName %>.entity'
 
 const Query = gql`
@@ -13,15 +12,12 @@ export const queryTypes = () => [ Query ]
 
 export const queryResolvers = {
   Query: {
-    <%= entityName %>s: () => ([
-      {
-        title: 'This is the first one',
-        body: "Cause if we're talking body",
-      },
-      {
-        title: 'This is the second one',
-        body: "You've got a perfect one so put it on me",
-      },
-    ]),
+    async <%= entityName %>(obj, { id }, context, info) {
+      return await <%= entityName[0].toUpperCase() + entityName.slice(1) %>.findOne({ id })
+    },
+
+    async <%= entityName %>s() {
+      return await <%= entityName[0].toUpperCase() + entityName.slice(1) %>.find()
+    },
   },
 }
