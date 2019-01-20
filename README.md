@@ -15,8 +15,6 @@ Welcome to your new API!
 yarn dev
 ```
 
-GraphQL playground at `GET /playground`.
-
 #### Adding a new entity
 
 Run the following from the root of the api:
