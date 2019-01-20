@@ -11,6 +11,7 @@ import * as helmet from 'helmet'
 import * as morgan from 'morgan'
 import * as passport from 'passport'
 import { Connection, createConnection, getConnectionOptions } from 'typeorm'
+import * as util from 'util'
 import authRouter from './api/auth'
 import { StartGraphQL } from './api/data'
 import { HttpError } from './config/errorHandler'
@@ -29,6 +30,9 @@ export async function run({
   if (typeof PORT === 'string') {
     PORT = parseInt(PORT, 10)
   }
+
+  // silly log the settings for a sanity check
+  logger.silly(`settings: \n${util.inspect(settings, false, null, true)}`)
 
   // database
   let connectionOptions = await getConnectionOptions()
