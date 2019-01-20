@@ -3,6 +3,7 @@ import * as crypto from 'crypto'
 import { NextFunction, Request, Response, Router } from 'express'
 import * as jwt from 'jsonwebtoken'
 import * as passport from 'passport'
+import validator from 'validator'
 import { logger } from '../../config/logger'
 import sendMail from '../../config/mailer'
 import { User } from '../data/user/user.entity'
@@ -22,6 +23,20 @@ const router = Router()
 router.post('/register',
   requiredFields(['email', 'password']),
   (req: Request, res: Response, next: NextFunction) => {
+    if (!validator.isEmail(req.body.email)) {
+      // try to keep the graphql error schema
+      // TODO: create better errors like this in a module
+      res.json({
+        error: {
+          errors: [
+            {
+              message: 'req.body.email is not valid',
+            },
+          ],
+        },
+      })
+    }
+
     User.create({
       email: req.body.email,
       password: hashPassword(req.body.password),
