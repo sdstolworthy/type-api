@@ -12,6 +12,7 @@ export default class Cron {
    * @memberof Cron
    */
   public static init(): void {
+    logger.info('Cron initialized')
     Cron.testCron()
   }
 
