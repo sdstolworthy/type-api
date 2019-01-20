@@ -9,7 +9,8 @@
     "start": "npm run serve",
     "build": "tsc",
     "dev": "nodemon -r ./src/server.ts --exec ts-node -e ts --trace-sync-io",
-    "serve": "npm run build && node dist/server.js"
+    "serve": "npm run build && node dist/server.js",
+    "entity": "gulp entity --name"
   },
   "dependencies": {
     "apollo-server-express": "^2.3.1",
