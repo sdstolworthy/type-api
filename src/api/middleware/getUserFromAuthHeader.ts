@@ -27,7 +27,9 @@ const getUserFromAuthHeader = async (bearerToken: string) => {
     .select('user.id') // only select necessary fields
     .where('user.id = :id', { id: decodedToken.id })
     .andWhere(new Brackets((qb) => {
-      // prevent user auth if lastPasswordReset is after the jwt's iat value
+      // Prevent user auth if lastPasswordReset is after the jwt's iat value.
+      // This allows password resets to happen without keeping track of JWTs,
+      // which is the whole point of JWTs.
       qb.where('user.lastPasswordReset < :iat', { iat: new Date(decodedToken.iat * 1000) })
       .orWhere('user.lastPasswordReset IS NULL')
     }))
