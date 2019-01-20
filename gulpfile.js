@@ -3,11 +3,13 @@ const gulp = require('gulp')
 const rename = require('gulp-rename')
 const template = require('gulp-template')
 const minimist = require('minimist')
+const validator = require('validator')
 
 // unnamed args will be stored in args._[]
 const args = minimist(process.argv.slice(2))
 
 gulp.task('entity', () => {
+  args.name = args.name + ''
   const entityName = args.name.toLowerCase()
   const entityPath = './src/api/data'
 
@@ -23,8 +25,7 @@ gulp.task('entity', () => {
   }
 
   // argument --name must be alpha
-  // https://stackoverflow.com/a/6800786/5623385
-  if (entityName.search(/[^A-Za-z\s]/) != -1) {
+  if (!validator.isAlpha(entityName)) {
     console.error('>>  Please use an entity name with only letters.')
     return
   }
