@@ -1,5 +1,5 @@
 import { Column, Entity, Index, OneToMany } from 'typeorm'
-import { AltamirEntity } from '../_helpers/base.entity'
+import { AltamirEntity } from '../_helpers/baseEntity'
 
 @Entity()
 export class User extends AltamirEntity {

@@ -10,9 +10,12 @@ module.exports = {
     'src/**/*.entity.ts',
   ],
   migrations: [
-    'src/migraion/**/*.ts',
+    'src/migrations/**/*.ts',
   ],
   subscribers: [
-    'src/subscriber/**/*.ts',
+    'src/subscribers/**/*.ts',
   ],
+  cli: {
+    migrationsDir: 'src/migrations',
+  },
 }
