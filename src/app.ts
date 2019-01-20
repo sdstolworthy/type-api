@@ -15,7 +15,7 @@ import authRouter from './api/auth'
 import { StartGraphQL } from './api/data'
 import { HttpError } from './config/errorHandler'
 import httpErrorModule from './config/errorHandler/sendHttpError'
-import { stream } from './config/logger'
+import { logger, stream } from './config/logger'
 import { TypeORMLogger } from './config/logger/typeorm'
 
 export const port = parseInt(process.env.PORT, 10) || 3100
@@ -41,6 +41,9 @@ export async function run({
   app.set('env', process.env.NODE_ENV || 'development')
   app.set('port', port)
 
+  logger.silly(`app env: ${app.get('env')}`)
+  logger.silly(`app port: ${app.get('port')}`)
+
   // middleware
   app.use(helmet())
   app.use(compression())
@@ -56,6 +59,8 @@ export async function run({
 
   app.use(httpErrorModule)
   app.use((error: Error, req: express.Request, res: any, next: express.NextFunction) => {
+    logger.error(error)
+
     if (typeof error === 'number') {
       error = new HttpError(error) // next(404)
     }

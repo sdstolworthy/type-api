@@ -26,13 +26,7 @@ router.post('/register',
   (req: Request, res: Response, next: NextFunction) => {
     if (!validator.isEmail(req.body.email)) {
       // TODO: create a more modularized error handler.
-      return res.status(400)
-      .json({
-        error: {
-          name: 'Invalid Email',
-          message: 'The email provided in the body is not a valid email.',
-        },
-      })
+      throw new HttpError(400, 'Invalid Email', 'The email provided in the body is not a valid email.')
     }
 
     User.create({
