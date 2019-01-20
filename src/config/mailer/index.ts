@@ -1,4 +1,5 @@
 import * as mailgun from 'mailgun-js'
+import { logger } from '../logger'
 import settings from '../settings'
 
 const mg = mailgun({
@@ -29,8 +30,11 @@ const send = (
 
   mg.messages().send(data, (err: any, body: any) => {
     if (err) {
+      logger.error(err)
       return done(err)
     }
+
+    logger.debug(body)
     return done(body)
   })
 }
