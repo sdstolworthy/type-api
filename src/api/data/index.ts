@@ -15,7 +15,7 @@ export async function StartGraphQL(app: Application) {
       let user = req.headers.authorization || ''
       user = await getUserFromAuthHeader(user)
 
-      logger.debug(`ApolloServer context user - ${util.inspect(user, {showHidden: false, depth: null})}`)
+      logger.debug(`ApolloServer context.user - ${util.inspect(user, {showHidden: false, depth: null})}`)
 
       return {
         user,
