@@ -4,7 +4,7 @@ const Post = gql`
   type Post {
     id: ID!
     title: String!
-    body: String!
+    body: String
   }
 `
 
