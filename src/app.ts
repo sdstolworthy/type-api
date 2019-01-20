@@ -17,15 +17,14 @@ import { HttpError } from './config/errorHandler'
 import httpErrorModule from './config/errorHandler/sendHttpError'
 import { logger, stream } from './config/logger'
 import { TypeORMLogger } from './config/logger/typeorm'
-
-export const port = parseInt(process.env.PORT, 10) || 3100
+import settings from './config/settings'
 
 export interface IEnv {
   PORT: number | string
 }
 
 export async function run({
-  PORT = port,
+  PORT = settings.port,
 }: IEnv) {
   if (typeof PORT === 'string') {
     PORT = parseInt(PORT, 10)
@@ -38,8 +37,8 @@ export async function run({
 
   const app = express()
 
-  app.set('env', process.env.NODE_ENV || 'development')
-  app.set('port', port)
+  app.set('env', settings.env)
+  app.set('port', settings.port)
 
   logger.silly(`app env: ${app.get('env')}`)
   logger.silly(`app port: ${app.get('port')}`)

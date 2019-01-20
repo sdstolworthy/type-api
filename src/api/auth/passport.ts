@@ -3,6 +3,7 @@ import * as JWT from 'passport-jwt'
 import * as Local from 'passport-local'
 import { Brackets } from 'typeorm'
 import { logger } from '../../config/logger'
+import settings from '../../config/settings'
 import { User } from '../data/user/user.entity'
 import { validatePassword } from './helpers'
 
@@ -32,7 +33,7 @@ passport.use(new Local.Strategy(
 
 passport.use(new JWT.Strategy({
   jwtFromRequest: JWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.SECRET_KEY,
+  secretOrKey: settings.secretKey,
 }, async (data, done) => {
   try {
     User.createQueryBuilder('user')

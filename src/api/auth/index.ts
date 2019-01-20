@@ -7,6 +7,7 @@ import validator from 'validator'
 import { HttpError } from '../../config/errorHandler'
 import { logger } from '../../config/logger'
 import sendMail from '../../config/mailer'
+import settings from '../../config/settings'
 import { User } from '../data/user/user.entity'
 import requiredFields from '../middleware/requiredFields'
 import { hashPassword } from './helpers'
@@ -54,7 +55,7 @@ router.post('/login',
   (req: any, res: Response) => {
     const token = jwt.sign(
       { id: req.user.id },
-      process.env.SECRET_KEY,
+      settings.secretKey,
       { expiresIn: tokenExpirationPeriod },
     )
 
@@ -74,7 +75,7 @@ router.post('/login',
 router.post('/refresh', isAuthenticated, (req: any, res: Response) => {
   const token = jwt.sign(
     { id: req.user.id },
-    process.env.SECRET_KEY,
+    settings.secretKey,
     { expiresIn: tokenExpirationPeriod },
   )
 
@@ -142,7 +143,7 @@ router.post('/forgot', requiredFields(['email']), (req: Request, res: Response, 
  */
 router.get('/reset/:token', (req: Request, res: Response) => {
   // res.send('todo: token reset')
-  User.createQueryBuilder()
+  User.createQueryBuilder('user')
   .where('user.resetPasswordToken = :token', { token: req.params.token })
   .andWhere('user.resetPasswordExpires > :now', { now: new Date() })
   .getOne()

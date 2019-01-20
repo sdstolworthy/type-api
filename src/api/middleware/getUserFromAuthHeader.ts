@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken'
 import { Brackets } from 'typeorm'
 import { logger } from '../../config/logger'
+import settings from '../../config/settings'
 import { User } from '../data/user/user.entity'
 
 /**
@@ -16,7 +17,7 @@ const getUserFromAuthHeader = async (bearerToken: string) => {
     return {}
   }
 
-  return await jwt.verify(bearerTokenArray[1], process.env.SECRET_KEY, async (err, decodedToken) => {
+  return await jwt.verify(bearerTokenArray[1], settings.secretKey, async (err, decodedToken) => {
     if (err) {
       logger.error('getUserFromAuthHeader() jwt.verify()')
       logger.error(err)

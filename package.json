@@ -10,6 +10,7 @@
     "build": "tsc",
     "dev": "nodemon -r ./src/server.ts --exec ts-node -e ts --trace-sync-io",
     "serve": "npm run build && node dist/server.js",
+    "test": "mocha -r ts-node/register ./src/**/*.spec.ts",
     "entity": "gulp entity --name"
   },
   "dependencies": {
@@ -39,15 +40,20 @@
   "devDependencies": {
     "@altamir/standards-tsconfig": "^1.0.3",
     "@altamir/standards-tslint": "^1.0.4",
+    "@types/chai": "^4.1.7",
     "@types/express": "^4.16.0",
+    "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.18",
+    "chai": "^4.2.0",
     "gulp": "^4.0.0",
     "gulp-rename": "^1.4.0",
     "gulp-template": "^5.0.0",
     "minimist": "^1.2.0",
+    "mocha": "^5.2.0",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.9",
     "ts-node": "^7.0.1",
-    "typescript": "^3.2.2"
+    "typescript": "^3.2.2",
+    "walk": "^2.3.14"
   }
 }

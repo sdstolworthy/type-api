@@ -1,7 +1,9 @@
 import { Column, Entity, Index, OneToMany } from 'typeorm'
 import { AltamirEntity } from '../_helpers/baseEntity'
 
-@Entity()
+@Entity({
+  name: 'users',
+})
 export class User extends AltamirEntity {
   @Index({ unique: true })
   @Column()
