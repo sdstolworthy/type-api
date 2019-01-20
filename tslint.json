@@ -1,5 +1,10 @@
 {
     "extends": [
         "@altamir/standards-tslint"
-    ]
+    ],
+    "linterOptions": {
+        "exclude": [
+            ".gulp"
+        ]
+    }
 }
