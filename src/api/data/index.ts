@@ -12,9 +12,9 @@ export async function StartGraphQL(app: Application) {
     typeDefs,
     resolvers,
     context: async ({ req, res }) => {
+      // add currently auth'd user to context
       let user = req.headers.authorization || ''
       user = await getUserFromAuthHeader(user)
-
       logger.debug(`ApolloServer context.user - ${util.inspect(user, {showHidden: false, depth: null})}`)
 
       return {
