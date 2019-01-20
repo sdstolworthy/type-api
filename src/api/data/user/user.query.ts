@@ -1,5 +1,4 @@
 import { gql } from 'apollo-server-express'
-import * as util from 'util'
 import { logger } from '../../../config/logger'
 import { User } from './user.entity'
 

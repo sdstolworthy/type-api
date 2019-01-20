@@ -1,4 +1,5 @@
 import { gql } from 'apollo-server-express'
+import { logger } from '../../../config/logger'
 import { <%= entityName[0].toUpperCase() + entityName.slice(1) %> } from './<%= entityName %>.entity'
 
 const Query = gql`
