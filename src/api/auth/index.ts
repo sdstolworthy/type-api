@@ -14,28 +14,6 @@ const ONE_HOUR = 3600000
 const router = Router()
 
 /**
- * /auth/login
- * Log an existing user in and return a valid, signed JWT.
- */
-router.post('/login',
-  requiredFields(['email', 'password']),
-  passport.authenticate('local', { session: false }),
-  (req: any, res: Response) => {
-    const token = jwt.sign(
-      { id: req.user.id },
-      process.env.SECRET_KEY,
-      { expiresIn: tokenExpirationPeriod },
-    )
-
-    res.set({
-      Authorization : `Bearer ${token}`,
-    })
-
-    return res.json({ token })
-  },
-)
-
-/**
  * POST /auth/register
  * Create a new user with:
  *  email: req.body.email
@@ -56,6 +34,28 @@ router.post('/register',
       logger.error(err)
       next(err)
     })
+  },
+)
+
+/**
+ * /auth/login
+ * Log an existing user in and return a valid, signed JWT.
+ */
+router.post('/login',
+  requiredFields(['email', 'password']),
+  passport.authenticate('local', { session: false }),
+  (req: any, res: Response) => {
+    const token = jwt.sign(
+      { id: req.user.id },
+      process.env.SECRET_KEY,
+      { expiresIn: tokenExpirationPeriod },
+    )
+
+    res.set({
+      Authorization : `Bearer ${token}`,
+    })
+
+    return res.json({ token })
   },
 )
 
