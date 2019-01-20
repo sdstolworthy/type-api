@@ -23,7 +23,6 @@ export const queryResolvers = {
     },
 
     async users(obj, { take, skip }, context, info) {
-      logger.info(util.inspect(context, {showHidden: false, depth: null}))
       take = take || 10 // default query limit to 10
       if (take > 50) { take = 50 } // limit query to 50 max
       skip = skip || 0 // default to none skipped

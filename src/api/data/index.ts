@@ -3,7 +3,7 @@ import { Application } from 'express'
 import * as util from 'util'
 import { port } from '../../app'
 import { logger } from '../../config/logger'
-import getDecodedJwt from '../middleware/getDecodedJwt'
+import getUserFromAuthHeader from '../middleware/getUserFromAuthHeader'
 import { resolvers, typeDefs } from './schema'
 
 export async function StartGraphQL(app: Application) {
@@ -11,14 +11,14 @@ export async function StartGraphQL(app: Application) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req, res }) => {
-      let token = req.headers.authorization || ''
-      token = getDecodedJwt(token)
+    context: async ({ req, res }) => {
+      let user = req.headers.authorization || ''
+      user = await getUserFromAuthHeader(user)
 
-      logger.debug(`ApolloServer context token - ${util.inspect(token, {showHidden: false, depth: null})}`)
+      logger.debug(`ApolloServer context user - ${util.inspect(user, {showHidden: false, depth: null})}`)
 
       return {
-        token,
+        user,
       }
     },
   })
