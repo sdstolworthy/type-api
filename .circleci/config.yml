@@ -10,10 +10,10 @@ jobs:
       - checkout
       - run:
           name: update-npm
-          command: 'sudo npm i -g npm@latest'
+          command: 'npm i -g npm@latest'
       - run:
           name: install yarn
-          command: 'sudo npm i -g yarn'
+          command: 'npm i -g yarn'
       - restore_cache: # special step to restore the dependency cache
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           key: dependency-cache-{{ checksum "package.json" }}
