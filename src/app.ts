@@ -1,8 +1,5 @@
 import 'reflect-metadata'
 
-import * as dotenv from 'dotenv'
-dotenv.config()
-
 import * as bodyParser from 'body-parser'
 import * as compression from 'compression'
 import * as errorHandler from 'errorhandler'
@@ -36,7 +33,11 @@ export async function run({
 
   // database
   let connectionOptions = await getConnectionOptions()
-  connectionOptions = {...connectionOptions, logger: new TypeORMLogger()}
+  connectionOptions = {
+    ...connectionOptions,
+    logging: 'all',
+    logger: new TypeORMLogger(),
+  }
   const connection: Connection = await createConnection(connectionOptions)
 
   const app = express()
