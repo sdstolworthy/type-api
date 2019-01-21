@@ -1,0 +1,44 @@
+version: 2
+
+jobs:
+  build:
+    # working_directory: ~/mern-starter
+    docker:
+      - image: node:latest
+      - image: postgres:latest
+    steps:
+      - checkout
+      - run:
+          name: update-npm
+          command: 'sudo npm i -g npm@latest'
+      - run:
+          name: install yarn
+          command: 'sudo npm i -g yarn'
+      - restore_cache: # special step to restore the dependency cache
+          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: yarn-install
+          command: yarn install
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: test
+          command: yarn test
+          environment:
+              POSTGRES_TEST_DB: postgres://postgres@localhost:5432/postgres
+      # - run:
+      #     name: code-coverage
+      #     command: './node_modules/.bin/nyc report --reporter=text-lcov'
+      - store_artifacts: # special step to save test results as as artifact
+          # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+          path: test-results.xml
+          # prefix: tests
+      # - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+      #     path: coverage
+      #     prefix: coverage
+      # - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+      #     path: test-results.xml
+      # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
