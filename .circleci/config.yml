@@ -2,7 +2,7 @@ version: 2
 
 jobs:
   build:
-    # working_directory: ~/mern-starter
+    working_directory: ~/app
     docker:
       - image: node:latest
       - image: postgres:latest
