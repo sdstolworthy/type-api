@@ -12,6 +12,7 @@ export default class Cron {
    * @memberof Cron
    */
   public static init(): void {
+    logger.info('Cron initialized')
     Cron.testCron()
   }
 
@@ -21,7 +22,7 @@ export default class Cron {
    * @memberof Cron
    */
   private static testCron(): void {
-    const TEST_CRON_INTERVAL = '0 * * * * *'
+    const TEST_CRON_INTERVAL = '0 * * * * *' // every minute
 
     new CronJob(TEST_CRON_INTERVAL, (): void => {
       logger.info('Hello, I am Cron! Please see /src/config/cron.ts')

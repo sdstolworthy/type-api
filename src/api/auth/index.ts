@@ -3,9 +3,12 @@ import * as crypto from 'crypto'
 import { NextFunction, Request, Response, Router } from 'express'
 import * as jwt from 'jsonwebtoken'
 import * as passport from 'passport'
+import validator from 'validator'
+import { HttpError } from '../../config/errorHandler'
 import { logger } from '../../config/logger'
 import sendMail from '../../config/mailer'
-import { User } from '../data/user/User.entity'
+import settings from '../../config/settings'
+import { User } from '../data/user/user.entity'
 import requiredFields from '../middleware/requiredFields'
 import { hashPassword } from './helpers'
 import { isAuthenticated, tokenExpirationPeriod } from './passport'
@@ -14,29 +17,7 @@ const ONE_HOUR = 3600000
 const router = Router()
 
 /**
- * /auth/login
- * Log an existing user in and return a valid, signed JWT.
- */
-router.post('/login',
-  requiredFields(['email', 'password']),
-  passport.authenticate('local', { session: false }),
-  (req: any, res: Response) => {
-    const token = jwt.sign(
-      { id: req.user.id },
-      process.env.SECRET_KEY,
-      { expiresIn: tokenExpirationPeriod },
-    )
-
-    res.set({
-      Authorization : `Bearer ${token}`,
-    })
-
-    return res.json({ token })
-  },
-)
-
-/**
- * /auth/register
+ * POST /auth/register
  * Create a new user with:
  *  email: req.body.email
  *  password: req.body.password
@@ -44,6 +25,11 @@ router.post('/login',
 router.post('/register',
   requiredFields(['email', 'password']),
   (req: Request, res: Response, next: NextFunction) => {
+    if (!validator.isEmail(req.body.email)) {
+      // TODO: create a more modularized error handler.
+      throw new HttpError(400, 'Invalid Email', 'The email provided in the body is not a valid email.')
+    }
+
     User.create({
       email: req.body.email,
       password: hashPassword(req.body.password),
@@ -60,14 +46,36 @@ router.post('/register',
 )
 
 /**
- * /auth/refresh
+ * /auth/login
+ * Log an existing user in and return a valid, signed JWT.
+ */
+router.post('/login',
+  requiredFields(['email', 'password']),
+  passport.authenticate('local', { session: false }),
+  (req: any, res: Response) => {
+    const token = jwt.sign(
+      { id: req.user.id },
+      settings.secretKey,
+      { expiresIn: tokenExpirationPeriod },
+    )
+
+    res.set({
+      Authorization : `Bearer ${token}`,
+    })
+
+    return res.json({ token })
+  },
+)
+
+/**
+ * POST /auth/refresh
  * Return a refreshed, valid, signed JWT.
  * https://stackoverflow.com/a/26834685
  */
 router.post('/refresh', isAuthenticated, (req: any, res: Response) => {
   const token = jwt.sign(
-    { id: req.user._id },
-    process.env.SECRET_KEY,
+    { id: req.user.id },
+    settings.secretKey,
     { expiresIn: tokenExpirationPeriod },
   )
 
@@ -135,9 +143,9 @@ router.post('/forgot', requiredFields(['email']), (req: Request, res: Response, 
  */
 router.get('/reset/:token', (req: Request, res: Response) => {
   // res.send('todo: token reset')
-  User.createQueryBuilder()
+  User.createQueryBuilder('user')
   .where('user.resetPasswordToken = :token', { token: req.params.token })
-  .andWhere('user.resetPasswordExpires > :now', { now: Date.now() })
+  .andWhere('user.resetPasswordExpires > :now', { now: new Date() })
   .getOne()
   .then((user) => {
     if (!user) {
@@ -153,6 +161,7 @@ router.get('/reset/:token', (req: Request, res: Response) => {
 
 /**
  * POST /auth/reset/:token
+ * Flow to reset a user's password given a token.
  */
 router.post('/reset/:token',
   requiredFields(['password']),
@@ -160,16 +169,17 @@ router.post('/reset/:token',
     User.createQueryBuilder('user')
     .addSelect('user.password')
     .where('user.resetPasswordToken = :token', { token: req.params.token })
-    .andWhere('user.resetPasswordExpires > :now', { now: Date.now() })
+    .andWhere('user.resetPasswordExpires > :now', { now: new Date() })
     .getOne()
     .then((user) => {
       if (!user) {
-        res.send("Either that user doesn't exist or that token is invalid.")
+        return res.send("Either that user doesn't exist or that token is invalid.")
       }
 
       user.password = hashPassword(req.body.password)
-      user.resetPasswordToken = undefined
-      user.resetPasswordExpires = undefined
+      user.resetPasswordToken = null
+      user.resetPasswordExpires = null
+      user.lastPasswordReset = new Date()
 
       user.save().then((savedUser) => {
         const data = {

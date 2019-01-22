@@ -2,7 +2,9 @@
     "extends": [
         "@altamir/standards-tslint"
     ],
-    "rules": {
-        "member-access": false
+    "linterOptions": {
+        "exclude": [
+            ".gulp"
+        ]
     }
 }

@@ -1,6 +1,3 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
-
 import 'reflect-metadata'
 
 import * as bodyParser from 'body-parser'
@@ -10,57 +7,88 @@ import * as express from 'express'
 import * as helmet from 'helmet'
 import * as morgan from 'morgan'
 import * as passport from 'passport'
+import { Connection, createConnection, getConnectionOptions } from 'typeorm'
+import * as util from 'util'
 import authRouter from './api/auth'
 import { StartGraphQL } from './api/data'
-import Cron from './config/cron'
 import { HttpError } from './config/errorHandler'
 import httpErrorModule from './config/errorHandler/sendHttpError'
-import { stream } from './config/logger'
+import { logger, stream } from './config/logger'
+import { TypeORMLogger } from './config/logger/typeorm'
+import settings from './config/settings'
 
-const app = express()
-
-// cron
-Cron.init()
-
-// express
-app.set('env', process.env.NODE_ENV || 'development')
-app.set('port', process.env.PORT || 3000)
-
-// middleware
-app.use(helmet())
-app.use(compression())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(passport.initialize())
-
-// error handler
-if (app.get('env') === 'development') {
-  app.use(errorHandler())
+export interface IEnv {
+  PORT: number | string
 }
 
-app.use(httpErrorModule)
-app.use((error: Error, req: express.Request, res: any, next: express.NextFunction) => {
-  if (typeof error === 'number') {
-    error = new HttpError(error) // next(404)
+export async function run({
+  PORT = settings.port,
+}: IEnv) {
+  if (typeof PORT === 'string') {
+    PORT = parseInt(PORT, 10)
   }
 
-  if (error instanceof HttpError) {
-    res.sendHttpError(error)
-  } else {
-    if (app.get('env') === 'development') {
-      error = new HttpError(500, error.message)
+  // silly log the settings for a sanity check
+  logger.silly(`settings: \n${util.inspect(settings, false, null, true)}`)
+
+  // database
+  let connectionOptions = await getConnectionOptions()
+  connectionOptions = {
+    ...connectionOptions,
+    logging: 'all',
+    logger: new TypeORMLogger(),
+  }
+  const connection: Connection = await createConnection(connectionOptions)
+
+  const app = express()
+
+  app.set('env', settings.env)
+  app.set('port', settings.port)
+
+  logger.silly(`app env: ${app.get('env')}`)
+  logger.silly(`app port: ${app.get('port')}`)
+
+  // middleware
+  app.use(helmet())
+  app.use(compression())
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(passport.initialize())
+
+  // error handler
+  // don't use in production
+  if (app.get('env') === 'development') {
+    app.use(errorHandler())
+  }
+
+  app.use(httpErrorModule)
+  app.use((error: Error, req: express.Request, res: any, next: express.NextFunction) => {
+    logger.error(error)
+
+    if (typeof error === 'number') {
+      error = new HttpError(error) // next(404)
+    }
+
+    if (error instanceof HttpError) {
       res.sendHttpError(error)
     } else {
-      error = new HttpError(500)
-      res.sendHttpError(error, error.message)
-    }
+      if (app.get('env') === 'development') {
+        error = new HttpError(500, error.message)
+        res.sendHttpError(error)
+      } else {
+        error = new HttpError(500)
+        res.sendHttpError(error, error.message)
+      }
+  }
+  })
+
+  app.use(morgan('tiny', { stream }))
+
+  // routes
+  app.get('/', (req, res) => {
+    res.send('Up and running.')
+  })
+
+  app.use('/auth', authRouter)
+  StartGraphQL(app)
 }
-})
-
-app.use(morgan('tiny', { stream }))
-
-// routes
-app.use('/auth', authRouter)
-StartGraphQL(app)
-
-export default app

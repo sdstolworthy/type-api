@@ -1,20 +1,31 @@
+import { ApolloServer } from 'apollo-server-express'
 import { Application } from 'express'
-import { bootstrap } from 'vesper'
+import * as util from 'util'
 import { logger } from '../../config/logger'
+import settings from '../../config/settings'
+import getUserFromAuthHeader from '../middleware/getUserFromAuthHeader'
+import { resolvers, typeDefs } from './schema'
 
 export async function StartGraphQL(app: Application) {
-  const port = (parseInt(process.env.PORT, 10) + 1) || 3001 // avoid port collision with express app
 
-  bootstrap({
-      port,
-      expressApp: app,
-      cors: true,
-      controllers: [__dirname + '/**/*.controller.ts'],
-      resolvers: [__dirname + '/**/*.resolver.ts'],
-      schemas: [__dirname + '/**/*.gql'],
-  }).then((vesper) => {
-      logger.info('GraphQL ready. 🚀')
-  }).catch((error) => {
-      logger.error(error.stack ? error.stack : error)
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req, res }) => {
+      // add currently auth'd user to context
+      let user = req.headers.authorization || ''
+      user = await getUserFromAuthHeader(user)
+      logger.debug(`ApolloServer context.user - ${util.inspect(user, {showHidden: false, depth: null})}`)
+
+      return {
+        user,
+      }
+    },
+  })
+
+  server.applyMiddleware({ app }) // app is from an existing express app
+
+  app.listen({ port: settings.port }, () => {
+    logger.info(`Server ready at http://127.0.0.1:${settings.port}${server.graphqlPath} 🚀`)
   })
 }

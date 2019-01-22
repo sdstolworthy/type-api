@@ -6,7 +6,6 @@ Welcome to your new API!
 
 - `/auth/*` - standard express routes handling authentication on the `User` entity.
 - `/graphql` - graphql endpoint
-- `/playground` (development environment only) - graphql helper playground
 
 ## Usage
 
@@ -16,4 +15,12 @@ Welcome to your new API!
 yarn dev
 ```
 
-GraphQL playground at `GET /playground`.
+#### Adding a new entity
+
+Run the following from the root of the api:
+
+```cli
+yarn create:entity <entityName>
+```
+
+This will add a new directory under [/src/api/data](./src/api/data/) containing a new, working entity. GraphQL will automagically pick it up.

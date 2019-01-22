@@ -1,16 +1,22 @@
+// This file must interact with process.env vars to avoid errors when compiling
+const srcOrDist = process.env.NODE_ENV === 'production' ? 'dist' : 'src'
+
 module.exports = {
-  type: 'sqljs',
-  location: './db.sql',
+  type: 'postgres',
+  url: process.env.POSTGRES_URL,
   autoSave: true,
   synchronize: true,
-  logging: true,
+  entityPrefix: 'app_',
   entities: [
-    'src/**/*.entity.ts',
+    `${srcOrDist}/**/*.entity.?s`,
   ],
   migrations: [
-    'src/migraion/**/*.ts',
+    `${srcOrDist}/migrations/**/*.?s`,
   ],
   subscribers: [
-    'src/subscriber/**/*.ts',
+    `${srcOrDist}/subscribers/**/*.?s`,
   ],
+  cli: {
+    migrationsDir: `${srcOrDist}/migrations`,
+  },
 }

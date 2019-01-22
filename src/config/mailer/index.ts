@@ -1,10 +1,10 @@
 import * as mailgun from 'mailgun-js'
-
-const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@example.com'
+import { logger } from '../logger'
+import settings from '../settings'
 
 const mg = mailgun({
-  apiKey: process.env.MAILGUN_API_KEY,
-  domain: process.env.MAILGUN_DOMAIN,
+  apiKey: settings.mailgunApiKey,
+  domain: settings.mailgunDomain,
 })
 
 /**
@@ -12,13 +12,13 @@ const mg = mailgun({
  * @function
  * @param {object} data - data about the email being sent
  * @param {string} data.to - the email address of the recipient
- * @param {string} data.[from] - the email address of the sender; defaults to process.env.FROM_EMAIL
+ * @param {string} data.[from] - the email address of the sender; defaults to settings.fromEmail
  * @param {string} data.subject - the subject of the email
  * @param {string} data.text - the body of the email
  * @param {CallableFunction} done - callback
  */
 const send = (
-  {to, from = FROM_EMAIL, subject, text}: {to: string, from?: string, subject: string, text: string},
+  {to, from = settings.fromEmail, subject, text}: {to: string, from?: string, subject: string, text: string},
   done: CallableFunction,
 ) => {
   const data = {
@@ -30,8 +30,11 @@ const send = (
 
   mg.messages().send(data, (err: any, body: any) => {
     if (err) {
+      logger.error(err)
       return done(err)
     }
+
+    logger.debug(body)
     return done(body)
   })
 }

@@ -3,7 +3,23 @@
     "include": [
         "./src/**/*"
     ],
+    "exclude": [
+        ".gulp",
+        "node_modules"
+    ],
     "compilerOptions": {
+        "lib": [
+            "es5",
+            "es6",
+            "esnext"
+        ],
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "removeComments": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
         "outDir": "dist",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true

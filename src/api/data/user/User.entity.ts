@@ -1,28 +1,34 @@
 import { Column, Entity, Index, OneToMany } from 'typeorm'
-import { AltamirEntity } from '../_helpers/base.entity'
-import {Photo} from '../photo/Photo.entity'
+import { AltamirEntity } from '../_helpers/baseEntity'
 
-@Entity()
+@Entity({
+  name: 'users',
+})
 export class User extends AltamirEntity {
-  @Index({ unique: true })
   @Column()
-  email: string
+  @Index({ unique: true })
+  public email: string
 
   @Column({ select: false })
-  password: string
+  public password: string
 
   @Column({
     nullable: true,
     select: false,
   })
-  resetPasswordToken: string
+  public resetPasswordToken: string
 
   @Column({
+    type: 'timestamptz',
     nullable: true,
     select: false,
   })
-  resetPasswordExpires: Date
+  public resetPasswordExpires: Date
 
-  @OneToMany(() => Photo, (photo) => photo.user)
-  photos: Photo[]
+  @Column({
+    type: 'timestamptz',
+    nullable: true,
+    select: false,
+  })
+  public lastPasswordReset: Date
 }

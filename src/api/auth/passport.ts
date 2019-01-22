@@ -1,8 +1,10 @@
 import * as passport from 'passport'
 import * as JWT from 'passport-jwt'
 import * as Local from 'passport-local'
+import { Brackets } from 'typeorm'
 import { logger } from '../../config/logger'
-import { User } from '../data/user/User.entity'
+import settings from '../../config/settings'
+import { User } from '../data/user/user.entity'
 import { validatePassword } from './helpers'
 
 const tokenExpirationPeriod = '7d'
@@ -31,12 +33,24 @@ passport.use(new Local.Strategy(
 
 passport.use(new JWT.Strategy({
   jwtFromRequest: JWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.SECRET_KEY,
+  secretOrKey: settings.secretKey,
 }, async (data, done) => {
   try {
-    User.findOneOrFail({ id: data.id })
+    User.createQueryBuilder('user')
+    .addSelect('user.lastPasswordReset')
+    .where('user.id = :id', { id: data.id })
+    .andWhere(new Brackets((qb) => {
+      // prevent user auth if lastPasswordReset is after the jwt's iat value
+      qb.where('user.lastPasswordReset < :iat', { iat: new Date(data.iat * 1000) })
+      .orWhere('user.lastPasswordReset IS NULL')
+    }))
+    .getOne()
     .then((user) => {
       if (!user) { return done(null, false) }
+
+      logger.debug(`user.lastPasswordReset: ${user.lastPasswordReset}`)
+      logger.debug(`data.iat: ${new Date(data.iat * 1000)}`)
+
       return done(null, user)
     })
     .catch((err) => {
