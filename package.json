@@ -10,9 +10,27 @@
     "build": "tsc",
     "dev": "nodemon -r ./src/server.ts --exec ts-node -e ts --trace-sync-io",
     "serve": "npm run build && node dist/server.js",
-    "test": "npm run testUnit",
-    "testUnit": "mocha -r ts-node/register ./src/**/**/*.spec.ts --exit",
+    "test": "npm run test:unit",
+    "test:unit": "nyc --reporter=text mocha -r ts-node/register ./src/**/**/*.spec.ts --exit",
     "entity": "gulp entity --name"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "src/**/*.spec.ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "reporter": [
+      "lcov"
+    ],
+    "all": true
   },
   "dependencies": {
     "apollo-server-express": "^2.3.1",
@@ -56,6 +74,7 @@
     "mocha": "^5.2.0",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.9",
+    "nyc": "^13.1.0",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2",
     "walk": "^2.3.14"
