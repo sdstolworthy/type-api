@@ -19,7 +19,7 @@ export default {
    */
   dbPostgresUrl: process.env.POSTGRES_URL,
   dbPostgresTestUrl: process.env.POSTGRES_TEST_URL,
-  dbTablePrefix: 'app_',
+  dbTablePrefix: 'app_', // this does nothing; see /ormconfig.js
 
   /**
    * Mailgun

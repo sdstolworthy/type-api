@@ -4,7 +4,8 @@
         "./src/**/*"
     ],
     "exclude": [
-        ".gulp"
+        ".gulp",
+        "node_modules"
     ],
     "compilerOptions": {
         "lib": [
@@ -17,6 +18,8 @@
         "moduleResolution": "node",
         "sourceMap": true,
         "removeComments": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
         "outDir": "dist",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true

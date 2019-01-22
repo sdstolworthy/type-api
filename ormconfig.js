@@ -1,21 +1,22 @@
-const settings = require('./src/config/settings').default
+// This file must interact with process.env vars to avoid errors when compiling
+const srcOrDist = process.env.NODE_ENV === 'production' ? 'dist' : 'src'
 
 module.exports = {
   type: 'postgres',
-  url: settings.dbPostgresUrl,
+  url: process.env.POSTGRES_URL,
   autoSave: true,
   synchronize: true,
-  entityPrefix: settings.dbTablePrefix,
+  entityPrefix: 'app_',
   entities: [
-    'src/**/*.entity.ts',
+    `${srcOrDist}/**/*.entity.?s`,
   ],
   migrations: [
-    'src/migrations/**/*.ts',
+    `${srcOrDist}/migrations/**/*.?s`,
   ],
   subscribers: [
-    'src/subscribers/**/*.ts',
+    `${srcOrDist}/subscribers/**/*.?s`,
   ],
   cli: {
-    migrationsDir: 'src/migrations',
+    migrationsDir: `${srcOrDist}/migrations`,
   },
 }
