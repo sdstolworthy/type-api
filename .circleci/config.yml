@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/app
 
     docker:
-      - image: node:latest
+      - image: node:8.11.2
         environment:
           POSTGRES_TEST_URL: postgres://postgres@localhost:5432/postgres
 
