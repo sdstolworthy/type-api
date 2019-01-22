@@ -1,11 +1,11 @@
 version: '3.3'
 
 services:
-  postgres:
+  db_dev:
     image: postgres:latest
     restart: always
 
-  app:
+  app_dev:
     restart: always
     build: .
     volumes:
@@ -14,7 +14,7 @@ services:
     ports:
       - '3100:3100'
     links:
-      - postgres
+      - db_dev
     environment:
-      POSTGRES_URL: postgres://postgres@postgres:5432/postgres
+      POSTGRES_URL: postgres://postgres@db_dev:5432/postgres
 
