@@ -5,8 +5,8 @@ import { AltamirEntity } from '../_helpers/baseEntity'
   name: 'users',
 })
 export class User extends AltamirEntity {
-  @Index({ unique: true })
   @Column()
+  @Index({ unique: true })
   public email: string
 
   @Column({ select: false })
