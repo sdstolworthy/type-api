@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 import { User } from '../data/user/user.entity'
 
 const SALT_ROUNDS = 10
