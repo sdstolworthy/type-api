@@ -20,7 +20,7 @@ yarn dev
 Run the following from the root of the api:
 
 ```cli
-yarn entity <entityName>
+yarn create:entity <entityName>
 ```
 
 This will add a new directory under [/src/api/data](./src/api/data/) containing a new, working entity. GraphQL will automagically pick it up.

@@ -12,7 +12,7 @@
     "serve": "npm run build && node dist/server.js",
     "test": "npm run test:unit",
     "test:unit": "nyc --reporter=text mocha -r ts-node/register ./src/**/**/*.spec.ts --exit",
-    "entity": "gulp entity --name"
+    "create:entity": "gulp entity --name"
   },
   "nyc": {
     "include": [
