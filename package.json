@@ -10,7 +10,8 @@
     "build": "tsc",
     "dev": "nodemon -r ./src/server.ts --exec ts-node -e ts --trace-sync-io",
     "serve": "npm run build && node dist/server.js",
-    "test": "mocha -r ts-node/register ./src/**/**/*.spec.ts --exit",
+    "test": "npm run testUnit",
+    "testUnit": "mocha -r ts-node/register ./src/**/**/*.spec.ts --exit",
     "entity": "gulp entity --name"
   },
   "dependencies": {
