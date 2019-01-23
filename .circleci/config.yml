@@ -69,6 +69,7 @@ jobs:
             # apt update -y
             # apt install docker-ce gnupg -y
             # apt install systemd -y # install systemd (for systemctl command)
+            echo "limit nofile 262144 262144" >> /etc/init/docker.conf
             /etc/init.d/docker start # start docker - https://unix.stackexchange.com/a/440413/165306
             # install docker compose
             curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
