@@ -11,3 +11,7 @@ jobs:
       - checkout
       - run: yarn install
       - run: yarn test
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: artifacts/test-results
