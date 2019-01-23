@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/app
 
     docker:
-      - image: ubuntu:bionic
+      - image: docker:18.06.1-ce-git
         # environment:
         #   POSTGRES_TEST_URL: postgres://postgres@localhost:5432/postgres
 
@@ -13,6 +13,13 @@ jobs:
 
     steps:
       - checkout
+      - run:
+          name: Install docker-compose
+          command: |
+            curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            mv ~/docker-compose /usr/local/bin/docker-compose
+      - setup_remote_docker
 
       # - run:
       #     name: install-global-deps
@@ -33,27 +40,35 @@ jobs:
       #     paths:
       #       - ./node_modules
 
-      - run:
-          name: Install dependencies
-          command: |
-            apt update -y && apt upgrade -y
-            apt install curl -y # install curl
-            # install docker
-            apt install docker.io -y
-            # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - -y
-            # add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" -y
-            # apt update -y
-            # apt install docker-ce gnupg -y
-            # apt install systemd -y # install systemd (for systemctl command)
-            service docker start # start docker
-            # install docker compose
-            curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            mv ~/docker-compose /usr/local/bin/docker-compose
+
+      # - run:
+      #     name: Install docker-compose
+      #     command: |
+      #       curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+      #       chmod +x ~/docker-compose
+      #       mv ~/docker-compose /usr/local/bin/docker-compose
+
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       apt update -y && apt upgrade -y
+      #       apt install curl -y # install curl
+      #       # install docker
+      #       apt install docker.io -y
+      #       # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - -y
+      #       # add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" -y
+      #       # apt update -y
+      #       # apt install docker-ce gnupg -y
+      #       # apt install systemd -y # install systemd (for systemctl command)
+      #       service docker start # start docker - https://unix.stackexchange.com/a/440413/165306
+      #       # install docker compose
+      #       curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+      #       chmod +x ~/docker-compose
+      #       mv ~/docker-compose /usr/local/bin/docker-compose
 
       - run:
           name: test
-          command: docker-compose -f docker-compose.test.yml up # Should always be same as yarn docker:test
+          command: docker-compose -f ~/app/docker-compose.test.yml up # Should always be same as yarn docker:test
 
       # - run:
       #     name: code-coverage
