@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/app
 
     docker:
-      - image: docker:git
+      - image: ubuntu:bionic
         # environment:
         #   POSTGRES_TEST_URL: postgres://postgres@localhost:5432/postgres
 
