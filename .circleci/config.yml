@@ -34,12 +34,13 @@ jobs:
       #       - ./node_modules
 
       - run:
-          name: Install curl
-          command: apt update -y && apt install curl -y
-
-      - run:
-          name: Install docker-compose
+          name: Install dependencies
           command: |
+            apt update -y
+            apt install docker.io # install docker
+            systemctl start docker # start docker
+            apt install curl -y # install curl
+            # install docker compose
             curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
             chmod +x ~/docker-compose
             mv ~/docker-compose /usr/local/bin/docker-compose
