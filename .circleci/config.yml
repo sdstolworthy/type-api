@@ -62,7 +62,7 @@ jobs:
             curl -fsSL get.docker.com -o get-docker.sh
             chmod +x get-docker.sh
             ./get-docker.sh
-            usermod -aG docker ${uname}
+            # usermod -aG docker ${uname}
             # apt install docker.io -y
             # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - -y
             # add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" -y
