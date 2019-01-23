@@ -1,6 +1,0 @@
-# Abstruse
-before_install:
-  - apt update
-  - npm i -g npm yarn typescript
-install:
-  - yarn install
