@@ -38,7 +38,7 @@ jobs:
           command: |
             apt update -y
             apt install docker.io -y # install docker
-            systemctl start docker # start docker
+            systemd start docker # start docker
             apt install curl -y # install curl
             # install docker compose
             curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
