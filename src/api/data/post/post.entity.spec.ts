@@ -18,7 +18,7 @@ describe('post entity', () => {
       type: 'postgres',
       url: settings.dbPostgresTestUrl,
       entities: [
-        'src/**/*.entity.ts',
+        'dist/**/*.entity.js',
       ],
       logging: false,
       dropSchema: true, // isolate each test case
