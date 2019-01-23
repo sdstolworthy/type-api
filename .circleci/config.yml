@@ -1,95 +1,27 @@
 version: 2
-
 jobs:
   build:
-    working_directory: ~/app
-
+    working_directory: ~/repo
     docker:
-      - image: docker:18.06.1-ce-git
-        # environment:
-        #   POSTGRES_TEST_URL: postgres://postgres@localhost:5432/postgres
-
-      # - image: postgres:latest
-
+      - image: node:current
+        environment:
+          NODE_ENV: test
+          POSTGRES_URL: postgres://postgres@localhost:5432/postgres
+      - image: postgres:latest
     steps:
       - checkout
-      # - run:
-      #     name: Install curl
-      #     command: |
-      #       apt update -y && apt upgrade -y
-      #       apt install curl -y
-      - run:
-          name: Install docker-compose
-          command: |
-            wget https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            mv ~/docker-compose /usr/local/bin/docker-compose
-      - setup_remote_docker
-
-      # - run:
-      #     name: install-global-deps
-      #     command: npm i -g npm@latest yarn typescript
-
-      # - run: node -v
-
-      # - restore_cache: # special step to restore the dependency cache
-      #     # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-      #     key: dependency-cache-{{ checksum "package.json" }}
-
-      # - run:
-      #     name: yarn-install
-      #     command: yarn install
-
-      # - save_cache: # special step to save the dependency cache
-      #     key: dependency-cache-{{ checksum "package.json" }}
-      #     paths:
-      #       - ./node_modules
-
-
-      # - run:
-      #     name: Install docker-compose
-      #     command: |
-      #       curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-      #       chmod +x ~/docker-compose
-      #       mv ~/docker-compose /usr/local/bin/docker-compose
-
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       apt update -y && apt upgrade -y
-      #       apt install curl -y # install curl
-      #       # install docker
-      #       apt install docker.io -y
-      #       # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - -y
-      #       # add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" -y
-      #       # apt update -y
-      #       # apt install docker-ce gnupg -y
-      #       # apt install systemd -y # install systemd (for systemctl command)
-      #       service docker start # start docker - https://unix.stackexchange.com/a/440413/165306
-      #       # install docker compose
-      #       curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-      #       chmod +x ~/docker-compose
-      #       mv ~/docker-compose /usr/local/bin/docker-compose
-
-      - run:
-          name: test
-          command: |
-            set -x
-            docker-compose -f ~/app/docker-compose.test.yml up # Should always be same as yarn docker:test
-            docker run yarn test
-      # - run:
-      #     name: code-coverage
-      #     command: './node_modules/.bin/nyc report --reporter=text-lcov'
-
-      # - store_artifacts: # special step to save test results as as artifact
-      #     # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-      #     path: test-results.xml
-      #     # prefix: tests
-
-      # - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-      #     path: coverage
-      #     # prefix: coverage
-
-      # - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-      #     path: test-results.xml
-      # # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - repo-yarn-{{ checksum "yarn.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - repo-yarn-
+      - run: yarn install
+      - save_cache:
+          paths:
+            - ~/.yarn-cache
+          key: repo-yarn-{{ checksum "yarn.lock" }}
+      # Wait for Postgres connection to open.
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      # Run validation checks & generate coverage reports
+      - run: yarn test
