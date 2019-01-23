@@ -18,7 +18,7 @@ jobs:
       #     name: install-global-deps
       #     command: npm i -g npm@latest yarn typescript
 
-      - run: node -v
+      # - run: node -v
 
       # - restore_cache: # special step to restore the dependency cache
       #     # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
