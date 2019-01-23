@@ -43,6 +43,7 @@ jobs:
             add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" -y
             apt update -y
             apt install docker-ce -y
+            apt install systemd -y # install systemd (for systemctl command)
             systemctl start docker # start docker
             # install docker compose
             curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
