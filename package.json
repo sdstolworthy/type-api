@@ -33,6 +33,7 @@
     "reporter": [
       "lcov"
     ],
+    "report-dir": "./reports",
     "all": true
   },
   "dependencies": {
