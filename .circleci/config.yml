@@ -34,6 +34,10 @@ jobs:
       #       - ./node_modules
 
       - run:
+          name: Install curl
+          command: sudo apt install curl
+
+      - run:
           name: Install docker-compose
           command: |
             curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
