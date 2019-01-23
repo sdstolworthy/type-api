@@ -13,7 +13,7 @@
     "dev": "nodemon -r ./src/server.ts --exec ts-node -e ts --trace-sync-io",
     "serve": "npm run build && node dist/server.js",
     "test": "npm run test:unit",
-    "test:unit": "mocha -r ts-node/register ./src/**/**/*.spec.ts --exit",
+    "test:unit": "nyc --reporter=text mocha -r ts-node/register ./src/**/**/*.spec.ts --exit",
     "test:full": "npm run build && mocha ./dist/**/**/*.spec.js --exit",
     "create:entity": "gulp entity --name"
   },
