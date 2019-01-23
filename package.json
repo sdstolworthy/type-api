@@ -7,11 +7,14 @@
   "main": "server.js",
   "scripts": {
     "start": "npm run serve",
+    "docker:dev": "docker-compose -f docker-compose.development.yml up",
+    "docker:test": "docker-compose -f docker-compose.test.yml up",
     "build": "tsc",
     "dev": "nodemon -r ./src/server.ts --exec ts-node -e ts --trace-sync-io",
     "serve": "npm run build && node dist/server.js",
     "test": "npm run test:unit",
     "test:unit": "nyc --reporter=text mocha -r ts-node/register ./src/**/**/*.spec.ts --exit",
+    "test:full": "npm run build && mocha ./dist/**/**/*.spec.js --exit",
     "create:entity": "gulp entity --name"
   },
   "nyc": {
@@ -30,11 +33,13 @@
     "reporter": [
       "lcov"
     ],
+    "report-dir": "./reports",
     "all": true
   },
   "dependencies": {
     "apollo-server-express": "^2.3.1",
     "bcrypt": "^3.0.3",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
     "cron": "^1.6.0",

@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+  db_dev:
+    image: postgres:latest
+    restart: always
+
+  app_dev:
+    restart: always
+    build: .
+    volumes:
+      - .:/app
+    command: yarn dev
+    ports:
+      - '3100:3100'
+    links:
+      - db_dev
+    environment:
+      POSTGRES_URL: postgres://postgres@db_dev:5432/postgres
+
