@@ -36,10 +36,14 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt update -y
-            apt install docker.io -y # install docker
-            systemd start docker # start docker
+            apt update -y && apt upgrade -y
             apt install curl -y # install curl
+            # install docker
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - -y
+            add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" -y
+            apt update -y
+            apt install docker-ce -y
+            systemctl start docker # start docker
             # install docker compose
             curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
             chmod +x ~/docker-compose
