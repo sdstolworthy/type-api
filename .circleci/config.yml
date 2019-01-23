@@ -39,7 +39,7 @@ jobs:
             apt update -y && apt upgrade -y
             apt install curl -y # install curl
             # install docker
-            apt install docker.io
+            apt install docker.io -y
             # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - -y
             # add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" -y
             # apt update -y
