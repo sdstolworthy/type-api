@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: node:current
+      - image: circleci/node
         environment:
           NODE_ENV: test
           POSTGRES_URL: postgres://postgres@localhost:5432/postgres
