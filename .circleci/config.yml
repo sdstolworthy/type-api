@@ -37,7 +37,7 @@ jobs:
           name: Install dependencies
           command: |
             apt update -y
-            apt install docker.io # install docker
+            apt install docker.io -y # install docker
             systemctl start docker # start docker
             apt install curl -y # install curl
             # install docker compose
