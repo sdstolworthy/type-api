@@ -46,7 +46,7 @@ jobs:
 
       - run:
           name: test
-          command: yarn docker:test
+          command: docker-compose -f docker-compose.test.yml up # Should always be same as yarn docker:test
 
       # - run:
       #     name: code-coverage
