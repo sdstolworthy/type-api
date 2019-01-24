@@ -1,5 +1,5 @@
 import { Column, Entity, Index, OneToMany } from 'typeorm'
-import { AltamirEntity } from '../_helpers/baseEntity'
+import { AltamirEntity } from '../_helpers/base.entity'
 
 @Entity({
   name: '<%= entityName%>s',
