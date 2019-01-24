@@ -17,7 +17,7 @@ const getUserFromAuthHeader = async (bearerToken: string) => {
     return {}
   }
 
-  return await jwt.verify(bearerTokenArray[1], settings.secretKey, async (err, decodedToken) => {
+  return await jwt.verify(bearerTokenArray[1], settings.secretKey, async (err, decodedToken: any) => {
     if (err) {
       logger.error('getUserFromAuthHeader() jwt.verify()')
       logger.error(err)

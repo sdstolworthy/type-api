@@ -12,9 +12,9 @@
     "build": "tsc",
     "dev": "nodemon -r ./src/server.ts --exec ts-node -e ts --trace-sync-io",
     "serve": "npm run build && node dist/server.js",
-    "test": "npm run test:unit",
-    "test:unit": "nyc --reporter=text mocha -r ts-node/register ./src/**/**/*.spec.ts --exit",
-    "test:full": "npm run build && mocha ./dist/**/**/*.spec.js --exit",
+    "test": "LOG_LEVEL=error npm run test:unit",
+    "test:unit": "nyc --reporter=text mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
+    "test:full": "npm run build && mocha 'dist/**/**/*.spec.js' --exit",
     "create:entity": "gulp entity --name"
   },
   "nyc": {
@@ -70,6 +70,7 @@
     "@types/chai-uuid": "^1.0.0",
     "@types/express": "^4.16.0",
     "@types/graphql": "^14.0.5",
+    "@types/jsonwebtoken": "^8.3.0",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.18",
     "@types/uuid": "^3.4.4",
