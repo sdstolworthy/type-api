@@ -22,7 +22,7 @@ export const logger = winston.createLogger({
       ),
     }),
     new winston.transports.File({
-      level: 'error',
+      level: 'warn',
       filename: 'app.log',
     }),
   ],
