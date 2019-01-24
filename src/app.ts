@@ -12,7 +12,7 @@ import * as util from 'util'
 import authRouter from './api/auth'
 import { StartGraphQL } from './api/data'
 import { HttpError } from './config/errorHandler'
-import httpErrorModule from './config/errorHandler/sendHttpError'
+import sendHttpError from './config/errorHandler/sendHttpError'
 import { logger, stream } from './config/logger'
 import { TypeORMLogger } from './config/logger/typeorm'
 import settings from './config/settings'
@@ -55,33 +55,6 @@ export async function run({
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(passport.initialize())
 
-  // error handler
-  // don't use in production
-  if (app.get('env') === 'development') {
-    app.use(errorHandler())
-  }
-
-  app.use(httpErrorModule)
-  app.use((error: Error, req: express.Request, res: any, next: express.NextFunction) => {
-    logger.error(error)
-
-    if (typeof error === 'number') {
-      error = new HttpError(error) // next(404)
-    }
-
-    if (error instanceof HttpError) {
-      res.sendHttpError(error)
-    } else {
-      if (app.get('env') === 'development') {
-        error = new HttpError(500, error.message)
-        res.sendHttpError(error)
-      } else {
-        error = new HttpError(500)
-        res.sendHttpError(error, error.message)
-      }
-  }
-  })
-
   app.use(morgan('tiny', { stream }))
 
   // routes
@@ -91,4 +64,18 @@ export async function run({
 
   app.use('/auth', authRouter)
   StartGraphQL(app)
+
+  app.use((error: any, req: express.Request, res: any, next: express.NextFunction) => {
+    logger.error(error)
+
+    if (typeof error === 'number') {
+      error = new HttpError(error) // next(404)
+    }
+
+    sendHttpError(error, req, res, next)
+  })
+  app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.status(500)
+    .json({ error })
+  })
 }
