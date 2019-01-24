@@ -1,21 +1,37 @@
 /* tslint:disable no-console */
 import { expect } from 'chai'
 import * as fs from 'fs'
+import * as yaml from 'js-yaml'
 import 'mocha'
 import * as walk from 'walk'
 
-describe('config/settings', () => {
-  /**
-   * Check all files in /src for the string "process.env." to ensure that we
-   * abstract the environment variables and avoid having to refactor dozens of
-   * files after one change.
-   */
-  it('should be the only file that contains "process.env.*"', (done) => {
-    const violatingString = 'process.env.'
+describe('circleci and docker-compose', () => {
+  it('should reference the same postgres docker image', (done) => {
+    try {
+      const circleciConfig = yaml.safeLoad(fs.readFileSync('.circleci/config.yml'))
+      const dockerComposeDev = yaml.safeLoad(fs.readFileSync('docker-compose.development.yml'))
+      const dockerComposeTest = yaml.safeLoad(fs.readFileSync('docker-compose.test.yml'))
+
+      const circleciBuildPostgresImg = circleciConfig.jobs.build.docker[1].image
+      const dockerComposeDevPostgresImg = dockerComposeDev.services.db_dev.image
+      const dockerComposeTestPostgresImg = dockerComposeTest.services.db_test.image
+
+      expect(dockerComposeDevPostgresImg).to.equal(circleciBuildPostgresImg)
+      expect(dockerComposeTestPostgresImg).to.equal(circleciBuildPostgresImg)
+      done()
+    } catch (e) {
+      console.log(e)
+      done()
+    }
+  })
+})
+
+describe('all app files', () => {
+  it('should not call "console.*"', (done) => {
+    const violatingString = 'console.'
     const violatingFiles = []
     const ignoredFiles = [
-      'settings.ts',
-      'settings.spec.ts',
+      'global.spec.ts', // this file
     ]
     const ignoredDirectories = ['node_modules']
     const walker = walk.walk('./src', {
@@ -51,7 +67,7 @@ describe('config/settings', () => {
         if (contents.indexOf(violatingString) >= 0) {
           // add the violating file name to violatingFiles
           violatingFiles.push(`${root}/${fileStats.name}`)
-         }
+          }
         next()
       })
     })
