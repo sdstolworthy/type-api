@@ -9,6 +9,7 @@ export default {
   port: parseInt(process.env.PORT, 10) || 3100,
   env: process.env.NODE_ENV || 'development',
   secretKey: process.env.SECRET_KEY || 'replace_this_key_474@itys*-gng^0phyeohag)qxa9$3v64+h^ze#',
+  allowedHosts: process.env.ALLOWED_HOSTS ? process.env.ALLOWED_HOSTS.split(',') : ['localhost'],
   logLevel: process.env.LOG_LEVEL || 'warn',
 
   /**
@@ -30,18 +31,4 @@ export default {
   mailgunApiKey: process.env.MAILGUN_API_KEY,
   mailgunDomain: process.env.MAILGUN_DOMAIN,
   fromEmail: process.env.FROM_EMAIL || 'noreply@example.com',
-
-  /**
-   * Test settings
-   */
-  testTypeormConnectionOptions: {
-    type: 'postgres',
-    url: this.dbPostgresTestUrl,
-    entities: [
-      'src/**/*.entity.ts',
-    ],
-    logging: false,
-    dropSchema: true, // isolate each test case
-    synchronize: true,
-  },
 }
