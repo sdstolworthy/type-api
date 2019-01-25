@@ -21,7 +21,7 @@ passport.use(new Local.Strategy(
     .getOne()
     .then((user) => {
       if (!user) { return done(null, false) }
-      if (!validatePassword(user, password)) { return done(null, false) }
+      if (!validatePassword(password, user.password)) { return done(null, false) }
       return done(null, user)
     })
     .catch((err) => {
