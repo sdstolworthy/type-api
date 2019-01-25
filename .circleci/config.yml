@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:current
+      - image: node:latest
         environment:
           POSTGRES_TEST_URL: postgres://postgres@localhost:5432/postgres
       - image: postgres:latest

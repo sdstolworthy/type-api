@@ -31,7 +31,7 @@ describe('circleci and docker-compose', () => {
     const circleciBuildNodeImage = circleciConfig.jobs.build.docker[0].image
 
     const lineReader = readline.createInterface({
-      input: fs.createReadStream('../../Dockerfile'),
+      input: fs.createReadStream('Dockerfile'),
     })
 
     lineReader.on('line', (line) => {
