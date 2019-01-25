@@ -14,7 +14,6 @@
     "serve": "npm run build && node dist/server.js",
     "test": "LOG_LEVEL=error npm run test:unit",
     "test:unit": "nyc --reporter=text mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
-    "test:full": "npm run build && mocha 'dist/**/*.spec.js' --exit",
     "create:entity": "gulp entity --name"
   },
   "nyc": {
