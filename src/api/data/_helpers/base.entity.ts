@@ -1,8 +1,8 @@
 import { BaseEntity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 export abstract class AltamirEntity extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  public id: string
+  @PrimaryGeneratedColumn()
+  public id: number
 
   @CreateDateColumn({
     type: 'timestamptz',
