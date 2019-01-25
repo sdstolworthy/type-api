@@ -3,6 +3,7 @@ import { expect } from 'chai'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 import 'mocha'
+import * as readline from 'readline'
 import * as walk from 'walk'
 
 describe('circleci and docker-compose', () => {
@@ -23,6 +24,25 @@ describe('circleci and docker-compose', () => {
       console.log(e)
       done()
     }
+  })
+
+  it('should reference the same node docker image', (done) => {
+    const circleciConfig = yaml.safeLoad(fs.readFileSync('.circleci/config.yml'))
+    const circleciBuildNodeImage = circleciConfig.jobs.build.docker[0].image
+
+    const lineReader = readline.createInterface({
+      input: fs.createReadStream('../../Dockerfile'),
+    })
+
+    lineReader.on('line', (line) => {
+      const parsed = line.split(' ')
+
+      if (parsed[0] === 'FROM') {
+        // the docker image
+        expect(parsed[1]).to.equal(circleciBuildNodeImage)
+        done()
+      }
+    })
   })
 })
 
