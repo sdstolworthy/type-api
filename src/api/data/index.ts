@@ -28,7 +28,7 @@ export async function StartGraphQL(app: Application) {
     },
   })
 
-  server.applyMiddleware({ app }) // app is from an existing express app
+  server.applyMiddleware({ app })
 
   app.listen({ port: settings.port }, () => {
     logger.info(`Server ready at http://127.0.0.1:${settings.port}${server.graphqlPath} 🚀`)
