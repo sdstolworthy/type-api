@@ -29,7 +29,8 @@ export async function run({
   }
 
   // silly log the settings for a sanity check
-  logger.silly(`settings: \n${util.inspect(settings, false, null, true)}`)
+  logger.silly('settings:')
+  logger.silly(settings)
 
   // database
   let connectionOptions = await getConnectionOptions()

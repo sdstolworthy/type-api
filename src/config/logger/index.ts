@@ -1,3 +1,4 @@
+import * as util from 'util'
 import * as winston from 'winston'
 import settings from '../settings'
 
@@ -18,8 +19,12 @@ export const logger = winston.createLogger({
         winston.format.timestamp({
           format: 'YYYY-MM-DD HH:mm:ss',
         }),
-        // TODO: if data.message is object, print using util
-        winston.format.printf((data) => `${data.timestamp} ${data.level}: ${data.message}`),
+        winston.format.printf((data) => {
+          if (typeof data.message === 'object') {
+            return `${data.timestamp} ${data.level}: ${util.inspect(data.message, false, null, true)}`
+          }
+          return `${data.timestamp} ${data.level}: ${data.message}`
+        }),
       ),
     }),
     new winston.transports.File({
