@@ -12,6 +12,7 @@ export async function StartGraphQL(app: Application) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    tracing: settings.env === 'development' ? true : false,
     subscriptions: {
       onConnect: (connectionParams, websocket) => {
         logger.info('Connected to subscription websocket.')
