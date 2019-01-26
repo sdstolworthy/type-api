@@ -15,6 +15,7 @@ export async function StartGraphQL(app: Application) {
     tracing: settings.env === 'development' ? true : false,
     subscriptions: {
       onConnect: (connectionParams, websocket) => {
+        // TODO: websocket auth
         logger.info('Connected to subscription websocket.')
       },
       onDisconnect: () => {
