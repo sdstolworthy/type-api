@@ -16,13 +16,19 @@ const Mutation = gql`
   }
 `
 
+const Subscription = gql`
+  type Subscription {
+    _empty: String
+  }
+`
+
 let resolvers = {
   Query: {
     status: () => 'ok',
   },
 }
 
-const typeDefs = [ Query, Mutation ]
+const typeDefs = [ Query, Mutation, Subscription ]
 
 // Read the current directory and load types and resolvers automatically
 // https://medium.com/@xoor/coding-a-graphql-api-with-node-js-c02d617f49f4

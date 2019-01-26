@@ -11,7 +11,12 @@ export async function StartGraphQL(app: Application) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: async ({ req, res }) => {
+    context: async ({ req, connection }) => {
+      // https://www.apollographql.com/docs/apollo-server/features/subscriptions.html#Context-with-Subscriptions
+      if (connection) {
+        return connection.context
+      }
+
       // add currently auth'd user to context
       let user = req.headers.authorization || ''
       user = await getUserFromAuthHeader(user)
