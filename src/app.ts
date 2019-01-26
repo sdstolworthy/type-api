@@ -51,6 +51,7 @@ export async function run({
   // middleware
   app.use(helmet())
   app.use(cors({
+    // TODO: is this implementation is subpar and too restrictive?
     origin: (origin, cb) => {
       logger.silly(`Origin: ${origin}`)
       if (settings.allowedHosts.indexOf(origin) !== -1 || !origin) {
