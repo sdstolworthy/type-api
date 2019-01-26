@@ -1,3 +1,5 @@
+package-lock.json
+
 # sqlite db
 db.sql
 *.log*

@@ -6,8 +6,6 @@ import 'mocha'
 import * as readline from 'readline'
 import * as walk from 'walk'
 
-// TODO: test that package.lock.json doesn't exist but yarn.lock does
-
 describe('circleci and docker-compose', () => {
   it('should reference the same postgres docker image', (done) => {
     try {
