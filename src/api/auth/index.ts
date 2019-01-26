@@ -26,7 +26,6 @@ router.post('/register',
   requiredFields(['email', 'password']),
   (req: Request, res: Response, next: NextFunction) => {
     if (!validator.isEmail(req.body.email)) {
-      // TODO: create a more modularized error handler.
       return next(new HttpError(400, 'Invalid Email', 'The email provided in the body is not a valid email.'))
     }
 
