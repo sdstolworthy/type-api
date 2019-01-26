@@ -15,8 +15,7 @@
     "serve": "npm run build && node dist/server.js",
     "test": "LOG_LEVEL=error npm run test:unit",
     "test:unit": "nyc --reporter=text mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
-    "create:entity": "gulp entity --name",
-    "oclif": "cd ./nova && oclif"
+    "create:entity": "gulp entity --name"
   },
   "nyc": {
     "include": [
@@ -89,7 +88,6 @@
     "morgan": "^1.9.1",
     "nodemon": "^1.18.9",
     "nyc": "^13.1.0",
-    "oclif": "^1.12.8",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2",
     "walk": "^2.3.14"
