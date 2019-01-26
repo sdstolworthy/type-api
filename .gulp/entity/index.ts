@@ -1,6 +1,6 @@
 import inputTypes from './<%= entityName %>.args'
 import { mutationResolvers, mutationTypes } from './<%= entityName %>.mutations'
-import { queryResolvers, queryTypes } from './<%= entityName %>.query'
+import { queryResolvers, queryTypes } from './<%= entityName %>.queries'
 import { subscriptionResolvers, subscriptionTypes } from './<%= entityName %>.subscriptions'
 import { typeResolvers, types } from './<%= entityName %>.type'
 

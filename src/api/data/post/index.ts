@@ -1,6 +1,6 @@
 import inputTypes from './post.args'
 import { mutationResolvers, mutationTypes } from './post.mutations'
-import { queryResolvers, queryTypes } from './post.query'
+import { queryResolvers, queryTypes } from './post.queries'
 import { subscriptionResolvers, subscriptionTypes } from './post.subscriptions'
 import { typeResolvers, types } from './post.type'
 
