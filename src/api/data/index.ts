@@ -14,9 +14,19 @@ export async function StartGraphQL(app: Application) {
     resolvers,
     tracing: settings.env === 'development' ? true : false,
     subscriptions: {
-      onConnect: (connectionParams, websocket) => {
-        // TODO: websocket auth
+      onConnect: async (connectionParams: any, websocket: any) => {
         logger.info('Connected to subscription websocket.')
+
+        // add currently auth'd user to context
+        let user = connectionParams.Authorization || ''
+        user = await getUserFromAuthHeader(user)
+
+        logger.debug('ApolloServer websocket context.user:')
+        logger.debug(user)
+
+        return {
+          user,
+        }
       },
       onDisconnect: () => {
         logger.info('Disconnected from subscription websocket.')
