@@ -1,6 +1,8 @@
 import { gql } from 'apollo-server-express'
 import { logger } from '../../../config/logger'
+import { pubsub } from '../subscriptions'
 import { <%= entityName[0].toUpperCase() + entityName.slice(1) %> } from './<%= entityName %>.entity'
+import { subscriptions } from './<%= entityName %>.subscriptions'
 
 const Mutation = gql`
   extend type Mutation {
@@ -13,7 +15,9 @@ export const mutationTypes = () => [ Mutation ]
 export const mutationResolvers = {
   Mutation: {
     async create<%= entityName[0].toUpperCase() + entityName.slice(1) %>(obj, { title }, context, info) {
-      return await <%= entityName[0].toUpperCase() + entityName.slice(1) %>.create({ title }).save()
+      const <%= entityName %> = await <%= entityName[0].toUpperCase() + entityName.slice(1) %>.create({ title }).save()
+      pubsub.publish(subscriptions.<%= entityName.toUpperCase() %>_ADDED, <%= entityName %>)
+      return <%= entityName %>
     },
   },
 }

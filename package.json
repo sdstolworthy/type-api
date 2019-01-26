@@ -11,10 +11,12 @@
     "docker:test": "docker-compose -f docker-compose.test.yml up",
     "build": "tsc",
     "dev": "nodemon -r ./src/server.ts --exec ts-node -e ts --trace-sync-io",
+    "nova": "node ./nova/bin/run",
     "serve": "npm run build && node dist/server.js",
     "test": "LOG_LEVEL=error npm run test:unit",
     "test:unit": "nyc --reporter=text mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
-    "create:entity": "gulp entity --name"
+    "create:entity": "gulp entity --name",
+    "oclif": "cd ./nova && oclif"
   },
   "nyc": {
     "include": [
@@ -87,6 +89,7 @@
     "morgan": "^1.9.1",
     "nodemon": "^1.18.9",
     "nyc": "^13.1.0",
+    "oclif": "^1.12.8",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2",
     "walk": "^2.3.14"

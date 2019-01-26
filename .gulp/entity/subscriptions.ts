@@ -17,6 +17,9 @@ export const subscriptionTypes = () => [ Subscription ]
 export const subscriptionResolvers = {
   Subscription: {
     <%= entityName %>Added: {
+      resolve: (<%= entityName %>) => {
+        return <%= entityName %>
+      },
       subscribe: () => pubsub.asyncIterator([subscriptions.<%= entityName.toUpperCase() %>_ADDED]),
     },
   },

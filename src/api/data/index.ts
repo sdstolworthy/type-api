@@ -1,5 +1,6 @@
 import { ApolloServer } from 'apollo-server-express'
 import { Application } from 'express'
+import * as http from 'http'
 import * as util from 'util'
 import { logger } from '../../config/logger'
 import settings from '../../config/settings'
@@ -11,6 +12,14 @@ export async function StartGraphQL(app: Application) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    subscriptions: {
+      onConnect: (connectionParams, websocket) => {
+        logger.info('Connected to subscription websocket.')
+      },
+      onDisconnect: () => {
+        logger.info('Disconnected from subscription websocket.')
+      },
+    },
     context: async ({ req, connection }) => {
       // https://www.apollographql.com/docs/apollo-server/features/subscriptions.html#Context-with-Subscriptions
       if (connection) {
@@ -30,7 +39,11 @@ export async function StartGraphQL(app: Application) {
 
   server.applyMiddleware({ app })
 
-  app.listen({ port: settings.port }, () => {
+  const httpServer = http.createServer(app)
+  server.installSubscriptionHandlers(httpServer)
+
+  httpServer.listen(settings.port, () => {
     logger.info(`Server ready at http://127.0.0.1:${settings.port}${server.graphqlPath} 🚀`)
+    logger.info(`Subscriptions ready at ws://127.0.0.1:${settings.port}${server.subscriptionsPath} 🚀`)
   })
 }

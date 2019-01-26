@@ -18,6 +18,7 @@ export const logger = winston.createLogger({
         winston.format.timestamp({
           format: 'YYYY-MM-DD HH:mm:ss',
         }),
+        // TODO: if data.message is object, print using util
         winston.format.printf((data) => `${data.timestamp} ${data.level}: ${data.message}`),
       ),
     }),

@@ -17,6 +17,9 @@ export const subscriptionTypes = () => [ Subscription ]
 export const subscriptionResolvers = {
   Subscription: {
     postAdded: {
+      resolve: (post) => {
+        return post
+      },
       subscribe: () => pubsub.asyncIterator([subscriptions.POST_ADDED]),
     },
   },
