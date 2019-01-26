@@ -17,10 +17,11 @@ export default {
    *
    * These settings alter the structure and/or naming conventions of the database.
    * These should not be changed in production.
+   *
+   * More database settings are in /ormconfig.js
    */
   dbPostgresUrl: process.env.POSTGRES_URL,
   dbPostgresTestUrl: process.env.POSTGRES_TEST_URL,
-  dbTablePrefix: 'app_', // this does nothing; see /ormconfig.js
 
   /**
    * Mailgun
