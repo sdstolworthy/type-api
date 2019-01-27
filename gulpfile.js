@@ -10,7 +10,7 @@ const args = minimist(process.argv.slice(2))
 
 gulp.task('entity', () => {
   args.name = args.name + ''
-  const entityName = args.name[0].toLowerCase() + entityName.slice(1) // make first letter lowercase
+  const entityName = args.name[0].toLowerCase() + args.name.slice(1) // make first letter lowercase
   const entityPath = './src/api/data'
 
   // argument --name is required
