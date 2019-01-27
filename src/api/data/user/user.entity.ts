@@ -1,3 +1,4 @@
+import { IsEmail } from 'class-validator'
 import { Column, Entity, Index, OneToMany } from 'typeorm'
 import { AltamirEntity } from '../_helpers/base.entity'
 
@@ -7,6 +8,7 @@ import { AltamirEntity } from '../_helpers/base.entity'
 export class User extends AltamirEntity {
   @Column()
   @Index({ unique: true })
+  @IsEmail()
   public email: string
 
   @Column({ select: false })
