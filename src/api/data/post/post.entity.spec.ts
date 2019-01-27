@@ -30,7 +30,7 @@ describe('post entity', () => {
     await connection.close()
   })
 
-  it('should have an id field of type uuid', (done) => {
+  it('should have an id field of type number', (done) => {
     Post.create(testEntity).save().then((post) => {
       expect(post).to.haveOwnProperty('id')
       expect(post.id).to.be.a('number')

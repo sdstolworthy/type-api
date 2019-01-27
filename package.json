@@ -32,7 +32,7 @@
       ".ts"
     ],
     "reporter": [
-      "lcov"
+      "text"
     ],
     "report-dir": "./reports",
     "all": true
