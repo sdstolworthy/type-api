@@ -9,7 +9,6 @@ export default {
   port: parseInt(process.env.PORT, 10) || 3100,
   env: process.env.NODE_ENV || 'development',
   secretKey: process.env.SECRET_KEY || 'replace_this_key_474@itys*-gng^0phyeohag)qxa9$3v64+h^ze#',
-  allowedHosts: process.env.ALLOWED_HOSTS ? process.env.ALLOWED_HOSTS.split(',') : ['localhost'],
   logLevel: process.env.LOG_LEVEL || 'warn',
 
   /**

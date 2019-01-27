@@ -2,7 +2,6 @@ import 'reflect-metadata'
 
 import * as bodyParser from 'body-parser'
 import * as compression from 'compression'
-import * as cors from 'cors'
 import * as express from 'express'
 import * as helmet from 'helmet'
 import * as morgan from 'morgan'
@@ -50,21 +49,6 @@ export async function run({
 
   // middleware
   app.use(helmet())
-  app.use(cors({
-    // TODO: is this implementation is subpar and too restrictive?
-    origin: (origin, cb) => {
-      logger.silly(`Origin: ${origin}`)
-      if (settings.allowedHosts.indexOf(origin) !== -1 || !origin) {
-        cb(null, true)
-      } else {
-        cb(new HttpError(
-          401,
-          'Not allowed by CORS',
-          settings.env === 'development' ? 'Check your env.ALLOWED_HOSTS' : '',
-        ))
-      }
-    },
-  }))
   app.use(compression())
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
