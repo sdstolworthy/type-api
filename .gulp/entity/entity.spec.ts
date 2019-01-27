@@ -30,10 +30,10 @@ describe('<%= entityName %> entity', () => {
     await connection.close()
   })
 
-  it('should have an id field of type uuid', (done) => {
+  it('should have an id field of type number', (done) => {
     <%= entityName[0].toUpperCase() + entityName.slice(1) %>.create(testEntity).save().then((<%= entityName %>) => {
       expect(<%= entityName %>).to.haveOwnProperty('id')
-      expect(validator.isUUID(<%= entityName %>.id)).to.be.true
+      expect(<%= entityName %>.id).to.be.a('number')
       done()
     })
   })

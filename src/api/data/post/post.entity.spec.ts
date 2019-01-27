@@ -33,7 +33,7 @@ describe('post entity', () => {
   it('should have an id field of type uuid', (done) => {
     Post.create(testEntity).save().then((post) => {
       expect(post).to.haveOwnProperty('id')
-      expect(validator.isUUID(post.id)).to.be.true
+      expect(post.id).to.be.a('number')
       done()
     })
   })

@@ -31,10 +31,10 @@ describe('user entity', () => {
     await connection.close()
   })
 
-  it('should have an id field of type uuid', (done) => {
+  it('should have an id field of type number', (done) => {
     User.create(testUser).save().then((user) => {
       expect(user).to.haveOwnProperty('id')
-      expect(validator.isUUID(user.id)).to.be.true
+      expect(user.id).to.be.a('number')
       done()
     })
   })
