@@ -20,7 +20,6 @@ export async function StartGraphQL(app: Application) {
         // add currently auth'd user to context
         let user = connectionParams.Authorization || ''
         user = await getUserFromAuthHeader(user)
-
         logger.debug('ApolloServer websocket context.user:')
         logger.debug(user)
 
