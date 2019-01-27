@@ -15,7 +15,7 @@ export async function StartGraphQL(app: Application) {
     tracing: settings.env === 'development' ? true : false,
     subscriptions: {
       onConnect: async (connectionParams: any, websocket: any) => {
-        logger.info('Connected to subscription websocket.')
+        logger.debug('Connected to subscription websocket.')
 
         // add currently auth'd user to context
         let user = connectionParams.Authorization || ''
@@ -29,7 +29,7 @@ export async function StartGraphQL(app: Application) {
         }
       },
       onDisconnect: () => {
-        logger.info('Disconnected from subscription websocket.')
+        logger.debug('Disconnected from subscription websocket.')
       },
     },
     context: async ({ req, connection }) => {
