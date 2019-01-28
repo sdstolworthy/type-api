@@ -11,26 +11,49 @@ import settings from './config/settings'
  * @class Server
  */
 export default class Server {
+  private httpServer: any
+  private db: Database = new Database()
+
   /**
    * Initialize the server. This can be called from anywhere, including tests,
    * to scaffold out the full server. callback() is an optional parameter mostly
    * used to pass done() in testing.
-   * @static
+   * @public
    * @memberof Server
    */
-  public static async init(callback?: () => void) {
-    await Database.init() // must be called first
+  public async init(callback?: () => void) {
+    // database must be first
+    await this.db.init()
+
     await Cron.init()
 
     await graphql.applyMiddleware({ app })
-    const httpServer = await http.createServer(app)
-    await graphql.installSubscriptionHandlers(httpServer)
+    this.httpServer = await http.createServer(app)
+    await graphql.installSubscriptionHandlers(this.httpServer)
 
-    httpServer.listen(settings.port, () => {
+    this.httpServer.listen(settings.port, () => {
       logger.info(`Server ready at http://127.0.0.1:${settings.port}${graphql.graphqlPath} 🚀`)
       logger.info(`Subscriptions ready at ws://127.0.0.1:${settings.port}${graphql.subscriptionsPath} 🚀`)
 
-      if (callback) {
+      if (typeof callback === 'function') {
+        callback()
+      }
+    })
+  }
+
+  /**
+   * Close the server. Pass a callback (mostly used to close the server in
+   * tests).
+   * @public
+   * @memberof Server
+   */
+  public async close(callback?: () => void) {
+    await this.db.close()
+
+    this.httpServer.close(() => {
+      logger.info('Server closed')
+
+      if (typeof callback === 'function') {
         callback()
       }
     })

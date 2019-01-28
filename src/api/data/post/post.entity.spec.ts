@@ -2,7 +2,6 @@
 import { expect } from 'chai'
 import 'mocha'
 import { Connection, createConnection } from 'typeorm'
-import validator from 'validator'
 import settings from '../../../config/settings'
 import { Post } from './post.entity'
 

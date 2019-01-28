@@ -6,18 +6,23 @@ import { TypeORMLogger } from './logger/typeorm'
  * @class Database
  */
 export default class Database {
+  private connection: Connection
+
   /**
-   * @static
+   * @public
    * @memberof Database
    */
-  public static async init() {
+  public async init() {
     let connectionOptions = await getConnectionOptions()
     connectionOptions = {
       ...connectionOptions,
       logging: 'all',
       logger: new TypeORMLogger(),
     }
-    const connection: Connection = await createConnection(connectionOptions)
-    return connection
+    this.connection = await createConnection(connectionOptions)
+  }
+
+  public async close() {
+    this.connection.close()
   }
 }

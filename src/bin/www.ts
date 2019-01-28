@@ -1,3 +1,3 @@
 import Server from '../server'
 
-Server.init()
+new Server().init()

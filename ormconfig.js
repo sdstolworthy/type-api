@@ -3,7 +3,7 @@ const srcOrDist = process.env.NODE_ENV === 'production' ? 'dist' : 'src'
 
 module.exports = {
   type: 'postgres',
-  url: process.env.POSTGRES_URL,
+  url: process.env.NODE_ENV === 'test' ? process.env.POSTGRES_TEST_URL : process.env.POSTGRES_URL,
   autoSave: true,
   synchronize: true,
   entityPrefix: 'app_',
