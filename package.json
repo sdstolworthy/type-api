@@ -14,7 +14,8 @@
     "serve": "npm run build && NODE_ENV=production node dist/bin/www",
     "test": "LOG_LEVEL=error npm run test:unit",
     "test:unit": "NODE_ENV=test nyc --reporter=text mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
-    "create:entity": "gulp entity --name"
+    "create:entity": "gulp entity --name",
+    "typeorm": "ts-node -r ts-node/register ./node_modules/typeorm/cli.js"
   },
   "nyc": {
     "include": [
