@@ -63,7 +63,7 @@ passport.use(new JWT.Strategy({
   }
 }))
 
-const isAuthenticated = passport.authenticate('jwt', { session: false })
+const isAuthenticated = passport.authenticate('jwt', { session: false, failWithError: true })
 
 export {
   isAuthenticated,
