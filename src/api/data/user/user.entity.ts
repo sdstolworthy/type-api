@@ -1,6 +1,7 @@
 import { IsEmail } from 'class-validator'
-import { Column, Entity, Index, OneToMany } from 'typeorm'
+import { BeforeInsert, BeforeUpdate, Column, Entity, Index, OneToMany } from 'typeorm'
 import { AltamirEntity } from '../_helpers/base.entity'
+import generateGravatarUrl from '../_helpers/generateGravatarUrl'
 
 @Entity({
   name: 'users',
@@ -13,6 +14,9 @@ export class User extends AltamirEntity {
 
   @Column({ select: false })
   public password: string
+
+  @Column()
+  public gravatarUrl: string
 
   @Column({
     nullable: true,
@@ -33,4 +37,10 @@ export class User extends AltamirEntity {
     select: false,
   })
   public lastPasswordReset: Date
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private updateGravatar() {
+    this.gravatarUrl = generateGravatarUrl(this.email)
+  }
 }
