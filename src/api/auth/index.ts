@@ -98,7 +98,7 @@ router.post('/refresh', isAuthenticated, (req: any, res: Response) => {
 })
 
 /**
- * /auth/forgot
+ * POST /auth/forgot
  * Send email to user email address with password reset token.
  */
 router.post('/forgot', requiredFields(['email']), (req: Request, res: Response, next: NextFunction) => {

@@ -188,4 +188,9 @@ describe('auth endpoint', function() {
       })
     })
   })
+
+  // TODO: POST /auth/refresh
+  // TODO: POST /auth/forgot
+  // TODO: GET /auth/reset/:token
+  // TODO: POST /auth/reset/:token
 })
