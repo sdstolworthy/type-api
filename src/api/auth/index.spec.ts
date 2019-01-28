@@ -1,5 +1,6 @@
 /* tslint:disable no-unused-expression no-var-requires */
 import * as chai from 'chai'
+import * as jwt from 'jsonwebtoken'
 import 'mocha'
 import validator from 'validator'
 import settings from '../../config/settings'
@@ -26,7 +27,7 @@ describe('auth endpoint', function() {
   })
 
   /**
-   * This test does nothing but make sure that the server persists across all
+   * This test does nothing but makes sure that the server persists across all
    * of the tests in this module.
    */
   it('returns true', (done) => {
@@ -189,7 +190,105 @@ describe('auth endpoint', function() {
     })
   })
 
-  // TODO: POST /auth/refresh
+  describe('POST /auth/refresh', () => {
+    it('returns an error when no auth header was sent', (done) => {
+      chai.request(baseUrl)
+      .post('/refresh')
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(400)
+        expect(res.body).to.haveOwnProperty('errors')
+
+        done()
+      })
+    })
+
+    it('returns an error when no token is included in the auth header', (done) => {
+      chai.request(baseUrl)
+      .post('/refresh')
+      .set('Authorization', 'Bearer')
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(400)
+        expect(res.body).to.haveOwnProperty('errors')
+
+        done()
+      })
+    })
+
+    it('returns an error when provided an ill-formatted token in the auth header', (done) => {
+      chai.request(baseUrl)
+      .post('/refresh')
+      .set('Authorization', 'Bearer thisIsNotAToken')
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(400)
+        expect(res.body).to.haveOwnProperty('errors')
+
+        done()
+      })
+    })
+
+    it('returns an error when provided a token with a bad user.id in the auth header', (done) => {
+      const badIdToken = jwt.sign(
+        { id: -2 }, // not a user id that's in use
+        settings.secretKey,
+        { expiresIn: '5s' },
+      )
+
+      chai.request(baseUrl)
+      .post('/refresh')
+      .set('Authorization', `Bearer ${badIdToken}`)
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(400)
+        expect(res.body).to.haveOwnProperty('errors')
+
+        done()
+      })
+    })
+
+    it('returns an error when provided an expired token in the auth header', (done) => {
+      const expiredToken = jwt.sign(
+        { id: 1 },
+        settings.secretKey,
+        { expiresIn: '2ms' },
+      )
+
+      setTimeout(() => {
+        chai.request(baseUrl)
+        .post('/refresh')
+        .set('Authorization', `Bearer ${expiredToken}`)
+        .end((err, res) => {
+          expect(err).to.be.null
+          expect(res).to.have.status(400)
+          expect(res.body).to.haveOwnProperty('errors')
+
+          done()
+        })
+      }, 10) // delay 10ms for the token to expire
+    })
+
+    it('returns a refreshed token when provided a valid token in the auth header', (done) => {
+      chai.request(baseUrl)
+      .post('/refresh')
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        const bearerToken = res.get('Authorization').split(' ')[1]
+
+        expect(err).to.be.null
+        expect(res).to.have.status(200)
+        expect(res).to.have.header('Authorization')
+        expect(validator.isJWT(bearerToken))
+        expect(res.body).to.haveOwnProperty('token')
+        expect(res.body.token).to.be.a('string')
+        expect(validator.isJWT(res.body.token)).to.be.true
+
+        done()
+      })
+    })
+  })
+
   // TODO: POST /auth/forgot
   // TODO: GET /auth/reset/:token
   // TODO: POST /auth/reset/:token
