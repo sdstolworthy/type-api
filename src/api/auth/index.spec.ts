@@ -13,6 +13,7 @@ describe('auth endpoint', function() {
   const baseUrl = `http://127.0.0.1:${settings.port}/auth`
   const email = 'test@gmail.com'
   const password = 'testPassword'
+  let token = ''
 
   const server = new Server()
 
@@ -180,6 +181,9 @@ describe('auth endpoint', function() {
         expect(res.body).to.haveOwnProperty('token')
         expect(res.body.token).to.be.a('string')
         expect(validator.isJWT(res.body.token)).to.be.true
+
+        // save token for following tests
+        token = bearerToken
         done()
       })
     })
