@@ -59,17 +59,32 @@ app.get('/', (req: express.Request, res: express.Response) => {
 app.use('/auth', authRouter)
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  // only run this if errors not handled by someone else
+  let error = err
+  if (!res.locals.errors.length) {
+    error = {
+      name: err.name || 'Error',
+      msg: err.message || 'Unhandled error',
+    }
+    logger.error(error)
+    res.locals.errors.push(error)
+  }
+  next(error)
+})
+
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (res.locals.errors.length > 0) {
     // at least one error exists; send the errors
     return res.status(400)
     .json({ errors: res.locals.errors })
   }
-  next()
+  next(err)
 })
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   // An error occurred but wasn't handled.
   const error = settings.env === 'development' ? err : 'Internal Server Error'
+  logger.error(error)
 
   res.status(500)
   .json({ error })

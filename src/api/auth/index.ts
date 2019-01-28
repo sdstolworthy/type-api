@@ -26,7 +26,9 @@ router.post('/register',
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array()})
+      logger.error(errors.array())
+      res.locals.errors.push.apply(res.locals.errors, errors.array())
+      return next(errors.array())
     }
 
     User.create({
@@ -52,9 +54,16 @@ router.post('/register',
  * Log an existing user in and return a valid, signed JWT.
  */
 router.post('/login',
-  requiredFields(['email', 'password']),
-  passport.authenticate('local', { session: false }),
-  (req: any, res: Response) => {
+  [check('email').exists(), check('password').exists()],
+  passport.authenticate('local', { session: false, failWithError: true }),
+  (req: any, res: Response, next: NextFunction) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      logger.error(errors.array())
+      res.locals.errors.push.apply(res.locals.errors, errors.array())
+      return next(errors.array())
+    }
+
     const token = jwt.sign(
       { id: req.user.id },
       settings.secretKey,
