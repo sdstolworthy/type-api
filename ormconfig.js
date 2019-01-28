@@ -1,9 +1,14 @@
 // This file must interact with process.env vars to avoid errors when compiling
-const srcOrDist = process.env.NODE_ENV === 'production' ? 'dist' : 'src'
+const env = process.env.NODE_ENV || 'development'
+const srcOrDist = env === 'production' ? 'dist' : 'src'
 
 module.exports = {
+  // use postgres for timestamp columns
   type: 'postgres',
-  url: process.env.NODE_ENV === 'test' ? process.env.POSTGRES_TEST_URL : process.env.POSTGRES_URL,
+  url: env === 'test' ? process.env.POSTGRES_TEST_URL : process.env.POSTGRES_URL,
+
+  // only drop schema in test environment; this keeps tests separate
+  dropSchema: env === 'test' ? true : false,
   autoSave: true,
   synchronize: true,
   entityPrefix: 'app_',

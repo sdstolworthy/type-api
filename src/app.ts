@@ -38,23 +38,39 @@ app.use(passport.initialize())
 
 app.use(morgan('tiny', { stream }))
 
+// initialize custom errors
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+  /**
+   * Using an array that stores errors until we are ready to access them again
+   * ensures that we can capture all errors along the path to sending the errors
+   * back to the user.
+   */
+  res.locals.errors = []
+  next()
+})
+
 // routes
-app.get('/', (req, res) => {
-  res.send('Up and running.')
+app.get('/', (req: express.Request, res: express.Response) => {
+  res.json({
+    status: 'ok',
+  })
 })
 
 app.use('/auth', authRouter)
 
-app.use((error: any, req: express.Request, res: any, next: express.NextFunction) => {
-  logger.error(error)
-
-  if (typeof error === 'number') {
-    error = new HttpError(error) // next(404)
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (res.locals.errors.length > 0) {
+    // at least one error exists; send the errors
+    return res.status(400)
+    .json({ errors: res.locals.errors })
   }
-
-  sendHttpError(error, req, res, next)
+  next()
 })
-app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  // An error occurred but wasn't handled.
+  const error = settings.env === 'development' ? err : 'Internal Server Error'
+
   res.status(500)
   .json({ error })
 })

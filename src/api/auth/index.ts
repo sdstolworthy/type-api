@@ -38,6 +38,9 @@ router.post('/register',
         email: user.email,
       })
     }).catch((err) => {
+      res.locals.errors.push({
+        msg: err.detail,
+      })
       logger.error(err)
       next(err)
     })
