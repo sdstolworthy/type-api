@@ -37,7 +37,13 @@ export const logger = winston.createLogger({
 // capture streamed info
 class Stream {
   public write(text: string) {
-    logger.info(text)
+    /**
+     * Frequently, Morgan (and other loggers) will include linebreaks in their
+     * text (as all loggers should). When wrapping with this logger, we want to
+     * remove those linebreaks since we are already including our own.
+     * https://stackoverflow.com/a/10805198/5623385
+     */
+    logger.info(text.replace(/(\r\n|\n|\r)/gm, ''))
   }
 }
 export const stream = new Stream()
