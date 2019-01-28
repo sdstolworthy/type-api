@@ -18,14 +18,14 @@ export class HttpError extends Error {
    * @param {any} [message]
    * @memberof HttpError
    */
-  constructor(status?: number, name?: string, message?: any) {
+  constructor(status: number = 500, name?: string, message?: any) {
     super(message)
 
     Error.captureStackTrace(this, this.constructor)
 
-    this.status = status || 500
+    this.status = status
     this.name = name || this.constructor.name || 'Error'
-    // this.message = message || http.STATUS_CODES[this.status] || 'Error'
+    this.message = message || http.STATUS_CODES[this.status] || 'Error'
     if (typeof Error.captureStackTrace === 'function') {
       Error.captureStackTrace(this, this.constructor)
     } else {

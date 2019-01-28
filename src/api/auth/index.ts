@@ -1,6 +1,7 @@
 import async from 'async'
 import * as crypto from 'crypto'
 import { NextFunction, Request, Response, Router } from 'express'
+import * as checkApis from 'express-validator/check'
 import * as jwt from 'jsonwebtoken'
 import * as passport from 'passport'
 import validator from 'validator'
@@ -15,6 +16,7 @@ import { isAuthenticated, tokenExpirationPeriod } from './passport'
 
 const ONE_HOUR = 3600000
 const router = Router()
+const { check, validationResult } = checkApis
 
 /**
  * POST /auth/register
@@ -23,10 +25,11 @@ const router = Router()
  *  password: req.body.password
  */
 router.post('/register',
-  requiredFields(['email', 'password']),
+  [check('email').isEmail(), check('password').isString()],
   (req: Request, res: Response, next: NextFunction) => {
-    if (!validator.isEmail(req.body.email)) {
-      return next(new HttpError(400, 'Invalid Email', 'The email provided in the body is not a valid email.'))
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array()})
     }
 
     User.create({

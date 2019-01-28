@@ -1,6 +1,7 @@
 /* tslint:disable no-unused-expression no-var-requires */
 import * as chai from 'chai'
 import 'mocha'
+import { logger } from '../../config/logger'
 import settings from '../../config/settings'
 import Server from '../../server'
 
@@ -29,6 +30,34 @@ describe('auth endpoint', function() {
       .send({
         email: 'test@gmail', // invalid email
         password: 'testPassword',
+      })
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(400)
+        done()
+      })
+    })
+
+    it("returns an error when email isn't in the body", (done) => {
+      chai.request(baseUrl)
+      .post('/register')
+      .type('form')
+      .send({
+        password: 'testPassword',
+      })
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(400)
+        done()
+      })
+    })
+
+    it("returns an error when password isn't in the body", (done) => {
+      chai.request(baseUrl)
+      .post('/register')
+      .type('form')
+      .send({
+        email: 'test@example.com',
       })
       .end((err, res) => {
         expect(err).to.be.null
