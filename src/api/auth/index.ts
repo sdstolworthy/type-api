@@ -1,11 +1,9 @@
 import async from 'async'
 import * as crypto from 'crypto'
 import { NextFunction, Request, Response, Router } from 'express'
-import * as checkApis from 'express-validator/check'
+import { check, validationResult } from 'express-validator/check'
 import * as jwt from 'jsonwebtoken'
 import * as passport from 'passport'
-import validator from 'validator'
-import { HttpError } from '../../config/errorHandler'
 import { logger } from '../../config/logger'
 import sendMail from '../../config/mailer'
 import settings from '../../config/settings'
@@ -16,7 +14,6 @@ import { isAuthenticated, tokenExpirationPeriod } from './passport'
 
 const ONE_HOUR = 3600000
 const router = Router()
-const { check, validationResult } = checkApis
 
 /**
  * POST /auth/register
