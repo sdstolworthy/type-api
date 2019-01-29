@@ -1,7 +1,7 @@
 FROM node:latest
 
 RUN node -v
-RUN npm i -g npm yarn typescript
+RUN npm i -g npm yarn
 RUN mkdir /app
 WORKDIR /app
 COPY . /app
