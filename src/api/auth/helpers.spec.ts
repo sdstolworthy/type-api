@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 import { expect } from 'chai'
 import 'mocha'
 import { logger } from '../../config/logger'
