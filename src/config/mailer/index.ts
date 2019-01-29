@@ -31,11 +31,11 @@ const send = (
   mg.messages().send(data, (err: any, body: any) => {
     if (err) {
       logger.error(err)
-      return done(err)
+      return done(err, false)
     }
 
     logger.debug(body)
-    return done(body)
+    return done(null, body)
   })
 }
 
