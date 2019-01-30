@@ -116,16 +116,17 @@ router.post('/forgot', requiredFields(['email']), (req: Request, res: Response, 
         user.resetPasswordToken = token
         user.resetPasswordExpires = new Date(Date.now() + ONE_HOUR)
 
-        let emailText = 'A password reset has been initiated on your account.\n'
-        emailText += 'To reset your password, please click this link:\n\n'
-        emailText += `http://${req.headers.host}/auth/reset/${token}\n\n`
-        emailText += 'If you did not initiate this password reset, you do not need to do anything.'
+        // let emailText = 'A password reset has been initiated on your account.\n'
+        // emailText += 'To reset your password, please click this link:\n\n'
+        // emailText += `http://${req.headers.host}/auth/reset/${token}\n\n`
+        // emailText += 'If you did not initiate this password reset, you do not need to do anything.'
 
         user.save().then((savedUser) => {
           const data = {
             to: user.email,
             subject: 'Password reset',
-            text: emailText,
+            template: 'passwordResetRequest',
+            link: `http://${req.headers.host}/auth/reset/${token}`,
           }
 
           sendMail(data, (err, body) => {
