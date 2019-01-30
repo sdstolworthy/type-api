@@ -4,6 +4,8 @@ services:
   db_dev:
     image: postgres:latest
     restart: always
+    ports:
+      - 9000:5432
 
   app_dev:
     restart: always
@@ -16,5 +18,4 @@ services:
     links:
       - db_dev
     environment:
-      POSTGRES_URL: postgres://postgres@db_dev:5432/postgres
-
+      POSTGRES_URL: postgres://postgres@db_dev:9000/postgres
