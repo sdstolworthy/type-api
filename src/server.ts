@@ -21,7 +21,7 @@ export default class Server {
    * @public
    * @memberof Server
    */
-  public async init(callback?: () => void) {
+  public async up(callback?: () => void) {
     // database must be first
     await this.db.init()
 
@@ -47,7 +47,7 @@ export default class Server {
    * @public
    * @memberof Server
    */
-  public async close(callback?: () => void) {
+  public async down(callback?: () => void) {
     await this.db.close()
 
     this.httpServer.close(() => {

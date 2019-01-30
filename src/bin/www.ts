@@ -1,3 +1,7 @@
 import Server from '../server'
 
-new Server().init()
+const server = new Server()
+
+server.up()
+
+export default server

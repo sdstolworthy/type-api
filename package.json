@@ -2,7 +2,7 @@
   "name": "generator-api",
   "version": "0.1.0",
   "description": "",
-  "license": "GTFO",
+  "private": true,
   "author": "Altamir Consulting, LLC",
   "scripts": {
     "prestart": "if [ ! -d node_modules ]; then npm install; fi",

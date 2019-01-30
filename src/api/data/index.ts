@@ -1,6 +1,5 @@
 import { ApolloServer } from 'apollo-server-express'
 import { Application } from 'express'
-import * as http from 'http'
 import { logger } from '../../config/logger'
 import settings from '../../config/settings'
 import getUserFromAuthHeader from '../middleware/getUserFromAuthHeader'

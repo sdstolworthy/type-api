@@ -19,11 +19,11 @@ describe('auth endpoint', function() {
   const server = new Server()
 
   before((done) => {
-    server.init(done)
+    server.up(done)
   })
 
   after((done) => {
-    server.close(done)
+    server.down(done)
   })
 
   /**
