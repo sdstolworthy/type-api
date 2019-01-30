@@ -9,6 +9,10 @@ export default new ApolloServer({
   typeDefs,
   resolvers,
   tracing: settings.env === 'development' ? true : false,
+  engine: {
+    // https://www.apollographql.com/docs/apollo-server/features/metrics.html#Apollo-Engine
+    apiKey: settings.apolloEngineApiKey,
+  },
   subscriptions: {
     onConnect: async (connectionParams: any, websocket: any) => {
       logger.debug('Connected to subscription websocket.')
