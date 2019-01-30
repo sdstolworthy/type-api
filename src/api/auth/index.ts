@@ -129,8 +129,13 @@ router.post('/forgot', requiredFields(['email']), (req: Request, res: Response, 
           }
 
           sendMail(data, (err, body) => {
+            if (err) {
+              logger.error('wut')
+              logger.error(err)
+            }
+
             res.send('Password reset message sent.')
-            done(err, 'done')
+            return done(err, 'done')
           })
         }).catch((error) => {
           logger.error(error)
@@ -143,8 +148,11 @@ router.post('/forgot', requiredFields(['email']), (req: Request, res: Response, 
       })
     },
   ], (err) => {
-    logger.error(err)
-    return next(err)
+    if (err) {
+      logger.error(err)
+      return next(err)
+    }
+    return { success: true }
   })
 })
 

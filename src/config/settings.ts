@@ -23,12 +23,14 @@ export default {
   dbPostgresTestUrl: process.env.POSTGRES_TEST_URL,
 
   /**
-   * Mailgun
+   * Mailer
    *
-   * This API uses Mailgun as its mail transport. These MUST BE SET in the environment
-   * variables in order for the auth to work.
+   * This API uses nodemailer to run transports. Any SMTP transport will do.
    */
-  mailgunApiKey: process.env.MAILGUN_API_KEY,
-  mailgunDomain: process.env.MAILGUN_DOMAIN,
-  fromEmail: process.env.FROM_EMAIL || 'noreply@example.com',
+  mailHost: process.env.MAIL_HOST,
+  mailPort: parseInt(process.env.MAIL_PORT, 10) || 587,
+  mailSecure: (process.env.MAIL_SECURE === 'true') || false,
+  mailUser: process.env.MAIL_USER,
+  mailPass: process.env.MAIL_PASS,
+  mailFrom: process.env.MAIL_FROM || 'noreply@example.com',
 }
