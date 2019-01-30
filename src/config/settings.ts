@@ -10,7 +10,7 @@ export default {
   env: process.env.NODE_ENV || 'development',
   secretKey: process.env.SECRET_KEY || 'replace_this_key_474@itys*-gng^0phyeohag)qxa9$3v64+h^ze#',
   logLevel: process.env.LOG_LEVEL || 'warn',
-  apolloEngineApiKey: process.env.APOLLO_ENGINE_API_KEY,
+  apolloEngineApiKey: process.env.ENGINE_API_KEY,
 
   /**
    * Database
