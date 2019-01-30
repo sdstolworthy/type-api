@@ -40,7 +40,7 @@ const transporter = nodemailer.createTransport(transporterConfig)
 /**
  *
  */
-const sendMail = (
+export default (
   opts: MailerArgs,
   done?: CallableFunction,
 ) => {
@@ -50,29 +50,18 @@ const sendMail = (
   logger.silly('Email details:')
   logger.silly(data)
 
+  // set from email as default from email if not already set
   data.from = data.from || settings.mailFrom
 
   if (data.template) {
     // this email is an html email
     logger.debug('Sending an HTML email')
-    const html = parse(data.template, data.link)
-    transporter.sendMail({
-      to: data.to,
-      from: data.from,
-      subject: data.subject,
-      html,
-    })
-
+    data.html = parse(data.template, data.link)
   } else {
     // this email is a plain text email
     logger.debug('Sending a plain text email')
-    transporter.sendMail({
-      to: data.to,
-      from: data.from,
-      subject: data.subject,
-      text: data.text,
-    })
   }
+
   transporter.sendMail(data, (err, info, response) => {
     if (err) {
       logger.error(err)
@@ -85,5 +74,3 @@ const sendMail = (
     return done(null, response)
   })
 }
-
-export default sendMail
