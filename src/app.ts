@@ -66,7 +66,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
       name: err.name || 'Error',
       msg: err.mgs || err.message || 'Unhandled error',
     }
-    logger.error(error)
+    logger.debug(error)
     res.locals.errors.push(error)
   }
   next(error)

@@ -26,7 +26,7 @@ router.post('/register',
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      logger.error(errors.array())
+      logger.debug(errors.array())
       res.locals.errors.push.apply(res.locals.errors, errors.array())
       return next(errors.array())
     }
@@ -59,7 +59,7 @@ router.post('/login',
   (req: any, res: Response, next: NextFunction) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      logger.error(errors.array())
+      logger.debug(errors.array())
       res.locals.errors.push.apply(res.locals.errors, errors.array())
       return next(errors.array())
     }
@@ -104,7 +104,7 @@ router.post('/refresh', isAuthenticated, (req: any, res: Response) => {
 router.post('/forgot', [check('email').exists()], (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    logger.error(errors.array())
+    logger.debug(errors.array())
     res.locals.errors.push.apply(res.locals.errors, errors.array())
     return next(errors.array())
   }
@@ -158,8 +158,11 @@ router.post('/forgot', [check('email').exists()], (req: Request, res: Response, 
     if (err) {
       if (err.name === 'EntityNotFound') {
         err.message = 'No user was found with that email.'
+        logger.debug(err)
+      } else {
+        logger.error(err)
       }
-      logger.error(err)
+
       return next(err)
     }
     return { success: true }
