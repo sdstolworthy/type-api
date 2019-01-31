@@ -141,7 +141,10 @@ router.post('/forgot', [check('email').exists()], (req: Request, res: Response, 
               logger.error(err)
             }
 
-            res.send('Password reset message sent.')
+            res.send({
+              success: true,
+              msg: 'Password reset message sent.',
+            })
             return done(err, 'done')
           })
         }).catch((error) => {
@@ -170,34 +173,19 @@ router.post('/forgot', [check('email').exists()], (req: Request, res: Response, 
 })
 
 /**
- * GET /auth/reset/:token
- * Returns the user with the reset token.
- */
-router.get('/reset/:token', (req: Request, res: Response) => {
-  // res.send('todo: token reset')
-  User.createQueryBuilder('user')
-  .where('user.resetPasswordToken = :token', { token: req.params.token })
-  .andWhere('user.resetPasswordExpires > :now', { now: new Date() })
-  .getOne()
-  .then((user) => {
-    if (!user) {
-      res.send("Either that user doesn't exist or that token is invalid.")
-    }
-    res.send(user)
-  })
-  .catch((err) => {
-    logger.error(err)
-    res.send(err)
-  })
-})
-
-/**
  * POST /auth/reset/:token
  * Flow to reset a user's password given a token.
  */
 router.post('/reset/:token',
-  requiredFields(['password']),
+  [check('password').exists()],
   (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      logger.debug(errors.array())
+      res.locals.errors.push.apply(res.locals.errors, errors.array())
+      return next(errors.array())
+    }
+
     User.createQueryBuilder('user')
     .addSelect('user.password')
     .where('user.resetPasswordToken = :token', { token: req.params.token })
@@ -205,7 +193,9 @@ router.post('/reset/:token',
     .getOne()
     .then((user) => {
       if (!user) {
-        return res.send("Either that user doesn't exist or that token is invalid.")
+        const msg = "Either that user doesn't exist or the token is invalid."
+        res.locals.errors.push({ msg })
+        return next(msg)
       }
 
       user.password = hashPassword(req.body.password)
@@ -221,13 +211,16 @@ router.post('/reset/:token',
         }
 
         sendMail(data, (err, body) => {
-          res.send('Password reset message sent.')
+          res.json({
+            success: true,
+            msg: 'Password was reset.',
+          })
         })
       })
     })
     .catch((err) => {
       logger.error(err)
-      res.send(err)
+      return next(err)
     })
   },
 )

@@ -11,11 +11,14 @@ chai.use(require('chai-http'))
 const expect = chai.expect
 
 describe('auth endpoint', function() {
-  this.timeout(0)
+  this.timeout(20000) // 20 seconds
+  const ONE_MINUTE = 60000
+  const ONE_HOUR = 3600000
   const baseUrl = `http://127.0.0.1:${settings.port}/auth`
   const email = 'test@gmail.com'
   const password = 'testPassword'
-  let token = ''
+  let jwtToken = ''
+  let passwordResetToken = ''
 
   const server = new Server()
 
@@ -185,7 +188,7 @@ describe('auth endpoint', function() {
         expect(validator.isJWT(res.body.token)).to.be.true
 
         // save token for following tests
-        token = bearerToken
+        jwtToken = bearerToken
         done()
       })
     })
@@ -273,7 +276,7 @@ describe('auth endpoint', function() {
     it('returns a refreshed token when provided a valid token in the auth header', (done) => {
       chai.request(baseUrl)
       .post('/refresh')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${jwtToken}`)
       .end((err, res) => {
         const bearerToken = res.get('Authorization').split(' ')[1]
 
@@ -336,15 +339,13 @@ describe('auth endpoint', function() {
         .getOne()
         .then((user) => {
           expect(user.resetPasswordToken).to.exist
+          passwordResetToken = user.resetPasswordToken
           done()
         })
       })
     })
 
     it('sets the user.resetPasswordExpires to one hour from now', (done) => {
-      const FIFTY_FIVE_MINUTES = 3300000
-      const ONE_HOUR = 3600000
-
       chai.request(baseUrl)
       .post('/forgot')
       .type('form')
@@ -357,17 +358,73 @@ describe('auth endpoint', function() {
 
         User.createQueryBuilder('user')
         .where('email = :email', { email })
+        .addSelect('user.resetPasswordToken')
         .addSelect('user.resetPasswordExpires')
         .getOne()
         .then((user) => {
+          passwordResetToken = user.resetPasswordToken
+
           expect(user.resetPasswordExpires).to.exist
-          expect(new Date(Date.now() + FIFTY_FIVE_MINUTES)).to.be.lessThan(user.resetPasswordExpires)
-          expect(new Date(Date.now() + ONE_HOUR)).to.be.greaterThan(user.resetPasswordExpires)
+          expect(new Date(Date.now() + ONE_HOUR).getTime())
+            .to.be.closeTo(user.resetPasswordExpires.getTime(), ONE_MINUTE)
           done()
         })
       })
     })
   })
-  // TODO: GET /auth/reset/:token
-  // TODO: POST /auth/reset/:token
+
+  describe('POST /auth/reset/:token', () => {
+    it("returns an error when password isn't in the body", (done) => {
+      chai.request(baseUrl)
+      .post(`/reset/${passwordResetToken}`)
+      .type('form')
+      .send()
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(400)
+        expect(res.body).to.haveOwnProperty('errors')
+        done()
+      })
+    })
+
+    it('returns an error when the password reset token is invalid', (done) => {
+      chai.request(baseUrl)
+      .post('/reset/invalidToken')
+      .type('form')
+      .send({
+        password: 'newPassword',
+      })
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(400)
+        expect(res.body).to.haveOwnProperty('errors')
+        done()
+      })
+    })
+
+    it('updates the user.lastPasswordReset to now and clears user.resetPasswordToken', (done) => {
+      chai.request(baseUrl)
+      .post(`/reset/${passwordResetToken}`)
+      .type('form')
+      .send({
+        password: 'newPassword',
+      })
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(200)
+
+        User.createQueryBuilder('user')
+        .where('email = :email', { email })
+        .addSelect('user.resetPasswordToken')
+        .addSelect('user.lastPasswordReset')
+        .getOne()
+        .then((user) => {
+          expect(user.resetPasswordToken).to.be.null
+          expect(user.lastPasswordReset).to.exist
+          expect(new Date().getTime()).to.be.closeTo(user.lastPasswordReset.getTime(), ONE_MINUTE)
+          done()
+        })
+      })
+    })
+  })
 })
