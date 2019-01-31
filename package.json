@@ -16,7 +16,9 @@
     "test": "LOG_LEVEL=error npm run test:unit",
     "test:unit": "NODE_ENV=test nyc --reporter=text mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
     "create:entity": "gulp entity --name",
-    "typeorm": "ts-node -r ts-node/register ./node_modules/typeorm/cli.js"
+    "typeorm": "ts-node -r ts-node/register ./node_modules/typeorm/cli.js",
+    "oclif": "cd cli && oclif",
+    "cli": "./cli/bin/run"
   },
   "nyc": {
     "include": [
@@ -92,6 +94,7 @@
     "morgan": "^1.9.1",
     "nodemon": "^1.18.9",
     "nyc": "^13.1.0",
+    "oclif": "^1.12.8",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2",
     "walk": "^2.3.14"
