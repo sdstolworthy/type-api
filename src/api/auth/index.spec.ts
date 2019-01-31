@@ -293,7 +293,9 @@ describe('auth endpoint', function() {
     })
   })
 
-  describe('POST /auth/forget', () => {
+  describe('POST /auth/forgot', () => {
+    // TODO: test that email is sent
+
     it("returns an error when email isn't in the body", (done) => {
       chai.request(baseUrl)
       .post('/forgot')
@@ -374,6 +376,8 @@ describe('auth endpoint', function() {
   })
 
   describe('POST /auth/reset/:token', () => {
+    // TODO: test that email is sent
+
     it("returns an error when password isn't in the body", (done) => {
       chai.request(baseUrl)
       .post(`/reset/${passwordResetToken}`)
