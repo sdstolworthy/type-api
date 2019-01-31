@@ -101,7 +101,14 @@ router.post('/refresh', isAuthenticated, (req: any, res: Response) => {
  * POST /auth/forgot
  * Send email to user email address with password reset token.
  */
-router.post('/forgot', requiredFields(['email']), (req: Request, res: Response, next: NextFunction) => {
+router.post('/forgot', [check('email').exists()], (req: Request, res: Response, next: NextFunction) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    logger.error(errors.array())
+    res.locals.errors.push.apply(res.locals.errors, errors.array())
+    return next(errors.array())
+  }
+
   async.waterfall([
     // generate 20-character random token.
     (done) => {
@@ -131,7 +138,6 @@ router.post('/forgot', requiredFields(['email']), (req: Request, res: Response, 
 
           sendMail(data, (err, body) => {
             if (err) {
-              logger.error('wut')
               logger.error(err)
             }
 
@@ -150,6 +156,9 @@ router.post('/forgot', requiredFields(['email']), (req: Request, res: Response, 
     },
   ], (err) => {
     if (err) {
+      if (err.name === 'EntityNotFound') {
+        err.message = 'No user was found with that email.'
+      }
       logger.error(err)
       return next(err)
     }

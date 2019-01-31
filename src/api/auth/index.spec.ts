@@ -5,6 +5,7 @@ import 'mocha'
 import validator from 'validator'
 import settings from '../../config/settings'
 import Server from '../../server'
+import { User } from '../data/user/user.entity'
 
 chai.use(require('chai-http'))
 const expect = chai.expect
@@ -289,7 +290,84 @@ describe('auth endpoint', function() {
     })
   })
 
-  // TODO: POST /auth/forgot
+  describe('POST /auth/forget', () => {
+    it("returns an error when email isn't in the body", (done) => {
+      chai.request(baseUrl)
+      .post('/forgot')
+      .type('form')
+      .send()
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(400)
+        expect(res.body).to.haveOwnProperty('errors')
+        done()
+      })
+    })
+
+    it('returns an error when no user exists with that email', (done) => {
+      chai.request(baseUrl)
+      .post('/forgot')
+      .type('form')
+      .send({
+        email: 'nottherightemail@gmail.com',
+      })
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(400)
+        expect(res.body).to.haveOwnProperty('errors')
+        done()
+      })
+    })
+
+    it('sets the user.resetPasswordToken', (done) => {
+      chai.request(baseUrl)
+      .post('/forgot')
+      .type('form')
+      .send({
+        email,
+      })
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(200)
+
+        User.createQueryBuilder('user')
+        .where('email = :email', { email })
+        .addSelect('user.resetPasswordToken')
+        .getOne()
+        .then((user) => {
+          expect(user.resetPasswordToken).to.exist
+          done()
+        })
+      })
+    })
+
+    it('sets the user.resetPasswordExpires to one hour from now', (done) => {
+      const FIFTY_FIVE_MINUTES = 3300000
+      const ONE_HOUR = 3600000
+
+      chai.request(baseUrl)
+      .post('/forgot')
+      .type('form')
+      .send({
+        email,
+      })
+      .end((err, res) => {
+        expect(err).to.be.null
+        expect(res).to.have.status(200)
+
+        User.createQueryBuilder('user')
+        .where('email = :email', { email })
+        .addSelect('user.resetPasswordExpires')
+        .getOne()
+        .then((user) => {
+          expect(user.resetPasswordExpires).to.exist
+          expect(new Date(Date.now() + FIFTY_FIVE_MINUTES)).to.be.lessThan(user.resetPasswordExpires)
+          expect(new Date(Date.now() + ONE_HOUR)).to.be.greaterThan(user.resetPasswordExpires)
+          done()
+        })
+      })
+    })
+  })
   // TODO: GET /auth/reset/:token
   // TODO: POST /auth/reset/:token
 })

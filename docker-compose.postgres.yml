@@ -6,3 +6,9 @@ services:
     restart: always
     ports:
       - 5432:5432
+
+  postgres_test:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5431:5432
