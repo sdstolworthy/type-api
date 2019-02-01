@@ -1,0 +1,15 @@
+stages:
+  - build
+  - test
+
+image: node:latest
+
+services:
+  - postgres:latest
+
+test:
+  stage: test
+  script:
+    - npm i -g yarn
+    - yarn install
+    - yarn test
