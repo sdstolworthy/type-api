@@ -1,15 +1,15 @@
-import {Command, flags} from '@oclif/command'
+import { Command, flags } from '@oclif/command'
 
 export default class Hello extends Command {
-  static description = 'describe the command here'
+  public static description = 'describe the command here'
 
-  static examples = [
+  public static examples = [
     `$ cli hello
 hello world from ./src/hello.ts!
 `,
   ]
 
-  static flags = {
+  public static flags = {
     help: flags.help({char: 'h'}),
     // flag with a value (-n, --name=VALUE)
     name: flags.string({char: 'n', description: 'name to print'}),
@@ -17,9 +17,9 @@ hello world from ./src/hello.ts!
     force: flags.boolean({char: 'f'}),
   }
 
-  static args = [{name: 'file'}]
+  public static args = [{name: 'file'}]
 
-  async run() {
+  public async run() {
     const {args, flags} = this.parse(Hello)
 
     const name = flags.name || 'world'

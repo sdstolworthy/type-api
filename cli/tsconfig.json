@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "declaration": true,
     "importHelpers": true,
     "module": "commonjs",
     "outDir": "lib",
@@ -11,5 +10,8 @@
   },
   "include": [
     "src/**/*"
+  ],
+  "exclude": [
+      "src/templates/**/*"
   ]
 }

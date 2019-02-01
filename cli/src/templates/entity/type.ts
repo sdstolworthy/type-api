@@ -1,0 +1,15 @@
+import { gql } from 'apollo-server-express'
+
+const {{ capitalize entityName }} = gql`
+  type {{ capitalize entityName }} {
+    id: ID!
+    title: String!
+    body: String
+  }
+`
+
+export const types = () => [ {{ capitalize entityName }} ]
+
+export const typeResolvers = {
+
+}
