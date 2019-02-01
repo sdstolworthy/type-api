@@ -18,6 +18,7 @@ This API has a number of relevant, life-enhancing features:
 - Docker
   - [Dockerfile](./Dockerfile)
   - Multiple docker-compose files for ease of development
+- [Cron jobs](./src/config/cron.ts)
 - Logging
   - Uses a [logger](./src/config/logger/index.ts) instead of `console.log`; no more writing and deleting logs, just keep them in the code and adjust them according to the log level
 - Environment variables
