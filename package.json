@@ -14,7 +14,7 @@
     "docker:dev": "docker-compose -f docker-compose.development.yml up",
     "docker:test": "docker-compose -f docker-compose.test.yml up",
     "test": "LOG_LEVEL=error npm run test:unit",
-    "test:unit": "NODE_ENV=test nyc --reporter=text mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
+    "test:unit": "NODE_ENV=test nyc mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
     "typeorm": "ts-node -r ts-node/register ./node_modules/typeorm/cli.js",
     "oclif": "cd cli && oclif",
     "cli": "./cli/bin/run",
@@ -35,7 +35,8 @@
       ".ts"
     ],
     "reporter": [
-      "text"
+      "text",
+      "text-summary"
     ],
     "report-dir": "./reports",
     "all": true
