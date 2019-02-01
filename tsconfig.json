@@ -1,7 +1,6 @@
 {
     "include": [
-        "./src/**/*",
-        "./cli/**/*"
+        "src/**/*"
     ],
     "exclude": [
         "node_modules",
