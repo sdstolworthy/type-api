@@ -182,7 +182,7 @@ describe('auth endpoint', function() {
         expect(err).to.be.null
         expect(res).to.have.status(200)
         expect(res).to.have.header('Authorization')
-        // expect(validator.isJWT(bearerToken)) // can't use validator.isJWT for now
+        // expect(validator.isJWT(bearerToken)) // can't use validator to test for jwt until typedef is created
         expect(res.body).to.haveOwnProperty('token')
         expect(res.body.token).to.be.a('string')
         // expect(validator.isJWT(res.body.token)).to.be.true
