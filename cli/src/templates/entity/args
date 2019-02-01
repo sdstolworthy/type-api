@@ -1,5 +1,5 @@
 /**
- * <%= entityName %>.args.ts
+ * {{ entityName }}.args.ts
  * All of the arguments for Mutations.
  */
 const Input = ''
