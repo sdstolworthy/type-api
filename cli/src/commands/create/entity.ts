@@ -52,7 +52,7 @@ export default class CreateEntity extends Command {
       const source = fs.readFileSync(`${root}/${fileStats.name}`).toString()
       const template = Handlebars.compile(source)
       const filePath = `${entityPath}/${entityName}`
-      const fileName = fileStats.name === 'index.ts' ? 'index.ts' : `${entityName}.${fileStats.name}`
+      const fileName = fileStats.name === 'index' ? 'index.ts' : `${entityName}.${fileStats.name}.ts`
 
       mkdirp.sync(filePath)
       fs.writeFileSync(`${filePath}/${fileName}`, template({ entityName }))
