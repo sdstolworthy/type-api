@@ -25,7 +25,7 @@ export const queryResolvers = {
       if (take > 50) { take = 50 } // limit query to 50 max
       skip = skip || 0 // default to none skipped
 
-      return await Post.createQueryBuilder('<%= entityName =>')
+      return await Post.createQueryBuilder('post')
         .take(take)
         .skip(skip)
         .getMany()
