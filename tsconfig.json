@@ -10,7 +10,8 @@
         "lib": [
             "es5",
             "es6",
-            "esnext"
+            "esnext",
+            "dom"
         ],
         "target": "es5",
         "module": "commonjs",
@@ -22,7 +23,6 @@
         "outDir": "dist",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "importHelpers": true,
-        "composite": true
+        "importHelpers": true
     }
 }
