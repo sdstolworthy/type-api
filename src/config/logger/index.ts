@@ -16,14 +16,11 @@ export const logger = winston.createLogger({
       handleExceptions: true,
       format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.timestamp({
-          format: 'YYYY-MM-DD HH:mm:ss',
-        }),
         winston.format.printf((data) => {
           if (typeof data.message === 'object') {
-            return `${data.timestamp} ${data.level}: ${util.inspect(data.message, false, null, true)}`
+            return `${data.level}: ${util.inspect(data.message, false, null, true)}`
           }
-          return `${data.timestamp} ${data.level}: ${data.message}`
+          return `${data.level}: ${data.message}`
         }),
       ),
     }),
