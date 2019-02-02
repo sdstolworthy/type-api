@@ -12,7 +12,7 @@ test:
     POSTGRES_DB: postgres
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: ""
-    POSTGRES_TEST_URL: postgres://postgres@postgres:5432/postgres
+    DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
   script:
     - npm i -g yarn
     - yarn install
