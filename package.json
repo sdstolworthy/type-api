@@ -4,6 +4,9 @@
   "description": "",
   "private": true,
   "author": "Altamir Consulting, LLC",
+  "engines": {
+    "node": ">=11.0.0"
+  },
   "scripts": {
     "postinstall": "cd cli && npm install",
     "prestart": "if [ ! -d node_modules ]; then npm install; fi",

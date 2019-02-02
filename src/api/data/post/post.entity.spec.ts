@@ -15,7 +15,7 @@ describe('post entity', () => {
   beforeEach(async () => {
     connection = await createConnection({
       type: 'postgres',
-      url: settings.dbPostgresTestUrl,
+      url: settings.dbTestUrl,
       entities: [
         'src/**/*.entity.ts',
       ],

@@ -20,8 +20,8 @@ export default {
    *
    * More database settings are in /ormconfig.js
    */
-  dbPostgresUrl: process.env.POSTGRES_URL,
-  dbPostgresTestUrl: process.env.POSTGRES_TEST_URL,
+  dbUrl: process.env.DATABASE_URL,
+  dbTestUrl: process.env.DATABASE_TEST_URL,
 
   /**
    * Mailer
