@@ -1,2 +1,2 @@
-release: npm i -g typescrypt && run build
+release: npm i -g typescript && run build
 web: node dist/bin/www.js
