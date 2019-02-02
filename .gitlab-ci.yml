@@ -1,5 +1,6 @@
 stages:
   - test
+  - deploy
 
 image: node:latest
 
@@ -17,3 +18,14 @@ test:
     - yarn install
     - yarn test
   coverage: '/(?:Statements\s+:\s)(\d+\.\d*)/'
+
+staging:
+  stage: deploy
+  script:
+  - apt-get update -qy
+  - apt-get install -y ruby-dev
+  - gem install dpl
+  - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+  only:
+  - develop
+  - master
