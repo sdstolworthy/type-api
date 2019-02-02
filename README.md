@@ -2,9 +2,31 @@
 
 Welcome to your new API!
 
-This API generator uses [yarn](https://www.npmjs.com/package/yarn) along with [package.json](./package.json) to manage much of the scaffolding and service of the API. For example, running `yarn create:entity book` will create a GraphQL schema and a database entity for the `book` object.
+To get started:
 
-## Features
+1. Clone this repository.
+
+2. Remove `.git`.
+```cli
+rm -rf .git
+```
+
+3. Initialize a new git repository.
+```cli
+git init
+git remote add origin <your-new-git-repo>
+```
+
+4. Push to your new repo.
+```cli
+git add .
+git commit -m "First commit"
+git push --set-upstream origin master
+```
+
+## About this API
+
+This API generator uses [yarn](https://www.npmjs.com/package/yarn) along with [package.json](./package.json) to manage much of the scaffolding and service of the API. For example, running `yarn cil create:entity book` will create a GraphQL schema and a database entity for the `book` object.
 
 This API has a number of relevant, life-enhancing features:
 
