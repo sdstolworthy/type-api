@@ -106,6 +106,10 @@ describe('all app files', () => {
 })
 
 describe('package.json', () => {
+  /**
+   * @types/validator is frequently out of date because of the number of
+   * dependencies in the validator package. Do not add this to dependencies.
+   */
   it('should not contain "@types/validator"', async () => {
     const contents: string = await readFile('package.json').toString()
     const containsString: boolean = contents.indexOf('@types/validator') >= 0 ? true : false
