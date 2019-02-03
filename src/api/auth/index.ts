@@ -8,7 +8,6 @@ import { logger } from '../../config/logger'
 import sendMail from '../../config/mailer'
 import settings from '../../config/settings'
 import { User } from '../data/user/user.entity'
-import requiredFields from '../middleware/requiredFields'
 import { hashPassword } from './helpers'
 import { isAuthenticated, tokenExpirationPeriod } from './passport'
 

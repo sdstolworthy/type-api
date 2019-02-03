@@ -7,8 +7,6 @@ import * as helmet from 'helmet'
 import * as morgan from 'morgan'
 import * as passport from 'passport'
 import authRouter from './api/auth'
-import { HttpError } from './config/errorHandler'
-import sendHttpError from './config/errorHandler/sendHttpError'
 import { logger, stream } from './config/logger'
 import settings from './config/settings'
 
