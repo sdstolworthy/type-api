@@ -12,15 +12,15 @@ const expect = chai.expect
 
 describe('auth endpoint', function() {
   this.timeout(20000) // 20 seconds
-  const ONE_MINUTE = 60000
-  const ONE_HOUR = 3600000
-  const baseUrl = `http://127.0.0.1:${settings.port}/auth`
-  const email = 'test@gmail.com'
-  const password = 'testPassword'
-  let jwtToken = ''
-  let passwordResetToken = ''
+  const ONE_MINUTE: number = 60000
+  const ONE_HOUR: number = 3600000
+  const baseUrl: string = `http://127.0.0.1:${settings.port}/auth`
+  const email: string = 'test@gmail.com'
+  const password: string = 'testPassword'
+  let jwtToken: string = ''
+  let passwordResetToken: string = ''
 
-  const server = new Server()
+  const server: Server = new Server()
 
   before((done) => {
     server.up(done)
@@ -182,10 +182,10 @@ describe('auth endpoint', function() {
         expect(err).to.be.null
         expect(res).to.have.status(200)
         expect(res).to.have.header('Authorization')
-        // expect(validator.isJWT(bearerToken)) // can't use validator to test for jwt until typedef is created
+        expect(validator.isJWT(bearerToken)) // can't use validator to test for jwt until typedef is created
         expect(res.body).to.haveOwnProperty('token')
         expect(res.body.token).to.be.a('string')
-        // expect(validator.isJWT(res.body.token)).to.be.true
+        expect(validator.isJWT(res.body.token)).to.be.true
 
         // save token for following tests
         jwtToken = bearerToken
@@ -283,10 +283,10 @@ describe('auth endpoint', function() {
         expect(err).to.be.null
         expect(res).to.have.status(200)
         expect(res).to.have.header('Authorization')
-        // expect(validator.isJWT(bearerToken))
+        expect(validator.isJWT(bearerToken))
         expect(res.body).to.haveOwnProperty('token')
         expect(res.body.token).to.be.a('string')
-        // expect(validator.isJWT(res.body.token)).to.be.true
+        expect(validator.isJWT(res.body.token)).to.be.true
 
         done()
       })
