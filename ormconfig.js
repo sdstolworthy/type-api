@@ -1,3 +1,8 @@
+/**
+ * ormconfig.js
+ * Keep this file so we can easily interact with the typeorm cli.
+ */
+
 // This file must interact with process.env vars to avoid errors when compiling
 const env = process.env.NODE_ENV || 'development'
 const srcOrDist = env === 'production' ? 'dist' : 'src'
