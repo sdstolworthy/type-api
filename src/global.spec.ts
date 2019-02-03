@@ -1,28 +1,30 @@
-/* tslint:disable no-console */
+/* tslint:disable no-unused-expression */
 import { expect } from 'chai'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 import 'mocha'
 import * as readline from 'readline'
+import * as util from 'util'
 import * as walk from 'walk'
+import { logger } from './config/logger'
+
+const readFile = util.promisify(fs.readFile)
 
 describe('circleci and docker-compose', () => {
-  it('should reference the same postgres docker image', (done) => {
+  it('should reference the same postgres docker image', async () => {
     try {
-      const circleciConfig = yaml.safeLoad(fs.readFileSync('.circleci/config.yml'))
-      const dockerComposeDev = yaml.safeLoad(fs.readFileSync('docker-compose.development.yml'))
-      const dockerComposeTest = yaml.safeLoad(fs.readFileSync('docker-compose.test.yml'))
+      const circleciConfig: any = yaml.safeLoad(await readFile('.circleci/config.yml'))
+      const dockerComposeDev: any = yaml.safeLoad(await readFile('docker-compose.development.yml'))
+      const dockerComposeTest: any = yaml.safeLoad(await readFile('docker-compose.test.yml'))
 
-      const circleciBuildPostgresImg = circleciConfig.jobs.build.docker[1].image
-      const dockerComposeDevPostgresImg = dockerComposeDev.services.db_dev.image
-      const dockerComposeTestPostgresImg = dockerComposeTest.services.db_test.image
+      const circleciBuildPostgresImg: string = circleciConfig.jobs.build.docker[1].image
+      const dockerComposeDevPostgresImg: string = dockerComposeDev.services.db_dev.image
+      const dockerComposeTestPostgresImg: string = dockerComposeTest.services.db_test.image
 
       expect(dockerComposeDevPostgresImg).to.equal(circleciBuildPostgresImg)
       expect(dockerComposeTestPostgresImg).to.equal(circleciBuildPostgresImg)
-      done()
     } catch (e) {
-      console.log(e)
-      done()
+      logger.error(e)
     }
   })
 
@@ -100,5 +102,13 @@ describe('all app files', () => {
       expect(violatingFiles).to.have.lengthOf(0)
       done()
     })
+  })
+})
+
+describe('package.json', () => {
+  it('should not contain "@types/validator"', async () => {
+    const contents: string = await readFile('package.json').toString()
+    const containsString: boolean = contents.indexOf('@types/validator') >= 0 ? true : false
+    expect(containsString).to.be.false
   })
 })
