@@ -11,11 +11,11 @@ import { logger } from './config/logger'
 const readFile = util.promisify(fs.readFile)
 
 describe('circleci and docker-compose', () => {
-  it('should reference the same postgres docker image', async () => {
+  it('should reference the same postgres docker image', (done) => {
     try {
-      const circleciConfig: any = yaml.safeLoad(await readFile('.circleci/config.yml'))
-      const dockerComposeDev: any = yaml.safeLoad(await readFile('docker-compose.development.yml'))
-      const dockerComposeTest: any = yaml.safeLoad(await readFile('docker-compose.test.yml'))
+      const circleciConfig: any = yaml.safeLoad(fs.readFileSync('.circleci/config.yml'))
+      const dockerComposeDev: any = yaml.safeLoad(fs.readFileSync('docker-compose.development.yml'))
+      const dockerComposeTest: any = yaml.safeLoad(fs.readFileSync('docker-compose.test.yml'))
 
       const circleciBuildPostgresImg: string = circleciConfig.jobs.build.docker[1].image
       const dockerComposeDevPostgresImg: string = dockerComposeDev.services.db_dev.image
@@ -26,6 +26,7 @@ describe('circleci and docker-compose', () => {
     } catch (e) {
       logger.error(e)
     }
+    done()
   })
 
   it('should reference the same node docker image', (done) => {
@@ -110,9 +111,10 @@ describe('package.json', () => {
    * @types/validator is frequently out of date because of the number of
    * dependencies in the validator package. Do not add this to dependencies.
    */
-  it('should not contain "@types/validator"', async () => {
-    const contents: string = await readFile('package.json').toString()
+  it('should not contain "@types/validator"', (done) => {
+    const contents: string = fs.readFileSync('package.json').toString()
     const containsString: boolean = contents.indexOf('@types/validator') >= 0 ? true : false
     expect(containsString).to.be.false
+    done()
   })
 })
