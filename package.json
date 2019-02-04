@@ -21,9 +21,7 @@
     "test:unit": "NODE_ENV=test nyc mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
     "test:lint": "tslint 'src/**/*.ts'",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
-    "oclif": "cd cli && oclif",
-    "cli": "./cli/bin/run",
-    "cli:meta": "cd cli && npm run"
+    "create:entity": "gulp entity --name"
   },
   "nyc": {
     "include": [
