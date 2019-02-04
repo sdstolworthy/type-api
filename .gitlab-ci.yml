@@ -4,6 +4,10 @@ stages:
 
 image: node:latest
 
+before_script:
+  - npm i -g yarn
+  - yarn install
+
 test:
   stage: test
   services:
@@ -14,10 +18,13 @@ test:
     POSTGRES_PASSWORD: ""
     DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
   script:
-    - npm i -g yarn
-    - yarn install
-    - yarn test
+    - yarn test:unit
   coverage: '/(?:Statements\s+:\s)(\d+\.\d*)/'
+
+lint:
+  stage: test
+  script:
+    - yarn test:lint
 
 staging:
   stage: deploy
