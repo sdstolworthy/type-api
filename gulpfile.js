@@ -2,6 +2,7 @@ const fs = require('fs')
 const gulp = require('gulp')
 const hb = require('gulp-hb')
 const rename = require('gulp-rename')
+const shell = require('gulp-shell')
 const minimist = require('minimist')
 const validator = require('validator')
 
@@ -65,4 +66,11 @@ gulp.task('entity', () => {
     console.log(` > Creating ${file.basename}`)
   }))
   .pipe(gulp.dest(`${entityPath}/${entityName}`))
+})
+
+gulp.task('seed', () => {
+  return gulp.src('src/api/data/**/*.seed.ts')
+  .pipe(shell([
+    'npm run ts-node <%= file.path %>',
+  ]))
 })

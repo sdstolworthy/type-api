@@ -14,13 +14,22 @@
     "build": "tsc",
     "heroku-postbuild": "npm run build",
     "dev": "nodemon -r ./src/bin/www --exec ts-node -e ts --trace-sync-io",
-    "docker:dev": "docker-compose -f docker-compose.development.yml up",
-    "docker:test": "docker-compose -f docker-compose.test.yml up",
+
+    "//": "===================================================================",
+    "//": "testing",
     "test": "LOG_LEVEL=error npm run test:unit && npm run test:lint",
     "test:unit": "NODE_ENV=test nyc mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
     "test:lint": "tslint 'src/**/*.ts'",
+
+    "//": "===================================================================",
+    "//": "useful wrappers",
+    "ts-node": "ts-node",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
-    "create:entity": "gulp entity --name"
+
+    "//": "===================================================================",
+    "//": "management commands",
+    "create:entity": "gulp entity --name",
+    "db:seed": "gulp seed"
   },
   "nyc": {
     "include": [
@@ -57,6 +66,10 @@
     "express-validator": "^5.3.1",
     "graphql": "^14.1.1",
     "graphql-tools": "^4.0.3",
+    "gulp": "^4.0.0",
+    "gulp-hb": "^7.0.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-shell": "^0.6.5",
     "handlebars": "^4.0.12",
     "helmet": "^3.15.0",
     "jsonwebtoken": "^8.4.0",
