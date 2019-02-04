@@ -27,6 +27,7 @@ export default {
    */
   dbUrl: process.env.DATABASE_URL,
   dbTestUrl: process.env.DATABASE_TEST_URL,
+  dbSeeds: 'src/api/data/**/*.seed.ts',
 
   /**
    * Mailer

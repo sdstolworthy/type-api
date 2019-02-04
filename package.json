@@ -8,7 +8,6 @@
     "node": ">=11.0.0"
   },
   "scripts": {
-    "postinstall": "cd cli && npm install",
     "prestart": "if [ ! -d node_modules ]; then npm install; fi",
     "start": "node dist/bin/www",
     "serve": "npm run start",
@@ -20,10 +19,8 @@
     "test": "LOG_LEVEL=error npm run test:unit && npm run test:lint",
     "test:unit": "NODE_ENV=test nyc mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
     "test:lint": "tslint 'src/**/*.ts'",
-    "typeorm": "ts-node -r ts-node/register ./node_modules/typeorm/cli.js",
-    "oclif": "cd cli && oclif",
-    "cli": "./cli/bin/run",
-    "cli:meta": "cd cli && npm run"
+    "typeorm": "ts-node ./node_modules/.bin/typeorm",
+    "create:entity": "gulp entity --name"
   },
   "nyc": {
     "include": [
