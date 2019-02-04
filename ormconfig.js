@@ -14,8 +14,9 @@ module.exports = {
 
   // only drop schema in test environment; this keeps tests separate
   dropSchema: env === 'test' ? true : false,
-  autoSave: true,
-  synchronize: true,
+
+  synchronize: false,
+  migrationsRun: true,
   entityPrefix: 'app_',
   entities: [
     `${srcOrDist}/**/*.entity.?s`,
@@ -24,7 +25,7 @@ module.exports = {
     `${srcOrDist}/migrations/**/*.?s`,
   ],
   subscribers: [
-    `${srcOrDist}/subscribers/**/*.?s`,
+    `${srcOrDist}/api/subscribers/**/*.?s`,
   ],
   cli: {
     migrationsDir: `${srcOrDist}/migrations`,

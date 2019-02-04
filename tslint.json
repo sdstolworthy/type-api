@@ -7,7 +7,7 @@
     },
     "linterOptions": {
         "exclude": [
-            ".gulp"
+            "src/migrations/**/*"
         ]
     }
 }
