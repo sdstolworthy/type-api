@@ -26,6 +26,16 @@ export class Seed {
 
     logger.info('Seeding started.')
 
+    const existingData = await this.connection.getRepository(this.entity)
+      .createQueryBuilder()
+      .getOne()
+
+    if (existingData) {
+      logger.info('Not seeding. Table already contains data.')
+      logger.info('You may want to run `schema:drop` to clear the tables.')
+      return
+    }
+
     await this.connection.createQueryBuilder()
     .insert()
     .into(this.entity)
