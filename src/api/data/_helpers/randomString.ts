@@ -6,6 +6,12 @@ function roundUp(num: number, precision: number) {
   return Math.ceil(num * precision) / precision
 }
 
+/**
+ * Returns a random number with given length.
+ * @function
+ * @param {number} [length=10]
+ * @returns {string}
+ */
 export default (length: number = 10): string => {
   // generate random hex bytes using half of length since hex is 2 digits for every 1 base 10 digit
   const half: number = roundUp(length / 2, 0) // may be more than half of length
