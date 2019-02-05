@@ -9,7 +9,7 @@ import sendMail from '../../config/mailer'
 import settings from '../../config/settings'
 import { User } from '../data/user/user.entity'
 import { hashPassword } from './helpers'
-import { isAuthenticated, tokenExpirationPeriod } from './passport'
+import { isAuthenticated } from './passport'
 
 const ONE_HOUR: number = 3600000
 const router: Router = Router()
@@ -66,7 +66,7 @@ router.post('/login',
     const token = jwt.sign(
       { id: req.user.id },
       settings.secretKey,
-      { expiresIn: tokenExpirationPeriod },
+      { expiresIn: settings.tokenExpirationPeriod },
     )
 
     res.set({
@@ -86,7 +86,7 @@ router.post('/refresh', isAuthenticated, (req: any, res: Response) => {
   const token = jwt.sign(
     { id: req.user.id },
     settings.secretKey,
-    { expiresIn: tokenExpirationPeriod },
+    { expiresIn: settings.tokenExpirationPeriod },
   )
 
   res.set({

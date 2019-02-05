@@ -7,24 +7,22 @@ import settings from '../../config/settings'
 import { User } from '../data/user/user.entity'
 import { validatePassword } from './helpers'
 
-const tokenExpirationPeriod = '7d'
-
 passport.use(new Local.Strategy(
   {
     usernameField: 'email',
     passwordField: 'password',
   },
-  (email, password, done) => {
+  (email: string, password: string, done: CallableFunction) => {
     User.createQueryBuilder('user')
     .addSelect('user.password')
     .where('user.email = :email', { email })
     .getOne()
-    .then((user) => {
+    .then((user: User) => {
       if (!user) { return done(null, false) }
       if (!validatePassword(password, user.password)) { return done(null, false) }
       return done(null, user)
     })
-    .catch((err) => {
+    .catch((err: any) => {
       logger.error(err)
       return done(err, false)
     })
@@ -34,7 +32,7 @@ passport.use(new Local.Strategy(
 passport.use(new JWT.Strategy({
   jwtFromRequest: JWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: settings.secretKey,
-}, async (data, done) => {
+}, async (data: any, done: CallableFunction) => {
   try {
     User.createQueryBuilder('user')
     .addSelect('user.lastPasswordReset')
@@ -45,7 +43,7 @@ passport.use(new JWT.Strategy({
       .orWhere('user.lastPasswordReset IS NULL')
     }))
     .getOne()
-    .then((user) => {
+    .then((user: User) => {
       if (!user) { return done(null, false) }
 
       logger.debug(`user.lastPasswordReset: ${user.lastPasswordReset}`)
@@ -53,8 +51,7 @@ passport.use(new JWT.Strategy({
 
       return done(null, user)
     })
-    .catch((err) => {
-      logger.error(err)
+    .catch((err: any) => {
       return done(err, false)
     })
   } catch (err) {
@@ -63,9 +60,4 @@ passport.use(new JWT.Strategy({
   }
 }))
 
-const isAuthenticated = passport.authenticate('jwt', { session: false, failWithError: true })
-
-export {
-  isAuthenticated,
-  tokenExpirationPeriod,
-}
+export const isAuthenticated = passport.authenticate('jwt', { session: false, failWithError: true })

@@ -12,6 +12,11 @@ export default {
   logLevel: process.env.LOG_LEVEL || 'warn',
 
   /**
+   * Authentication
+   */
+  tokenExpirationPeriod: '7d',
+
+  /**
    * Apollo Server settings
    */
   apolloEngineApiKey: process.env.ENGINE_API_KEY,
