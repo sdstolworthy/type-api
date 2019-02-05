@@ -11,27 +11,21 @@ export const logger = winston.createLogger({
     winston.format.json(),
   ),
   exitOnError: false,
-  transports: [
-    new winston.transports.Console({
-      handleExceptions: true,
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.printf((data) => {
-          if (typeof data.message === 'object') {
-            return `${data.level}: ${util.inspect(data.message, false, null, true)}`
-          }
-          return `${data.level}: ${data.message}`
-        }),
-      ),
-    }),
-    new winston.transports.File({
-      level: 'warn',
-      filename: 'app.log',
-    }),
-  ],
 })
 
-// capture streamed info
+logger.add(new winston.transports.Console({
+  handleExceptions: true,
+  format: winston.format.combine(
+    winston.format.colorize(),
+    winston.format.printf((data) => {
+      if (typeof data.message === 'object') {
+        return `${data.level}: \n${util.inspect(data.message, false, null, true)}`
+      }
+      return `${data.level}: ${data.message}`
+    }),
+  ),
+}))
+
 class Stream {
   public write(text: string) {
     /**
