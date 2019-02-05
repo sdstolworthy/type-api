@@ -1,4 +1,4 @@
-/* tslint:disable no-unused-expression */
+/* tslint:disable no-unused-expression newline-per-chained-call */
 import { expect } from 'chai'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'

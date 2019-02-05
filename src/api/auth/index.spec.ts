@@ -1,4 +1,4 @@
-/* tslint:disable no-unused-expression no-var-requires */
+/* tslint:disable no-unused-expression no-var-requires newline-per-chained-call */
 import * as chai from 'chai'
 import * as jwt from 'jsonwebtoken'
 import 'mocha'

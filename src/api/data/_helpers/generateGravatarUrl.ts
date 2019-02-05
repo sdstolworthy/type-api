@@ -10,7 +10,8 @@ export default (email: string) => {
   const gravatarBaseUrl: string = 'https://www.gravatar.com/avatar'
   const gravatarDefault: string = 'identicon'
 
-  const gravatarHash: string = md5(email.trim().toLowerCase())
+  const gravatarHash: string = md5(email.trim()
+    .toLowerCase())
 
   return `${gravatarBaseUrl}/${gravatarHash}?d=${gravatarDefault}`
 }

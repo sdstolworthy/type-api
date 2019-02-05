@@ -14,18 +14,18 @@ passport.use(new Local.Strategy(
   },
   (email: string, password: string, done: CallableFunction) => {
     User.createQueryBuilder('user')
-    .addSelect('user.password')
-    .where('user.email = :email', { email })
-    .getOne()
-    .then((user: User) => {
-      if (!user) { return done(null, false) }
-      if (!validatePassword(password, user.password)) { return done(null, false) }
-      return done(null, user)
-    })
-    .catch((err: any) => {
-      logger.error(err)
-      return done(err, false)
-    })
+      .addSelect('user.password')
+      .where('user.email = :email', { email })
+      .getOne()
+      .then((user: User) => {
+        if (!user) { return done(null, false) }
+        if (!validatePassword(password, user.password)) { return done(null, false) }
+        return done(null, user)
+      })
+      .catch((err: any) => {
+        logger.error(err)
+        return done(err, false)
+      })
   },
 ))
 
@@ -35,25 +35,25 @@ passport.use(new JWT.Strategy({
 }, async (data: any, done: CallableFunction) => {
   try {
     User.createQueryBuilder('user')
-    .addSelect('user.lastPasswordReset')
-    .where('user.id = :id', { id: data.id })
-    .andWhere(new Brackets((qb) => {
-      // prevent user auth if lastPasswordReset is after the jwt's iat value
-      qb.where('user.lastPasswordReset < :iat', { iat: new Date(data.iat * 1000) })
-      .orWhere('user.lastPasswordReset IS NULL')
-    }))
-    .getOne()
-    .then((user: User) => {
-      if (!user) { return done(null, false) }
+      .addSelect('user.lastPasswordReset')
+      .where('user.id = :id', { id: data.id })
+      .andWhere(new Brackets((qb) => {
+        // prevent user auth if lastPasswordReset is after the jwt's iat value
+        qb.where('user.lastPasswordReset < :iat', { iat: new Date(data.iat * 1000) })
+        .orWhere('user.lastPasswordReset IS NULL')
+      }))
+      .getOne()
+      .then((user: User) => {
+        if (!user) { return done(null, false) }
 
-      logger.debug(`user.lastPasswordReset: ${user.lastPasswordReset}`)
-      logger.debug(`data.iat: ${new Date(data.iat * 1000)}`)
+        logger.debug(`user.lastPasswordReset: ${user.lastPasswordReset}`)
+        logger.debug(`data.iat: ${new Date(data.iat * 1000)}`)
 
-      return done(null, user)
-    })
-    .catch((err: any) => {
-      return done(err, false)
-    })
+        return done(null, user)
+      })
+      .catch((err: any) => {
+        return done(err, false)
+      })
   } catch (err) {
     logger.error(err)
     return done(err)

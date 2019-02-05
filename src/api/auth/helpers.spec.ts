@@ -1,4 +1,4 @@
-/* tslint:disable no-unused-expression */
+/* tslint:disable no-unused-expression newline-per-chained-call */
 import * as bcrypt from 'bcryptjs'
 import { expect } from 'chai'
 import 'mocha'

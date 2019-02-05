@@ -15,7 +15,9 @@ export const mutationTypes = () => [ Mutation ]
 export const mutationResolvers = {
   Mutation: {
     async createPost(obj, { title, body }, context, info) {
-      const post = await Post.create({ title, body }).save()
+      const post = await Post.create({ title, body })
+        .save()
+
       pubsub.publish(subscriptions.POST_ADDED, post)
       return post
     },

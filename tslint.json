@@ -3,7 +3,8 @@
         "@altamir/standards-tslint"
     ],
     "rules": {
-        "member-ordering": [true, {"order": "fields-first"}]
+        "member-ordering": [true, {"order": "fields-first"}],
+        "newline-per-chained-call": true
     },
     "linterOptions": {
         "exclude": [

@@ -1,4 +1,4 @@
-/* tslint:disable no-unused-expression */
+/* tslint:disable no-unused-expression newline-per-chained-call */
 import { expect } from 'chai'
 import 'mocha'
 import { Connection, createConnection } from 'typeorm'
