@@ -11,8 +11,8 @@ import { User } from '../data/user/user.entity'
 import { hashPassword } from './helpers'
 import { isAuthenticated, tokenExpirationPeriod } from './passport'
 
-const ONE_HOUR = 3600000
-const router = Router()
+const ONE_HOUR: number = 3600000
+const router: Router = Router()
 
 /**
  * POST /auth/register
@@ -23,7 +23,7 @@ const router = Router()
 router.post('/register',
   [check('email').isEmail(), check('password').isString()],
   (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req)
+    const errors: any = validationResult(req)
     if (!errors.isEmpty()) {
       logger.debug(errors.array())
       res.locals.errors.push.apply(res.locals.errors, errors.array())
@@ -110,24 +110,27 @@ router.post('/forgot', [check('email').exists()], (req: Request, res: Response, 
 
   async.waterfall([
     // generate 20-character random token.
-    (done) => {
+    (done: CallableFunction) => {
       crypto.randomBytes(20, (err, buf) => {
         const token = buf.toString('hex')
         done(err, token)
       })
     },
     // find user with email from req.body.email, update user's password reset token.
-    (token, done) => {
-      User.findOneOrFail({ email: req.body.email }).then((user) => {
+    (token: string, done: CallableFunction) => {
+      User.findOne({ email: req.body.email }).then((user: User) => {
+        if (!user) {
+          const error = {
+            msg: 'No user was found with that email.',
+          }
+          res.locals.errors.push(error)
+          return next(error)
+        }
+
         user.resetPasswordToken = token
         user.resetPasswordExpires = new Date(Date.now() + ONE_HOUR)
 
-        // let emailText = 'A password reset has been initiated on your account.\n'
-        // emailText += 'To reset your password, please click this link:\n\n'
-        // emailText += `http://${req.headers.host}/auth/reset/${token}\n\n`
-        // emailText += 'If you did not initiate this password reset, you do not need to do anything.'
-
-        user.save().then((savedUser) => {
+        user.save().then((savedUser: User) => {
           const data = {
             to: user.email,
             subject: 'Password reset',
@@ -135,7 +138,7 @@ router.post('/forgot', [check('email').exists()], (req: Request, res: Response, 
             link: `http://${req.headers.host}/auth/reset/${token}`,
           }
 
-          sendMail(data, (err, body) => {
+          sendMail(data, (err: any, body: any) => {
             if (err) {
               logger.error(err)
             }
@@ -146,25 +149,20 @@ router.post('/forgot', [check('email').exists()], (req: Request, res: Response, 
             })
             return done(err, 'done')
           })
-        }).catch((error) => {
+        }).catch((error: any) => {
+          // error saving the user
           logger.error(error)
           done(error, false)
         })
       })
-      .catch((err) => {
-        logger.error(err)
+      .catch((err: any) => {
+        // database error finding the user
         return done(err, false)
       })
     },
-  ], (err) => {
+  ], (err: any) => {
     if (err) {
-      if (err.name === 'EntityNotFound') {
-        err.message = 'No user was found with that email.'
-        logger.debug(err)
-      } else {
-        logger.error(err)
-      }
-
+      logger.error(err)
       return next(err)
     }
     return { success: true }
@@ -190,7 +188,7 @@ router.post('/reset/:token',
     .where('user.resetPasswordToken = :token', { token: req.params.token })
     .andWhere('user.resetPasswordExpires > :now', { now: new Date() })
     .getOne()
-    .then((user) => {
+    .then((user: User) => {
       if (!user) {
         const msg = "Either that user doesn't exist or the token is invalid."
         res.locals.errors.push({ msg })
@@ -202,14 +200,14 @@ router.post('/reset/:token',
       user.resetPasswordExpires = null
       user.lastPasswordReset = new Date()
 
-      user.save().then((savedUser) => {
+      user.save().then((savedUser: User) => {
         const data = {
           to: user.email,
           subject: 'Password has been reset',
           text: `Your password has been reset at http://${req.headers.host}`,
         }
 
-        sendMail(data, (err, body) => {
+        sendMail(data, (err: any, body: any) => {
           res.json({
             success: true,
             msg: 'Password was reset.',
@@ -217,7 +215,7 @@ router.post('/reset/:token',
         })
       })
     })
-    .catch((err) => {
+    .catch((err: any) => {
       logger.error(err)
       return next(err)
     })
