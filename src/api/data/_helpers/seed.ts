@@ -37,10 +37,10 @@ export class Seed {
     }
 
     await this.connection.createQueryBuilder()
-    .insert()
-    .into(this.entity)
-    .values(this.seeds)
-    .execute()
+      .insert()
+      .into(this.entity)
+      .values(this.seeds)
+      .execute()
 
     logger.info('Seeding complete.')
 
