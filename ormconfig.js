@@ -22,12 +22,12 @@ module.exports = {
     `${srcOrDist}/**/*.entity.?s`,
   ],
   migrations: [
-    `${srcOrDist}/migrations/**/*.?s`,
+    `${srcOrDist}/api/migrations/**/*.?s`,
   ],
   subscribers: [
     `${srcOrDist}/api/subscribers/**/*.?s`,
   ],
   cli: {
-    migrationsDir: `${srcOrDist}/migrations`,
+    migrationsDir: `${srcOrDist}/api/migrations`,
   },
 }
