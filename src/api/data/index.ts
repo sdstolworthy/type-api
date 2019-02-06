@@ -1,9 +1,8 @@
 import { ApolloServer } from 'apollo-server-express'
-import { Application } from 'express'
 import { logger } from '../../config/logger'
 import settings from '../../config/settings'
 import getUserFromAuthHeader from '../middleware/getUserFromAuthHeader'
-import getUserPermissions from './_helpers/getUserPermissions'
+import { getUserPermissions } from './_helpers/authorization'
 import { resolvers, typeDefs } from './schema'
 
 export default new ApolloServer({
