@@ -12,6 +12,6 @@ const seed: Seed = new Seed(Post, [
   },
 ])
 
-seed.seed()
+seed.write()
 
 export default seed
