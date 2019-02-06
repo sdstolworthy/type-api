@@ -3,6 +3,7 @@ import { Application } from 'express'
 import { logger } from '../../config/logger'
 import settings from '../../config/settings'
 import getUserFromAuthHeader from '../middleware/getUserFromAuthHeader'
+import getUserPermissions from './_helpers/getUserPermissions'
 import { resolvers, typeDefs } from './schema'
 
 export default new ApolloServer({
@@ -25,6 +26,9 @@ export default new ApolloServer({
       logger.debug('ApolloServer websocket context.user:')
       logger.debug(user)
 
+      const permissions: any[] = await getUserPermissions(user)
+      logger.debug(permissions)
+
       return {
         user,
       }
@@ -45,8 +49,13 @@ export default new ApolloServer({
     logger.debug('ApolloServer context.user:')
     logger.debug(user)
 
+    const permissions: string[] = await getUserPermissions(user)
+    logger.debug('ApolloServer context.permissions:')
+    logger.debug(permissions)
+
     return {
       user,
+      permissions,
     }
   },
 })
