@@ -9,7 +9,7 @@ import { Permission, PermissionValues } from './permission.entity'
 describe('permission entity', () => {
   let connection: Connection
   const testEntity = {
-    value: PermissionValues.CAN_CREATE_POST,
+    value: PermissionValues.CAN_READ_ROLE,
   }
 
   beforeEach(async () => {
