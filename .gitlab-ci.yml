@@ -1,0 +1,38 @@
+stages:
+  - test
+  - deploy
+
+image: node:latest
+
+before_script:
+  - npm i -g yarn
+  - yarn install
+
+test:
+  stage: test
+  services:
+    - postgres:latest
+  variables:
+    POSTGRES_DB: postgres
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: ""
+    DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
+  script:
+    - yarn test:unit
+  coverage: '/(?:Statements\s+:\s)(\d+\.\d*)/'
+
+lint:
+  stage: test
+  script:
+    - yarn test:lint
+
+staging:
+  stage: deploy
+  script:
+  - apt-get update -qy
+  - apt-get install -y ruby-dev
+  - gem install dpl
+  - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+  only:
+  - develop
+  - master

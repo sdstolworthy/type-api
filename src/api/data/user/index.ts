@@ -1,6 +1,6 @@
 import inputTypes from './user.args'
 import { mutationResolvers, mutationTypes } from './user.mutations'
-import { queryResolvers, queryTypes } from './user.query'
+import { queryResolvers, queryTypes } from './user.queries'
 import { typeResolvers, types } from './user.type'
 
 export default {

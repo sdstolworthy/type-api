@@ -1,8 +1,7 @@
-/* tslint:disable no-console */
+/* tslint:disable no-console newline-per-chained-call */
 import { expect } from 'chai'
 import * as fs from 'fs'
 import 'mocha'
-import * as path from 'path'
 import * as walk from 'walk'
 
 describe('config/settings', () => {

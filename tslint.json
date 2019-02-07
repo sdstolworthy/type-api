@@ -2,9 +2,12 @@
     "extends": [
         "@altamir/standards-tslint"
     ],
+    "rules": {
+        "member-ordering": [true, {"order": "fields-first"}]
+    },
     "linterOptions": {
         "exclude": [
-            ".gulp"
+            "src/api/migrations/**/*"
         ]
     }
 }

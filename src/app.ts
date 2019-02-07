@@ -2,93 +2,81 @@ import 'reflect-metadata'
 
 import * as bodyParser from 'body-parser'
 import * as compression from 'compression'
-import * as errorHandler from 'errorhandler'
 import * as express from 'express'
 import * as helmet from 'helmet'
 import * as morgan from 'morgan'
 import * as passport from 'passport'
-import { Connection, createConnection, getConnectionOptions } from 'typeorm'
-import * as util from 'util'
 import authRouter from './api/auth'
-import { StartGraphQL } from './api/data'
-import { HttpError } from './config/errorHandler'
-import httpErrorModule from './config/errorHandler/sendHttpError'
 import { logger, stream } from './config/logger'
-import { TypeORMLogger } from './config/logger/typeorm'
 import settings from './config/settings'
 
-export interface IEnv {
-  PORT: number | string
-}
+// silly log the settings for a sanity check
+logger.silly('settings:')
+logger.silly(settings)
 
-export async function run({
-  PORT = settings.port,
-}: IEnv) {
-  if (typeof PORT === 'string') {
-    PORT = parseInt(PORT, 10)
-  }
+const app = express()
 
-  // silly log the settings for a sanity check
-  logger.silly(`settings: \n${util.inspect(settings, false, null, true)}`)
+app.set('env', settings.env)
+logger.silly(`app env: ${app.get('env')}`)
 
-  // database
-  let connectionOptions = await getConnectionOptions()
-  connectionOptions = {
-    ...connectionOptions,
-    logging: 'all',
-    logger: new TypeORMLogger(),
-  }
-  const connection: Connection = await createConnection(connectionOptions)
+// middleware
+app.use(helmet())
+app.use(compression())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(passport.initialize())
+app.use(morgan('tiny', { stream }))
 
-  const app = express()
+// initialize custom errors
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+  /**
+   * Using an array that stores errors until we are ready to access them again
+   * ensures that we can capture all errors along the path to sending the errors
+   * back to the user.
+   */
+  res.locals.errors = []
+  next()
+})
 
-  app.set('env', settings.env)
-  app.set('port', settings.port)
+// routes
+app.get('/', (req: express.Request, res: express.Response) => {
+  res.json({
+    status: 'ok',
+  })
+})
 
-  logger.silly(`app env: ${app.get('env')}`)
-  logger.silly(`app port: ${app.get('port')}`)
+app.use('/auth', authRouter)
 
-  // middleware
-  app.use(helmet())
-  app.use(compression())
-  app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({ extended: true }))
-  app.use(passport.initialize())
-
-  // error handler
-  // don't use in production
-  if (app.get('env') === 'development') {
-    app.use(errorHandler())
-  }
-
-  app.use(httpErrorModule)
-  app.use((error: Error, req: express.Request, res: any, next: express.NextFunction) => {
-    logger.error(error)
-
-    if (typeof error === 'number') {
-      error = new HttpError(error) // next(404)
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  // only run this if errors not handled by someone else
+  let error = err
+  if (!res.locals.errors.length) {
+    error = {
+      name: err.name || 'Error',
+      msg: err.mgs || err.message || 'Unhandled error',
     }
-
-    if (error instanceof HttpError) {
-      res.sendHttpError(error)
-    } else {
-      if (app.get('env') === 'development') {
-        error = new HttpError(500, error.message)
-        res.sendHttpError(error)
-      } else {
-        error = new HttpError(500)
-        res.sendHttpError(error, error.message)
-      }
+    logger.debug(error)
+    res.locals.errors.push(error)
   }
-  })
+  next(error)
+})
 
-  app.use(morgan('tiny', { stream }))
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (res.locals.errors.length > 0) {
+    // at least one error exists; send the errors
+    return res.status(400)
+    .json({ errors: res.locals.errors })
+  }
+  next(err)
+})
 
-  // routes
-  app.get('/', (req, res) => {
-    res.send('Up and running.')
-  })
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  // An error occurred but wasn't handled.
+  const error = settings.env === 'development' ? err : 'Internal Server Error'
+  logger.error(error)
 
-  app.use('/auth', authRouter)
-  StartGraphQL(app)
-}
+  res.status(500)
+  .json({ error })
+})
+
+export default app

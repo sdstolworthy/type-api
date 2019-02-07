@@ -1,5 +1,4 @@
-import * as bcrypt from 'bcrypt'
-import { User } from '../data/user/user.entity'
+import * as bcrypt from 'bcryptjs'
 
 const SALT_ROUNDS = 10
 
@@ -16,10 +15,10 @@ export function hashPassword(password: string) {
 /**
  * Compare a given user's password with the given password. Return true if a match.
  * @function
- * @param {User} user
- * @param {string} password
+ * @param {string} plaintextPassword
+ * @param {string} userPassword
  * @returns {boolean}
  */
-export function validatePassword(user: User, password: string): boolean {
-  return bcrypt.compareSync(password, user.password)
+export function validatePassword(plaintextPassword: string, userPassword: string): boolean {
+  return bcrypt.compareSync(plaintextPassword, userPassword)
 }

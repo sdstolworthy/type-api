@@ -1,4 +1,4 @@
-/* tslint:disable no-unused-expression */
+/* tslint:disable no-unused-expression newline-per-chained-call */
 import { expect } from 'chai'
 import 'mocha'
 import { Connection, createConnection } from 'typeorm'
@@ -17,7 +17,7 @@ describe('user entity', () => {
   beforeEach(async () => {
     connection = await createConnection({
       type: 'postgres',
-      url: settings.dbPostgresTestUrl,
+      url: settings.dbTestUrl,
       entities: [
         'src/**/*.entity.ts',
       ],
@@ -31,10 +31,10 @@ describe('user entity', () => {
     await connection.close()
   })
 
-  it('should have an id field of type uuid', (done) => {
+  it('should have an id field of type number', (done) => {
     User.create(testUser).save().then((user) => {
       expect(user).to.haveOwnProperty('id')
-      expect(validator.isUUID(user.id)).to.be.true
+      expect(user.id).to.be.a('number')
       done()
     })
   })

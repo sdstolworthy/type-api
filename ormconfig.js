@@ -1,22 +1,33 @@
+/**
+ * ormconfig.js
+ * Keep this file so we can easily interact with the typeorm cli.
+ */
+
 // This file must interact with process.env vars to avoid errors when compiling
-const srcOrDist = process.env.NODE_ENV === 'production' ? 'dist' : 'src'
+const env = process.env.NODE_ENV || 'development'
+const srcOrDist = env === 'production' ? 'dist' : 'src'
 
 module.exports = {
+  // use postgres for timestamp columns
   type: 'postgres',
-  url: process.env.POSTGRES_URL,
-  autoSave: true,
-  synchronize: true,
+  url: env === 'test' ? process.env.DATABASE_TEST_URL : process.env.DATABASE_URL,
+
+  // only drop schema in test environment; this keeps tests separate
+  dropSchema: env === 'test' ? true : false,
+
+  synchronize: false,
+  migrationsRun: true,
   entityPrefix: 'app_',
   entities: [
     `${srcOrDist}/**/*.entity.?s`,
   ],
   migrations: [
-    `${srcOrDist}/migrations/**/*.?s`,
+    `${srcOrDist}/api/migrations/**/*.?s`,
   ],
   subscribers: [
-    `${srcOrDist}/subscribers/**/*.?s`,
+    `${srcOrDist}/api/subscribers/**/*.?s`,
   ],
   cli: {
-    migrationsDir: `${srcOrDist}/migrations`,
+    migrationsDir: `${srcOrDist}/api/migrations`,
   },
 }

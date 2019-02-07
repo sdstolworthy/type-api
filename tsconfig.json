@@ -1,17 +1,17 @@
 {
-    "extends": "@altamir/standards-tsconfig/tsconfig.json",
     "include": [
-        "./src/**/*"
+        "src/**/*"
     ],
     "exclude": [
-        ".gulp",
-        "node_modules"
+        "node_modules",
+        "**/*.spec.ts"
     ],
     "compilerOptions": {
         "lib": [
             "es5",
             "es6",
-            "esnext"
+            "esnext",
+            "dom"
         ],
         "target": "es5",
         "module": "commonjs",
@@ -22,6 +22,7 @@
         "forceConsistentCasingInFileNames": true,
         "outDir": "dist",
         "emitDecoratorMetadata": true,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "importHelpers": true
     }
 }

@@ -1,10 +1,8 @@
-import { Column, Entity, Index, OneToMany } from 'typeorm'
-import { AltamirEntity } from '../_helpers/baseEntity'
+import { Column, Entity } from 'typeorm'
+import { AltamirEntity } from '../_helpers/base.entity'
 
-@Entity({
-  name: '<%= entityName%>s',
-})
-export class <%= entityName[0].toUpperCase() + entityName.slice(1) %> extends AltamirEntity {
+@Entity({ name: '{{ entityName }}s' })
+export class {{ capitalize entityName }} extends AltamirEntity {
   @Column()
   public title: string
 

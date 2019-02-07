@@ -1,22 +1,22 @@
-/* tslint:disable no-unused-expression */
+/* tslint:disable no-unused-expression newline-per-chained-call */
 import { expect } from 'chai'
 import 'mocha'
 import { Connection, createConnection } from 'typeorm'
 import validator from 'validator'
 import settings from '../../../config/settings'
-import { <%= entityName[0].toUpperCase() + entityName.slice(1) %> } from './<%= entityName %>.entity'
+import { {{ capitalize entityName }} } from './{{ entityName }}.entity'
 
-describe('<%= entityName %> entity', () => {
+describe('{{ entityName }} entity', () => {
   let connection: Connection
   const testEntity = {
-    title: 'Test title for <%= entityName[0].toUpperCase() + entityName.slice(1) %>',
-    body: 'Test body for <%= entityName[0].toUpperCase() + entityName.slice(1) %>',
+    title: 'Test title for {{ capitalize entityName }}',
+    body: 'Test body for {{ capitalize entityName }}',
   }
 
   beforeEach(async () => {
     connection = await createConnection({
       type: 'postgres',
-      url: settings.dbPostgresTestUrl,
+      url: settings.dbTestUrl,
       entities: [
         'src/**/*.entity.ts',
       ],
@@ -30,26 +30,26 @@ describe('<%= entityName %> entity', () => {
     await connection.close()
   })
 
-  it('should have an id field of type uuid', (done) => {
-    <%= entityName[0].toUpperCase() + entityName.slice(1) %>.create(testEntity).save().then((<%= entityName %>) => {
-      expect(<%= entityName %>).to.haveOwnProperty('id')
-      expect(validator.isUUID(<%= entityName %>.id)).to.be.true
+  it('should have an id field of type number', (done) => {
+    {{ capitalize entityName }}.create(testEntity).save().then(({{ entityName }}) => {
+      expect({{ entityName }}).to.haveOwnProperty('id')
+      expect({{ entityName }}.id).to.be.a('number')
       done()
     })
   })
 
   it('should have a createdAt field of type date', (done) => {
-    <%= entityName[0].toUpperCase() + entityName.slice(1) %>.create(testEntity).save().then((<%= entityName %>) => {
-      expect(<%= entityName %>).to.haveOwnProperty('createdAt')
-      expect(<%= entityName %>.createdAt).to.be.a('Date')
+    {{ capitalize entityName }}.create(testEntity).save().then(({{ entityName }}) => {
+      expect({{ entityName }}).to.haveOwnProperty('createdAt')
+      expect({{ entityName }}.createdAt).to.be.a('Date')
       done()
     })
   })
 
   it('should have an updatedAt field of type date', (done) => {
-    <%= entityName[0].toUpperCase() + entityName.slice(1) %>.create(testEntity).save().then((<%= entityName %>) => {
-      expect(<%= entityName %>).to.haveOwnProperty('updatedAt')
-      expect(<%= entityName %>.updatedAt).to.be.a('Date')
+    {{ capitalize entityName }}.create(testEntity).save().then(({{ entityName }}) => {
+      expect({{ entityName }}).to.haveOwnProperty('updatedAt')
+      expect({{ entityName }}.updatedAt).to.be.a('Date')
       done()
     })
   })

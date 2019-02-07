@@ -1,31 +1,51 @@
 import { ApolloServer } from 'apollo-server-express'
-import { Application } from 'express'
-import * as util from 'util'
 import { logger } from '../../config/logger'
 import settings from '../../config/settings'
 import getUserFromAuthHeader from '../middleware/getUserFromAuthHeader'
 import { resolvers, typeDefs } from './schema'
 
-export async function StartGraphQL(app: Application) {
+export default new ApolloServer({
+  typeDefs,
+  resolvers,
+  tracing: settings.env === 'development' ? true : false,
+  playground: settings.env === 'development' ? true : settings.apolloForcePlayground,
+  introspection: settings.env === 'development' ? true : settings.apolloForcePlayground,
+  engine: {
+    // https://www.apollographql.com/docs/apollo-server/features/metrics.html#Apollo-Engine
+    apiKey: settings.apolloEngineApiKey,
+  },
+  subscriptions: {
+    onConnect: async (connectionParams: any, websocket: any) => {
+      logger.debug('Connected to subscription websocket.')
 
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: async ({ req, res }) => {
       // add currently auth'd user to context
-      let user = req.headers.authorization || ''
+      let user = connectionParams.Authorization || ''
       user = await getUserFromAuthHeader(user)
-      logger.debug(`ApolloServer context.user - ${util.inspect(user, {showHidden: false, depth: null})}`)
+      logger.debug('ApolloServer websocket context.user:')
+      logger.debug(user)
 
       return {
         user,
       }
     },
-  })
+    onDisconnect: () => {
+      logger.debug('Disconnected from subscription websocket.')
+    },
+  },
+  context: async ({ req, connection }) => {
+    // https://www.apollographql.com/docs/apollo-server/features/subscriptions.html#Context-with-Subscriptions
+    if (connection) {
+      return connection.context
+    }
 
-  server.applyMiddleware({ app }) // app is from an existing express app
+    // add currently auth'd user to context
+    let user = req.headers.authorization || ''
+    user = await getUserFromAuthHeader(user)
+    logger.debug('ApolloServer context.user:')
+    logger.debug(user)
 
-  app.listen({ port: settings.port }, () => {
-    logger.info(`Server ready at http://127.0.0.1:${settings.port}${server.graphqlPath} 🚀`)
-  })
-}
+    return {
+      user,
+    }
+  },
+})
