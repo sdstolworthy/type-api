@@ -4,9 +4,11 @@ stages:
 
 image: node:latest
 
-before_script:
-  - npm i -g yarn
-  - yarn install
+build:
+  stage: build
+  script:
+    - npm i -g yarn
+    - yarn install
 
 test:
   stage: test
