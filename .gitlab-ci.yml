@@ -1,15 +1,12 @@
 stages:
-  - build
   - test
   - deploy
 
 image: node:latest
 
-build:
-  stage: build
-  script:
-    - npm i -g yarn
-    - yarn install
+before_script:
+  - npm i -g yarn
+  - yarn install
 
 test:
   stage: test
