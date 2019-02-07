@@ -1,5 +1,8 @@
 # Altamir API
 
+>TODO:
+>- Context-based authorization on subscriptions.
+
 Welcome to your new API!
 
 To get started:
@@ -26,7 +29,7 @@ git push --set-upstream origin master
 
 ## About this API
 
-This API generator uses [yarn](https://www.npmjs.com/package/yarn) along with [package.json](./package.json) to manage much of the scaffolding and service of the API. For example, running `yarn cil create:entity book` will create a GraphQL schema and a database entity for the `book` object.
+This API generator uses [yarn](https://www.npmjs.com/package/yarn) along with [package.json](./package.json) to manage much of the scaffolding and service of the API. For example, running `yarn create:entity book` will create a GraphQL schema and a database entity for the `book` object.
 
 This API has a number of relevant, life-enhancing features:
 
@@ -35,8 +38,8 @@ This API has a number of relevant, life-enhancing features:
   - Password reset via email
   - JWT auth in the GraphQL routes
   - JWT invalidation after password resets
-- CLI
-  - Run commands via `yarn cli`
+- Authorization
+  - Role-based permissions
 - Docker
   - [Dockerfile](./Dockerfile)
   - Multiple docker-compose files for ease of development
@@ -86,7 +89,7 @@ docker-compose -f docker-compose.development.yml up
 Run the following from the root of the api:
 
 ```cli
-yarn cli create:entity <entityName>
+yarn create:entity <entityName>
 ```
 
 This will add a new directory under [/src/api/data](./src/api/data/) containing a new, working entity. GraphQL will automagically pick it up and register it with the schema.

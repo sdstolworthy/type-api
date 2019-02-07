@@ -1,5 +1,4 @@
 import { gql } from 'apollo-server-express'
-import { logger } from '../../../config/logger'
 import { pubsub } from '../subscriptions'
 import { Post } from './post.entity'
 import { subscriptions } from './post.subscriptions'

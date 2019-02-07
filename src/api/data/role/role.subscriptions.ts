@@ -3,12 +3,12 @@ import { logger } from '../../../config/logger'
 import { pubsub } from '../subscriptions'
 
 export const subscriptions = {
-  POST_ADDED: 'POST_ADDED',
+  ROLE_ADDED: 'ROLE_ADDED',
 }
 
 const Subscription = gql`
   extend type Subscription {
-    postAdded: Post
+    roleAdded: Role
   }
 `
 
@@ -16,11 +16,11 @@ export const subscriptionTypes = () => [ Subscription ]
 
 export const subscriptionResolvers = {
   Subscription: {
-    postAdded: {
-      resolve: async (post) => {
-        return post
+    roleAdded: {
+      resolve: (role) => {
+        return role
       },
-      subscribe: () => pubsub.asyncIterator([subscriptions.POST_ADDED]),
+      subscribe: () => pubsub.asyncIterator([subscriptions.ROLE_ADDED]),
     },
   },
 }

@@ -1,5 +1,4 @@
 import { ApolloServer } from 'apollo-server-express'
-import { Application } from 'express'
 import { logger } from '../../config/logger'
 import settings from '../../config/settings'
 import getUserFromAuthHeader from '../middleware/getUserFromAuthHeader'

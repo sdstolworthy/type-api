@@ -15,7 +15,7 @@ export class Seed {
     this.seeds = seeds
   }
 
-  public async seed() {
+  public async write() {
     let connectionOptions = await getConnectionOptions()
     connectionOptions = {
       ...connectionOptions,
@@ -24,7 +24,7 @@ export class Seed {
 
     this.connection = await createConnection(connectionOptions)
 
-    logger.info('Seeding started.')
+    logger.info(`Seeding started for ${this.entity.name}`)
 
     const existingData = await this.connection.getRepository(this.entity)
       .createQueryBuilder()

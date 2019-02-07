@@ -20,8 +20,13 @@ const getUserFromAuthHeader = async (bearerToken: string) => {
 
     const decodedToken: any = await jwt.verify(bearerTokenArray[1], settings.secretKey)
 
-    const user: User = await User.createQueryBuilder('user')
-      .select('user.id') // only select necessary fields
+    const user: any = await User.createQueryBuilder('user')
+      // .leftJoin('user.roles', 'role')
+      // .leftJoin('role.permissions', 'permission')
+      .select([
+        'user.id',
+        // 'permission.value',
+      ])
       .where('user.id = :id', { id: decodedToken.id })
       .andWhere(new Brackets((qb) => {
         // Prevent user auth if lastPasswordReset is after the jwt's iat value.
