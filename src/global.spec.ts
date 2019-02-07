@@ -10,45 +10,6 @@ import { logger } from './config/logger'
 
 const readFile = util.promisify(fs.readFile)
 
-describe('circleci and docker-compose', () => {
-  it('should reference the same postgres docker image', (done) => {
-    try {
-      const circleciConfig: any = yaml.safeLoad(fs.readFileSync('.circleci/config.yml'))
-      const dockerComposeDev: any = yaml.safeLoad(fs.readFileSync('docker-compose.development.yml'))
-      const dockerComposeTest: any = yaml.safeLoad(fs.readFileSync('docker-compose.test.yml'))
-
-      const circleciBuildPostgresImg: string = circleciConfig.jobs.build.docker[1].image
-      const dockerComposeDevPostgresImg: string = dockerComposeDev.services.db_dev.image
-      const dockerComposeTestPostgresImg: string = dockerComposeTest.services.db_test.image
-
-      expect(dockerComposeDevPostgresImg).to.equal(circleciBuildPostgresImg)
-      expect(dockerComposeTestPostgresImg).to.equal(circleciBuildPostgresImg)
-    } catch (e) {
-      logger.error(e)
-    }
-    done()
-  })
-
-  it('should reference the same node docker image', (done) => {
-    const circleciConfig = yaml.safeLoad(fs.readFileSync('.circleci/config.yml'))
-    const circleciBuildNodeImage = circleciConfig.jobs.build.docker[0].image
-
-    const lineReader = readline.createInterface({
-      input: fs.createReadStream('Dockerfile'),
-    })
-
-    lineReader.on('line', (line) => {
-      const parsed = line.split(' ')
-
-      if (parsed[0] === 'FROM') {
-        // the docker image
-        expect(parsed[1]).to.equal(circleciBuildNodeImage)
-        done()
-      }
-    })
-  })
-})
-
 describe('all app files', () => {
   it('should not call "console.*"', (done) => {
     const violatingString = 'console.'
