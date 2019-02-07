@@ -1,5 +1,8 @@
 # Altamir API
 
+>TODO:
+>- Context-based authorization on subscriptions.
+
 Welcome to your new API!
 
 To get started:
