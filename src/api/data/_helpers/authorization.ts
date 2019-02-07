@@ -6,18 +6,16 @@ export { PermissionValues } from '../permission/permission.entity'
 /**
  * Throws an error if a user doesn't have the proper permissions.
  * @function
- * @param {object} context - the Apollo request context
+ * @param {User} user
  * @param {string} permissionValue - the permission required from permission.PermissionValues
+ * Checks the given user's permissions via the roles assigned to that user. If
+ * the user has the permission `permissionValue` somewhere within its granted
+ * permissions, return true. Otherwise, throw an AuthenticationError.
  */
-export const needsPermission = (context: any, permissionValue: string) => {
-  if (!context.permissions || !context.permissions.includes(permissionValue)) {
-    throw new AuthenticationError("The user doesn't have permission to do that.")
+export const needsPermission = async (user: User, permissionValue: string) => {
+  if (!user) {
+    throw new AuthenticationError('No user was provided for authentication on a protected resource.')
   }
-  return true
-}
-
-export const getUserPermissions = async (user: User) => {
-  if (!user) { return [] }
 
   const permissionsRaw: any[] = await User.createQueryBuilder('user')
     .leftJoin('user.roles', 'role')
@@ -34,10 +32,11 @@ export const getUserPermissions = async (user: User) => {
    */
   const permissions: string[] = []
   permissionsRaw.forEach((p) => {
-    if (!permissions.includes(p.permission_value)) {
       permissions.push(p.permission_value)
-    }
   })
 
-  return permissions
+  if (!permissions.includes(permissionValue)) {
+    throw new AuthenticationError("The user doesn't have permission to do that.")
+  }
+  return true
 }
