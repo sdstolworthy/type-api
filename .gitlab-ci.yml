@@ -26,6 +26,11 @@ lint:
   script:
     - yarn test:lint
 
+audit:
+  stage: test
+  script:
+    - yarn test:audit
+
 staging:
   stage: deploy
   script:

@@ -1,12 +1,9 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
 import { expect } from 'chai'
 import * as fs from 'fs'
-import * as yaml from 'js-yaml'
 import 'mocha'
-import * as readline from 'readline'
 import * as util from 'util'
 import * as walk from 'walk'
-import { logger } from './config/logger'
 
 const readFile = util.promisify(fs.readFile)
 
