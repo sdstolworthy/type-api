@@ -2,9 +2,23 @@
 import { expect } from 'chai'
 import 'mocha'
 import { Connection, createConnection } from 'typeorm'
-import validator from 'validator'
 import settings from '../../../config/settings'
 import { Permission, PermissionValues } from './permission.entity'
+
+// https://stackoverflow.com/a/24968449/5623385
+function getDuplicateArrayValues(array: string[]): string[] {
+  const unique = array
+    .map((val: string) => {
+      return { count: 1, val }
+    })
+    .reduce((a, b) => {
+      a[b.val] = (a[b.val] || 0) + b.count
+      return a
+    }, {})
+
+  const duplicates: string[] = Object.keys(unique).filter((a) => unique[a] > 1)
+  return duplicates
+}
 
 describe('permission entity', () => {
   let connection: Connection
@@ -51,5 +65,15 @@ describe('permission entity', () => {
       expect(permission.updatedAt).to.be.a('Date')
       done()
     })
+  })
+
+  it('should have only unique values in the PermissionValues enum', (done) => {
+    const permissionValuesArray: any[] = []
+    Object.keys(PermissionValues).forEach((key) => {
+      permissionValuesArray.push(PermissionValues[key])
+    })
+
+    expect(getDuplicateArrayValues(permissionValuesArray)).to.have.lengthOf(0)
+    done()
   })
 })

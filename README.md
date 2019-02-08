@@ -1,9 +1,9 @@
 # Altamir API
 
+Welcome to your new API! [**Read the docs.**](./docs/)
+
 >TODO:
 >- Context-based authorization on subscriptions.
-
-Welcome to your new API!
 
 To get started:
 

@@ -15,9 +15,10 @@
     "heroku-postbuild": "npm run build",
     "dev": "nodemon -r ./src/bin/www --exec ts-node -e ts --trace-sync-io",
     "//": "management commands",
-    "test": "LOG_LEVEL=error npm run test:unit && npm run test:lint",
+    "test": "LOG_LEVEL=error npm run test:unit && npm run test:lint && npm run test:audit",
     "test:unit": "NODE_ENV=test nyc mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
     "test:lint": "tslint 'src/**/*.ts'",
+    "test:audit": "yarn audit",
     "ts-node": "ts-node",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "create:entity": "gulp entity --name",
@@ -46,6 +47,7 @@
     "all": true
   },
   "dependencies": {
+    "@sentry/node": "^4.5.3",
     "apollo-server-express": "^2.3.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
@@ -78,7 +80,9 @@
     "typeorm": "^0.2.11",
     "typescript": "^3.3.1",
     "validator": "^10.11.0",
-    "winston": "^3.1.0"
+    "winston": "^3.1.0",
+    "winston-loggly-bulk": "^3.0.0",
+    "winston-transport": "^4.3.0"
   },
   "devDependencies": {
     "@altamir/standards-tsconfig": "^1.0.3",

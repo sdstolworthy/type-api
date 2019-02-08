@@ -14,9 +14,4 @@ describe('permission/index', () => {
     expect(index.resolvers).to.haveOwnProperty('Query')
     done()
   })
-
-  it('should have a Subscription property on the resolvers', (done: () => void) => {
-    expect(index.resolvers).to.haveOwnProperty('Subscription')
-    done()
-  })
 })

@@ -4,5 +4,6 @@ Welcome to the documentation. Here you will find more in-depth explanations of i
 
 ## TOC
 
-- [Authentication](./authentication)
-- [Authorization](./authorization)
+- [Authentication](./authentication.md)
+- [Authorization](./authorization.md)
+- [Logging](./logging.md)
