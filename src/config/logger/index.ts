@@ -1,6 +1,7 @@
 import * as util from 'util'
 import * as winston from 'winston'
 import settings from '../settings'
+import { SentryTransport } from './sentry'
 
 export const logger = winston.createLogger({
   level: settings.logLevel || 'warn',
@@ -24,6 +25,10 @@ logger.add(new winston.transports.Console({
       return `${data.level}: ${data.message}`
     }),
   ),
+}))
+
+logger.add(new SentryTransport({
+  level: 'warn',
 }))
 
 class Stream {

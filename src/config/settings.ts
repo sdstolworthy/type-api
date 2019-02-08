@@ -45,4 +45,12 @@ export default {
   mailUser: process.env.MAIL_USER,
   mailPass: process.env.MAIL_PASS,
   mailFrom: process.env.MAIL_FROM || 'noreply@example.com',
+
+  /**
+   * Error logging
+   *
+   * This application supports multiple error logging services.
+   * - Sentry
+   */
+  sentryDsn: process.env.SENTRY_DSN,
 }
