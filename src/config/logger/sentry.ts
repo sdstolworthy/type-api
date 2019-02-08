@@ -7,7 +7,7 @@ export class SentryTransport extends Transport {
   constructor(opts) {
     super(opts)
     Sentry.init({
-      dsn: settings.sentryDsn,
+      dsn: settings.sentry.dsn,
       environment: settings.env,
       attachStacktrace: true,
     })

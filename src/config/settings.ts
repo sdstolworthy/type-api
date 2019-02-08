@@ -51,6 +51,15 @@ export default {
    *
    * This application supports multiple error logging services.
    * - Sentry
+   * - Loggly
    */
-  sentryDsn: process.env.SENTRY_DSN,
+  sentry: {
+    logLevel: process.env.SENTRY_LOG_LEVEL,
+    dsn: process.env.SENTRY_DSN,
+  },
+  loggly: {
+    logLevel: process.env.LOGGLY_LOG_LEVEL,
+    token: process.env.LOGGLY_TOKEN,
+    subdomain: process.env.LOGGLY_SUBDOMAIN,
+  },
 }

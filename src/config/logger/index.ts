@@ -1,5 +1,7 @@
+/* tslint:disable no-var-requires */
 import * as util from 'util'
 import * as winston from 'winston'
+import { Loggly } from 'winston-loggly-bulk'
 import settings from '../settings'
 import { SentryTransport } from './sentry'
 
@@ -27,9 +29,21 @@ logger.add(new winston.transports.Console({
   ),
 }))
 
-if (settings.sentryDsn) {
+if (settings.sentry.dsn) {
+  logger.info('Adding Sentry logger')
   logger.add(new SentryTransport({
-    level: 'warn',
+    level: settings.sentry.logLevel || 'warn',
+  }))
+}
+
+if (settings.loggly.token && settings.loggly.subdomain) {
+  logger.info('Adding Loggly logger')
+  logger.add(new Loggly({
+    level: settings.loggly.logLevel || 'warn',
+    token: settings.loggly.token,
+    subdomain: settings.loggly.subdomain,
+    tags: ['Winston-NodeJS'],
+    json: true,
   }))
 }
 

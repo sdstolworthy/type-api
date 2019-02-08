@@ -6,7 +6,13 @@ This API uses [Winston](https://www.npmjs.com/package/winston) to log events. Lo
 
 To add logs with supported event tracking services, set the corresponding environment variable:
 
-- [Sentry.io](https://sentry.io/) - `SENTRY_DSN`
+- [Sentry](https://sentry.io/)
+  - `SENTRY_DSN`
+  - `SENTRY_LOG_LEVEL` (optional, defaults to `warn`)
+- [Loggly](https://www.loggly.com/)
+  - `LOGGLY_TOKEN`
+  - `LOGGLY_SUBDOMAIN`
+  - `LOGGLY_LOG_LEVEL` (optional, defaults to `warn`)
 
 ### Adding a new logging service
 
