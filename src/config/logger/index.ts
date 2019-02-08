@@ -27,9 +27,11 @@ logger.add(new winston.transports.Console({
   ),
 }))
 
-logger.add(new SentryTransport({
-  level: 'warn',
-}))
+if (settings.sentryDsn) {
+  logger.add(new SentryTransport({
+    level: 'warn',
+  }))
+}
 
 class Stream {
   public write(text: string) {
