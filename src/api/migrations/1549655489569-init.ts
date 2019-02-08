@@ -1,11 +1,10 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class init1549562298357 implements MigrationInterface {
+export class init1549655489569 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(`CREATE TYPE "app_permissions_value_enum" AS ENUM('can read role', 'can write role')`);
         await queryRunner.query(`CREATE TABLE "app_permissions" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "value" "app_permissions_value_enum" NOT NULL, CONSTRAINT "UQ_406a19ca3a2f218ca24aa7361aa" UNIQUE ("value"), CONSTRAINT "PK_2ffc521a3e9b111cab3dbcca274" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "app_posts" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "title" character varying NOT NULL, "body" character varying, CONSTRAINT "PK_fe36095e6a37d195feb58d50ba3" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "app_roles" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying NOT NULL, CONSTRAINT "PK_1dab358fe21b705367e3a7194c0" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "app_users" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "email" character varying NOT NULL, "password" character varying NOT NULL, "gravatarUrl" character varying NOT NULL, "resetPasswordToken" character varying, "resetPasswordExpires" TIMESTAMP WITH TIME ZONE, "lastPasswordReset" TIMESTAMP WITH TIME ZONE, CONSTRAINT "PK_9b97e4fbff9c2f3918fda27f999" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE UNIQUE INDEX "IDX_14241fb016a330600a7e0efae9" ON "app_users" ("email") `);
@@ -27,7 +26,6 @@ export class init1549562298357 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "IDX_14241fb016a330600a7e0efae9"`);
         await queryRunner.query(`DROP TABLE "app_users"`);
         await queryRunner.query(`DROP TABLE "app_roles"`);
-        await queryRunner.query(`DROP TABLE "app_posts"`);
         await queryRunner.query(`DROP TABLE "app_permissions"`);
         await queryRunner.query(`DROP TYPE "app_permissions_value_enum"`);
     }
