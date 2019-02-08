@@ -6,3 +6,4 @@ Welcome to the documentation. Here you will find more in-depth explanations of i
 
 - [Authentication](./authentication.md)
 - [Authorization](./authorization.md)
+- [Logging](./logging.md)
