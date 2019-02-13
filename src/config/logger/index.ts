@@ -23,8 +23,9 @@ logger.add(new winston.transports.Console({
   handleExceptions: true,
   silent: settings.env === 'test' ? true : false,
   format: winston.format.combine(
-    // winston.format.colorize(),
     winston.format.printf((data) => {
+      let message: string = `${chalk.blue(`[${settings.name}]`)}`
+
       let level = ` ${data.level.toUpperCase()} `
       switch (level.toLowerCase().trim()) {
         case 'error':
@@ -49,10 +50,15 @@ logger.add(new winston.transports.Console({
           level = chalk.bgWhite.bold(level)
           break
       }
+      message = `${message} ${level}`
+
       if (typeof data.message === 'object') {
-        return `${chalk.blue(`[${settings.name}]`)} ${level}\n${util.inspect(data.message, false, null, true)}`
+        message = `${message} ${util.inspect(data.message, false, null, true)}`
+      } else {
+        message = `${message} ${data.message}`
       }
-      return `${chalk.blue(`[${settings.name}]`)} ${level} ${data.message}`
+
+      return message
     }),
   ),
 }))
