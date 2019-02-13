@@ -29,7 +29,7 @@ export default class Database {
       synchronize: false,
       migrationsRun: true,
       entityPrefix: settings.dbTablePrefix,
-      entities: ['**/*.entity'],
+      entities: [__dirname + '/../**/*.entity'],
       migrations: [__dirname + '/../api/migrations/**'],
       subscribers: [__dirname + '/../api/subscribers/**'],
 
