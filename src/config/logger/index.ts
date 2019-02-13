@@ -1,9 +1,12 @@
 /* tslint:disable no-var-requires */
+import * as chalkImport from 'chalk'
 import * as util from 'util'
 import * as winston from 'winston'
 import { Loggly } from 'winston-loggly-bulk'
 import settings from '../settings'
 import { SentryTransport } from './sentry'
+
+const chalk: any = chalkImport // fix import error with chalk
 
 export const logger = winston.createLogger({
   level: settings.logLevel || 'warn',
@@ -19,12 +22,36 @@ export const logger = winston.createLogger({
 logger.add(new winston.transports.Console({
   handleExceptions: true,
   format: winston.format.combine(
-    winston.format.colorize(),
+    // winston.format.colorize(),
     winston.format.printf((data) => {
-      if (typeof data.message === 'object') {
-        return `${data.level}: \n${util.inspect(data.message, false, null, true)}`
+      let level = ` ${data.level.toUpperCase()} `
+      switch (level.toLowerCase().trim()) {
+        case 'error':
+          level = chalk.bgRed.bold(level)
+          break
+        case 'warn':
+          level = chalk.bgYellow.bold(level)
+          break
+        case 'info':
+          level = chalk.bgCyan.bold(level)
+          break
+        case 'verbose':
+          level = chalk.bgWhite.bold(level)
+          break
+        case 'debug':
+          level = chalk.bgGreen.bold(level)
+          break
+        case 'silly':
+          level = chalk.bgMagenta.bold(level)
+          break
+        default:
+          level = chalk.bgWhite.bold(level)
+          break
       }
-      return `${data.level}: ${data.message}`
+      if (typeof data.message === 'object') {
+        return `${level}: ${util.inspect(data, false, null, true)}`
+      }
+      return `${level}: ${data.message}`
     }),
   ),
 }))
