@@ -4,5 +4,8 @@
         ".env",
         "package.json",
         "ormconfig.js"
-    ]
+    ],
+    "ignore": ["src/**/*.spec.ts"],
+    "ext": "ts",
+    "exec": "ts-node -r tsconfig-paths/register src/bin/www --trace-sync-io"
 }

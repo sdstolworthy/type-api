@@ -23,6 +23,7 @@
         "outDir": "dist",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "importHelpers": true
+        "importHelpers": true,
+        "baseUrl": "./"
     }
 }

@@ -13,7 +13,7 @@
     "serve": "npm run start",
     "build": "tsc",
     "heroku-postbuild": "npm run build",
-    "dev": "nodemon -r ./src/bin/www --exec ts-node -e ts --trace-sync-io",
+    "dev": "nodemon",
     "test": "LOG_LEVEL=error npm run test:unit && npm run test:lint && npm run test:audit",
     "test:unit": "NODE_ENV=test nyc mocha -r ts-node/register 'src/**/*.spec.ts' --exit",
     "test:lint": "tslint 'src/**/*.ts'",
@@ -112,6 +112,7 @@
     "nyc": "^13.1.0",
     "oclif": "^1.12.8",
     "ts-node": "^7.0.1",
+    "tsconfig-paths": "^3.8.0",
     "walk": "^2.3.14"
   }
 }
