@@ -11,13 +11,12 @@ import { logger, stream } from './config/logger'
 import settings from './config/settings'
 
 // silly log the settings for a sanity check
-logger.silly('settings:')
+logger.silly('Application settings:')
 logger.silly(settings)
 
 const app = express()
 
 app.set('env', settings.env)
-logger.silly(`app env: ${app.get('env')}`)
 
 // middleware
 app.use(helmet())

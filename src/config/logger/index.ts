@@ -50,9 +50,9 @@ logger.add(new winston.transports.Console({
           break
       }
       if (typeof data.message === 'object') {
-        return `${level}: ${util.inspect(data, false, null, true)}`
+        return `${chalk.blue(`[${settings.name}]`)} ${level}\n${util.inspect(data.message, false, null, true)}`
       }
-      return `${level}: ${data.message}`
+      return `${chalk.blue(`[${settings.name}]`)} ${level} ${data.message}`
     }),
   ),
 }))

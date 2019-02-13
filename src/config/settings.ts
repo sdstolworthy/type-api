@@ -3,9 +3,13 @@
  * This should be the ONLY file that accesses process.env.
  */
 import * as dotenv from 'dotenv'
+import * as pkg from '../../package.json'
+
 dotenv.config()
 
 export default {
+  name: pkg.name,
+  version: pkg.version,
   port: parseInt(process.env.PORT, 10) || 3100,
   env: process.env.NODE_ENV || 'development',
   secretKey: process.env.SECRET_KEY || 'replace_this_key_474@itys*-gng^0phyeohag)qxa9$3v64+h^ze#',
