@@ -69,6 +69,7 @@
     "passport-local": "^1.0.0",
     "pg": "^7.8.0",
     "reflect-metadata": "^0.1.12",
+    "request": "^2.88.0",
     "tslib": "^1.9.3",
     "typeorm": "^0.2.11",
     "typescript": "^3.3.1",
