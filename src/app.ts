@@ -14,7 +14,7 @@ import settings from './config/settings'
 logger.silly('Application settings:')
 logger.silly(settings)
 
-const app = express()
+const app: express.Application = express()
 
 app.set('env', settings.env)
 
