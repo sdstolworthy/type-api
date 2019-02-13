@@ -32,6 +32,7 @@ export default {
    */
   dbUrl: process.env.DATABASE_URL,
   dbTestUrl: process.env.DATABASE_TEST_URL,
+  dbTablePrefix: 'app_',
   dbSeeds: 'src/api/data/**/*.seed.ts',
 
   /**
