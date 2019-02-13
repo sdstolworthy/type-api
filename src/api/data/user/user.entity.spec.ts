@@ -1,6 +1,4 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
-import { expect } from 'chai'
-import 'mocha'
 import { Connection, createConnection } from 'typeorm'
 import validator from 'validator'
 import settings from '../../../config/settings'
@@ -9,12 +7,13 @@ import { User } from './user.entity'
 // https://github.com/typeorm/typeorm/issues/1267#issuecomment-350724511
 describe('user entity', () => {
   let connection: Connection
+  let user: User
   const testUser = {
     email: 'test@example.com',
     password: 'password',
   }
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     connection = await createConnection({
       type: 'postgres',
       url: settings.dbTestUrl,
@@ -25,42 +24,43 @@ describe('user entity', () => {
       dropSchema: true, // isolate each test case
       synchronize: true,
     })
+    user = await User.create(testUser).save()
   })
 
-  afterEach(async () => {
+  beforeAll(async () => {
     await connection.close()
   })
 
-  it('should have an id field of type number', (done) => {
-    User.create(testUser).save().then((user) => {
-      expect(user).to.haveOwnProperty('id')
-      expect(user.id).to.be.a('number')
-      done()
-    })
+  it('should have an id field of type number', () => {
+    // User.create(testUser).save().then((user) => {
+    expect(user).toHaveProperty('id')
+    expect(typeof user.id).toBe('number')
+    //   done()
+    // })
   })
 
-  it('should have a createdAt field of type date', (done) => {
-    User.create(testUser).save().then((user) => {
-      expect(user).to.haveOwnProperty('createdAt')
-      expect(user.createdAt).to.be.a('Date')
-      done()
-    })
+  it('should have a createdAt field of type date', () => {
+    // User.create(testUser).save().then((user) => {
+      expect(user).toHaveProperty('createdAt')
+      expect(typeof user.createdAt.getMonth).toBe('function')
+    //   done()
+    // })
   })
 
-  it('should have an updatedAt field of type date', (done) => {
-    User.create(testUser).save().then((user) => {
-      expect(user).to.haveOwnProperty('updatedAt')
-      expect(user.updatedAt).to.be.a('Date')
-      done()
-    })
+  it('should have an updatedAt field of type date', () => {
+    // User.create(testUser).save().then((user) => {
+      expect(user).toHaveProperty('updatedAt')
+      expect(typeof user.updatedAt.getMonth).toBe('function')
+    //   done()
+    // })
   })
 
-  it('should have an email field of type string and is an email', (done) => {
-    User.create(testUser).save().then((user) => {
-      expect(user).to.haveOwnProperty('email')
-      expect(user.email).to.be.a('String')
-      expect(validator.isEmail(user.email)).to.be.true
-      done()
-    })
+  it('should have an email field of type string and is an email', () => {
+    // User.create(testUser).save().then((user) => {
+      expect(user).toHaveProperty('email')
+      expect(typeof user.email).toBe('string')
+      expect(validator.isEmail(user.email)).toBeTruthy
+    //   done()
+    // })
   })
 })

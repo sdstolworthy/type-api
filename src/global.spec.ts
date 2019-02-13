@@ -1,7 +1,5 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
-import { expect } from 'chai'
 import * as fs from 'fs'
-import 'mocha'
 import * as util from 'util'
 import * as walk from 'walk'
 
@@ -58,7 +56,7 @@ describe('all app files', () => {
     })
 
     walker.on('end', () => {
-      expect(violatingFiles).to.have.lengthOf(0)
+      expect(violatingFiles).toHaveLength(0)
       done()
     })
   })
@@ -72,7 +70,7 @@ describe('package.json', () => {
   it('should not contain "@types/validator"', (done) => {
     const contents: string = fs.readFileSync('package.json').toString()
     const containsString: boolean = contents.indexOf('@types/validator') >= 0 ? true : false
-    expect(containsString).to.be.false
+    expect(containsString).toBeFalsy
     done()
   })
 })

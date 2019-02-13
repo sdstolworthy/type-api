@@ -1,7 +1,5 @@
 /* tslint:disable no-console newline-per-chained-call */
-import { expect } from 'chai'
 import * as fs from 'fs'
-import 'mocha'
 import * as walk from 'walk'
 
 describe('config/settings', () => {
@@ -61,7 +59,7 @@ describe('config/settings', () => {
     })
 
     walker.on('end', () => {
-      expect(violatingFiles).to.have.lengthOf(0)
+      expect(violatingFiles).toHaveLength(0)
       done()
     })
   })

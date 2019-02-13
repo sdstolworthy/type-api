@@ -1,6 +1,4 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
-import { expect } from 'chai'
-import 'mocha'
 import { Connection, createConnection } from 'typeorm'
 import validator from 'validator'
 import settings from '../../../config/settings'
@@ -31,24 +29,24 @@ describe('role entity', () => {
 
   it('should have an id field of type number', (done) => {
     Role.create(testEntity).save().then((role) => {
-      expect(role).to.haveOwnProperty('id')
-      expect(role.id).to.be.a('number')
+      expect(role).toHaveProperty('id')
+      expect(typeof role.id).toBe('number')
       done()
     })
   })
 
   it('should have a createdAt field of type date', (done) => {
     Role.create(testEntity).save().then((role) => {
-      expect(role).to.haveOwnProperty('createdAt')
-      expect(role.createdAt).to.be.a('Date')
+      expect(role).toHaveProperty('createdAt')
+      expect(typeof role.createdAt.getMonth).toBe('function')
       done()
     })
   })
 
   it('should have an updatedAt field of type date', (done) => {
     Role.create(testEntity).save().then((role) => {
-      expect(role).to.haveOwnProperty('updatedAt')
-      expect(role.updatedAt).to.be.a('Date')
+      expect(role).toHaveProperty('updatedAt')
+      expect(typeof role.updatedAt.getMonth).toBe('function')
       done()
     })
   })
