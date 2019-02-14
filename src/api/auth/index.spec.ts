@@ -7,7 +7,6 @@ import Server from '../../server'
 import { User } from '../data/user/user.entity'
 
 describe('auth endpoint', function() {
-  this.timeout(20000) // 20 seconds
   const ONE_MINUTE: number = 60000
   const ONE_HOUR: number = 3600000
   const baseUrl: string = `http://127.0.0.1:${settings.port}/auth`
@@ -201,39 +200,35 @@ describe('auth endpoint', function() {
         })
     })
 
-    it('returns an error when provided an ill-formatted token in the auth header', (done) => {
-      chai.request(baseUrl)
-      .post('/refresh')
-      .set('Authorization', 'Bearer thisIsNotAToken')
-      .end((err, res) => {
-        expect(err).toBeNull
-        expect(res.status).toBe(400)
-        expect(res.body).toHaveProperty('errors')
-
-        done()
-      })
+    it('returns an error when provided an ill-formatted token in the auth header', () => {
+      request(baseUrl)
+        .post('/refresh')
+        .set('Authorization', 'Bearer thisIsNotAToken')
+        .end((err, res) => {
+          expect(err).toBeNull
+          expect(res.status).toBe(400)
+          expect(res.body).toHaveProperty('errors')
+        })
     })
 
-    it('returns an error when provided a token with a bad user.id in the auth header', (done) => {
+    it('returns an error when provided a token with a bad user.id in the auth header', () => {
       const badIdToken = jwt.sign(
         { id: -2 }, // not a user id that's in use
         settings.secretKey,
         { expiresIn: '5s' },
       )
 
-      chai.request(baseUrl)
-      .post('/refresh')
-      .set('Authorization', `Bearer ${badIdToken}`)
-      .end((err, res) => {
-        expect(err).toBeNull
-        expect(res.status).toBe(400)
-        expect(res.body).toHaveProperty('errors')
-
-        done()
-      })
+      request(baseUrl)
+        .post('/refresh')
+        .set('Authorization', `Bearer ${badIdToken}`)
+        .end((err, res) => {
+          expect(err).toBeNull
+          expect(res.status).toBe(400)
+          expect(res.body).toHaveProperty('errors')
+        })
     })
 
-    it('returns an error when provided an expired token in the auth header', (done) => {
+    it('returns an error when provided an expired token in the auth header', () => {
       const expiredToken = jwt.sign(
         { id: 1 },
         settings.secretKey,
@@ -241,174 +236,163 @@ describe('auth endpoint', function() {
       )
 
       setTimeout(() => {
-        chai.request(baseUrl)
-        .post('/refresh')
-        .set('Authorization', `Bearer ${expiredToken}`)
-        .end((err, res) => {
-          expect(err).toBeNull
-          expect(res.status).toBe(400)
-          expect(res.body).toHaveProperty('errors')
-
-          done()
-        })
+        request(baseUrl)
+          .post('/refresh')
+          .set('Authorization', `Bearer ${expiredToken}`)
+          .end((err, res) => {
+            expect(err).toBeNull
+            expect(res.status).toBe(400)
+            expect(res.body).toHaveProperty('errors')
+          })
       }, 10) // delay 10ms for the token to expire
     })
 
-    it('returns a refreshed token when provided a valid token in the auth header', (done) => {
-      chai.request(baseUrl)
-      .post('/refresh')
-      .set('Authorization', `Bearer ${jwtToken}`)
-      .end((err, res) => {
-        const bearerToken = res.get('Authorization').split(' ')[1]
+    it('returns a refreshed token when provided a valid token in the auth header', () => {
+      request(baseUrl)
+        .post('/refresh')
+        .set('Authorization', `Bearer ${jwtToken}`)
+        .end((err, res) => {
+          const bearerToken = res.get('Authorization').split(' ')[1]
 
-        expect(err).toBeNull
-        expect(res.status).toBe(200)
-        expect(validator.isJWT(bearerToken))
-        expect(res.body).toHaveProperty('token')
-        expect(typeof res.body.token).toBe('string')
-        expect(validator.isJWT(res.body.token)).toBeTruthy
-
-        done()
-      })
+          expect(err).toBeNull
+          expect(res.status).toBe(200)
+          expect(validator.isJWT(bearerToken))
+          expect(res.body).toHaveProperty('token')
+          expect(typeof res.body.token).toBe('string')
+          expect(validator.isJWT(res.body.token)).toBeTruthy
+        })
     })
   })
 
   describe('POST /auth/forgot', () => {
     // TODO: test that email is sent
 
-    it("returns an error when email isn't in the body", (done) => {
-      chai.request(baseUrl)
-      .post('/forgot')
-      .type('form')
-      .send()
-      .end((err, res) => {
-        expect(err).toBeNull
-        expect(res.status).toBe(400)
-        expect(res.body).toHaveProperty('errors')
-        done()
-      })
+    it("returns an error when email isn't in the body", () => {
+      request(baseUrl)
+        .post('/forgot')
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(err).toBeNull
+          expect(res.status).toBe(400)
+          expect(res.body).toHaveProperty('errors')
+        })
     })
 
-    it('returns an error when no user exists with that email', (done) => {
-      chai.request(baseUrl)
-      .post('/forgot')
-      .type('form')
-      .send({
-        email: 'nottherightemail@gmail.com',
-      })
-      .end((err, res) => {
-        expect(err).toBeNull
-        expect(res.status).toBe(400)
-        expect(res.body).toHaveProperty('errors')
-        done()
-      })
+    it('returns an error when no user exists with that email', () => {
+      request(baseUrl)
+        .post('/forgot')
+        .type('form')
+        .send({
+          email: 'nottherightemail@gmail.com',
+        })
+        .end((err, res) => {
+          expect(err).toBeNull
+          expect(res.status).toBe(400)
+          expect(res.body).toHaveProperty('errors')
+        })
     })
 
-    it('sets the user.resetPasswordToken', (done) => {
-      chai.request(baseUrl)
-      .post('/forgot')
-      .type('form')
-      .send({
-        email,
-      })
-      .end((err, res) => {
-        expect(err).toBeNull
-        expect(res.status).toBe(200)
+    it('sets the user.resetPasswordToken', () => {
+      request(baseUrl)
+        .post('/forgot')
+        .type('form')
+        .send({
+          email,
+        })
+        .end((err, res) => {
+          expect(err).toBeNull
+          expect(res.status).toBe(200)
 
-        User.createQueryBuilder('user')
-        .where('email = :email', { email })
-        .addSelect('user.resetPasswordToken')
-        .getOne()
-        .then((user) => {
-          expect(typeof user.resetPasswordToken).toBe('string')
-          passwordResetToken = user.resetPasswordToken
-          done()
+          User.createQueryBuilder('user')
+          .where('email = :email', { email })
+          .addSelect('user.resetPasswordToken')
+          .getOne()
+          .then((user) => {
+            expect(typeof user.resetPasswordToken).toBe('string')
+            passwordResetToken = user.resetPasswordToken
+          })
+        })
+    })
+
+    it('sets the user.resetPasswordExpires to one hour from now', () => {
+      request(baseUrl)
+        .post('/forgot')
+        .type('form')
+        .send({
+          email,
+        })
+        .end((err, res) => {
+          expect(err).toBeNull
+          expect(res.status).toBe(200)
+
+          User.createQueryBuilder('user')
+          .where('email = :email', { email })
+          .addSelect('user.resetPasswordToken')
+          .addSelect('user.resetPasswordExpires')
+          .getOne()
+          .then((user) => {
+            passwordResetToken = user.resetPasswordToken
+
+            expect(typeof user.resetPasswordExpires).toBe('string')
+            expect(new Date(Date.now() + ONE_HOUR).getTime())
+              .toBeCloseTo(user.resetPasswordExpires.getTime(), ONE_MINUTE)
+          })
         })
       })
-    })
-
-    it('sets the user.resetPasswordExpires to one hour from now', (done) => {
-      chai.request(baseUrl)
-      .post('/forgot')
-      .type('form')
-      .send({
-        email,
-      })
-      .end((err, res) => {
-        expect(err).toBeNull
-        expect(res.status).toBe(200)
-
-        User.createQueryBuilder('user')
-        .where('email = :email', { email })
-        .addSelect('user.resetPasswordToken')
-        .addSelect('user.resetPasswordExpires')
-        .getOne()
-        .then((user) => {
-          passwordResetToken = user.resetPasswordToken
-
-          expect(typeof user.resetPasswordExpires).toBe('string')
-          expect(new Date(Date.now() + ONE_HOUR).getTime())
-            .toBeCloseTo(user.resetPasswordExpires.getTime(), ONE_MINUTE)
-          done()
-        })
-      })
-    })
   })
 
   describe('POST /auth/reset/:token', () => {
     // TODO: test that email is sent
 
-    it("returns an error when password isn't in the body", (done) => {
-      chai.request(baseUrl)
-      .post(`/reset/${passwordResetToken}`)
-      .type('form')
-      .send()
-      .end((err, res) => {
-        expect(err).toBeNull
-        expect(res.status).toBe(400)
-        expect(res.body).toHaveProperty('errors')
-        done()
-      })
-    })
-
-    it('returns an error when the password reset token is invalid', (done) => {
-      chai.request(baseUrl)
-      .post('/reset/invalidToken')
-      .type('form')
-      .send({
-        password: 'newPassword',
-      })
-      .end((err, res) => {
-        expect(err).toBeNull
-        expect(res.status).toBe(400)
-        expect(res.body).toHaveProperty('errors')
-        done()
-      })
-    })
-
-    it('updates the user.lastPasswordReset to now and clears user.resetPasswordToken', (done) => {
-      chai.request(baseUrl)
-      .post(`/reset/${passwordResetToken}`)
-      .type('form')
-      .send({
-        password: 'newPassword',
-      })
-      .end((err, res) => {
-        expect(err).toBeNull
-        expect(res.status).toBe(200)
-
-        User.createQueryBuilder('user')
-        .where('email = :email', { email })
-        .addSelect('user.resetPasswordToken')
-        .addSelect('user.lastPasswordReset')
-        .getOne()
-        .then((user) => {
-          expect(user.resetPasswordToken).toBeNull
-          // expect(typeof user.lastPasswordReset).to.exist
-          expect(new Date().getTime()).toBeCloseTo(user.lastPasswordReset.getTime(), ONE_MINUTE)
-          done()
+    it("returns an error when password isn't in the body", () => {
+      request(baseUrl)
+        .post(`/reset/${passwordResetToken}`)
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(err).toBeNull
+          expect(res.status).toBe(400)
+          expect(res.body).toHaveProperty('errors')
         })
-      })
+    })
+
+    it('returns an error when the password reset token is invalid', () => {
+      request(baseUrl)
+        .post('/reset/invalidToken')
+        .type('form')
+        .send({
+          password: 'newPassword',
+        })
+        .end((err, res) => {
+          expect(err).toBeNull
+          expect(res.status).toBe(400)
+          expect(res.body).toHaveProperty('errors')
+        })
+    })
+
+    it('updates the user.lastPasswordReset to now and clears user.resetPasswordToken', () => {
+      request(baseUrl)
+        .post(`/reset/${passwordResetToken}`)
+        .type('form')
+        .send({
+          password: 'newPassword',
+        })
+        .end((err, res) => {
+          expect(err).toBeNull
+          expect(res.status).toBe(200)
+
+          User.createQueryBuilder('user')
+          .where('email = :email', { email })
+          .addSelect('user.resetPasswordToken')
+          .addSelect('user.lastPasswordReset')
+          .getOne()
+          .then((user) => {
+            expect(user.resetPasswordToken).toBeNull
+            // expect(typeof user.lastPasswordReset).to.exist
+            expect(new Date().getTime()).toBeCloseTo(user.lastPasswordReset.getTime(), ONE_MINUTE)
+          })
+        })
     })
   })
 })
