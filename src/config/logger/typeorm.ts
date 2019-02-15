@@ -24,7 +24,8 @@ export class TypeORMLogger implements Logger {
   }
 
   public logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): any {
-    logger.debug(`Executing query: ${query}${parameters ? ' -- [' + parameters + ']' : ''}`)
+    logger.debug('Executing query:')
+    logger.debug({ query, parameters })
   }
 
   public logMigration(message: string, queryRunner?: QueryRunner): any {
@@ -32,11 +33,13 @@ export class TypeORMLogger implements Logger {
   }
 
   public logQueryError(error: string, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
-    logger.error(`Query error: ${error} >> ${query}${parameters ? ' -- [' + parameters + ']' : ''}`)
+    logger.error('Query error:')
+    logger.error({ query, parameters })
   }
 
   public logQuerySlow(time: number, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
-    logger.warn(`Slow query: [${time.toString()}] ${query}${parameters ? ' -- [' + parameters + ']' : ''}`)
+    logger.warn(`Slow query [${time.toString()}]:`)
+    logger.warn({ query, parameters, time })
   }
 
   public logSchemaBuild(message: string, queryRunner?: QueryRunner): any {

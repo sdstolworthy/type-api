@@ -53,7 +53,7 @@ logger.add(new winston.transports.Console({
       message = `${message} ${level}`
 
       if (typeof data.message === 'object') {
-        message = `${message} ${util.inspect(data.message, false, null, true)}`
+        message = `${message}\n${util.inspect(data.message, false, null, true)}`
       } else {
         message = `${message} ${data.message}`
       }
