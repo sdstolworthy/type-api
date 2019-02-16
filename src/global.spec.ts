@@ -10,7 +10,8 @@ describe('all app files', () => {
     const violatingString = 'console.'
     const violatingFiles = []
     const ignoredFiles = [
-      'global.spec.ts', // this file
+      './src/global.spec.ts', // this file
+      './src/config/cli/index.ts',
     ]
     const ignoredDirectories = ['node_modules']
     const walker = walk.walk('./src', {
@@ -38,7 +39,7 @@ describe('all app files', () => {
       fs.readFile(`${root}/${fileStats.name}`, (err, contents) => {
         if (err) { next() } // who cares about errors? not me.
 
-        if (ignoredFiles.indexOf(fileStats.name) > -1) {
+        if (ignoredFiles.indexOf(`${root}/${fileStats.name}`) > -1) {
           // skip ignoredFiles
           return next()
         }
