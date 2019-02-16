@@ -3,6 +3,7 @@ import chalk from 'chalk'
 import * as program from 'commander'
 import * as fs from 'fs'
 import * as mkdirp from 'mkdirp'
+import * as path from 'path'
 import * as validator from 'validator'
 import * as walk from 'walk'
 import Handlebars from './helpers/handlebars'
@@ -48,10 +49,19 @@ program
     const walker = walk.walk(templateDir)
 
     walker.on('file', (root, fileStats, next) => {
-      const source = fs.readFileSync(`${root}/${fileStats.name}`).toString()
+      const source: string = fs.readFileSync(`${root}/${fileStats.name}`).toString()
       const template = Handlebars.compile(source)
-      const filePath = `${entityPath}/${entityName}`
-      const fileName = fileStats.name === 'index.ts' ? fileStats.name : `${entityName}.${fileStats.name}`
+      const filePath: string = `${entityPath}/${entityName}`
+
+      const filesToExcludeFromPrepending: string[] = [
+        'index',
+        'index.spec',
+      ]
+
+      const rawFileName: string = path.parse(fileStats.name).name
+      const fileName = filesToExcludeFromPrepending.indexOf(rawFileName) !== -1
+        ? `${rawFileName}.ts`
+        : `${entityName}.${rawFileName}.ts`
 
       mkdirp.sync(filePath)
       fs.writeFileSync(`${filePath}/${fileName}`, template({ entityName }))

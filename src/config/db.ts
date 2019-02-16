@@ -19,6 +19,10 @@ export default class Database {
    * @memberof Database
    */
   public async init() {
+    if (!settings.dbUrl) {
+      logger.warn('No DATABASE_URL environment variable is set.')
+    }
+
     const connectionOptions: ConnectionOptions = {
       type: 'postgres',
       url: settings.env === 'test' ? settings.dbUrl : settings.dbTestUrl,
