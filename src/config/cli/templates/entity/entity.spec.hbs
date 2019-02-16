@@ -1,6 +1,4 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
-import { expect } from 'chai'
-import 'mocha'
 import { Connection, createConnection } from 'typeorm'
 import validator from 'validator'
 import settings from '../../../config/settings'
@@ -30,27 +28,21 @@ describe('{{ entityName }} entity', () => {
     await connection.close()
   })
 
-  it('should have an id field of type number', (done) => {
-    {{ capitalize entityName }}.create(testEntity).save().then(({{ entityName }}) => {
-      expect({{ entityName }}).to.haveOwnProperty('id')
-      expect({{ entityName }}.id).to.be.a('number')
-      done()
-    })
+  it('should have an id field of type number', async () => {
+    const {{ entityName }}: {{ capitalize entityName }} = await {{ capitalize entityName }}.create(testEntity).save()
+    expect({{ entityName }}).toHaveProperty('id')
+    expect(typeof {{ entityName }}.id).toBe('number')
   })
 
-  it('should have a createdAt field of type date', (done) => {
-    {{ capitalize entityName }}.create(testEntity).save().then(({{ entityName }}) => {
-      expect({{ entityName }}).to.haveOwnProperty('createdAt')
-      expect({{ entityName }}.createdAt).to.be.a('Date')
-      done()
-    })
+  it('should have a createdAt field of type date', async () => {
+    const {{ entityName }}: {{ capitalize entityName }} = await {{ capitalize entityName }}.create(testEntity).save()
+    expect({{ entityName }}).toHaveProperty('createdAt')
+    expect(typeof {{ entityName }}.createdAt.getMonth).toBe('function')
   })
 
-  it('should have an updatedAt field of type date', (done) => {
-    {{ capitalize entityName }}.create(testEntity).save().then(({{ entityName }}) => {
-      expect({{ entityName }}).to.haveOwnProperty('updatedAt')
-      expect({{ entityName }}.updatedAt).to.be.a('Date')
-      done()
-    })
+  it('should have an updatedAt field of type date', async () => {
+    const {{ entityName }}: {{ capitalize entityName }} = await {{ capitalize entityName }}.create(testEntity).save()
+    expect({{ entityName }}).toHaveProperty('createdAt')
+    expect(typeof {{ entityName }}.createdAt.getMonth).toBe('function')
   })
 })
