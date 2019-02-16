@@ -4,6 +4,7 @@
     ],
     "exclude": [
         "node_modules",
+        "src/config/cli/templates/**/*",
         "**/*.spec.ts"
     ],
     "compilerOptions": {
