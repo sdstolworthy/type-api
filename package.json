@@ -34,6 +34,11 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "collectCoverageFrom": [
+      "src/**",
+      "!**/node_modules/**",
+      "!src/config/cli/templates/**"
+    ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
