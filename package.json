@@ -21,8 +21,6 @@
     "test:audit": "yarn audit",
     "ts-node": "ts-node",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
-    "create:entity": "gulp entity --name",
-    "db:seed": "gulp seed",
     "cli": "ts-node -r tsconfig-paths/register src/config/cli/index.ts"
   },
   "jest": {
@@ -55,10 +53,6 @@
     "express-validator": "^5.3.1",
     "graphql": "^14.1.1",
     "graphql-tools": "^4.0.3",
-    "gulp": "^4.0.0",
-    "gulp-hb": "^7.0.1",
-    "gulp-rename": "^1.4.0",
-    "gulp-shell": "^0.6.5",
     "handlebars": "^4.0.13",
     "helmet": "^3.15.0",
     "inquirer": "^6.2.2",
@@ -103,7 +97,6 @@
     "chai-uuid": "^1.0.6",
     "jest": "^24.1.0",
     "js-yaml": "^3.12.1",
-    "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.9",
