@@ -14,16 +14,27 @@
     "build": "tsc",
     "heroku-postbuild": "npm run build",
     "dev": "nodemon",
-    "test": "NODE_ENV=test jest --detectOpenHandles --forceExit --config ./test/jest-unit.json",
+    "test": "NODE_ENV=test jest --detectOpenHandles --forceExit",
     "test:full": "npm run test:jest && npm run test:lint && npm run test:audit",
-    "test:jest": "NODE_ENV=test jest --coverage --detectOpenHandles --forceExit --config ./test/jest-full.json",
-    "test:unit": "NODE_ENV=test jest --coverage --detectOpenHandles --forceExit --config ./test/jest-unit.json",
+    "test:jest": "npm run test:unit",
+    "test:unit": "NODE_ENV=test jest --coverage --detectOpenHandles --forceExit",
     "test:e2e": "NODE_ENV=test jest --coverage --detectOpenHandles --forceExit --config ./test/jest-e2e.json",
     "test:lint": "NODE_ENV=test tslint 'src/**/*.ts'",
     "test:audit": "NODE_ENV=test yarn audit",
     "ts-node": "ts-node",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "cli": "ts-node -r tsconfig-paths/register src/config/cli/index.ts"
+  },
+  "jest": {
+    "moduleFileExtensions": ["js", "json", "ts"],
+    "rootDir": "./src",
+    "testEnvironment": "node",
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "coverageDirectory": "../coverage",
+    "coverageReporters": ["json"]
   },
   "dependencies": {
     "@sentry/node": "^4.5.3",
@@ -84,6 +95,8 @@
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
     "chai-uuid": "^1.0.6",
+    "istanbul-api": "^2.1.1",
+    "istanbul-lib-coverage": "^2.0.3",
     "jest": "^24.1.0",
     "js-yaml": "^3.12.1",
     "mkdirp": "^0.5.1",

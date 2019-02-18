@@ -4,8 +4,7 @@
     ],
     "exclude": [
         "node_modules",
-        "**/*.spec.ts",
-        "**/*.spec.e2e.ts"
+        "**/*.spec.ts"
     ],
     "compilerOptions": {
         "lib": [

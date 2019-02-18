@@ -19,7 +19,7 @@ test:
     DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
   script:
     - yarn test:full
-  coverage: '/(?:All files\s+\|\s+\d+\.?\d*\s\|\s*)(\d+\.?\d*)/'
+  coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
 
 lint:
   stage: test
