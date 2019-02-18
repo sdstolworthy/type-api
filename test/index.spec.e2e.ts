@@ -1,10 +1,10 @@
 /* tslint:disable no-unused-expression no-var-requires newline-per-chained-call no-string-literal */
 import * as jwt from 'jsonwebtoken'
-import request from 'request'
+import * as request from 'request-promise-native'
 import validator from 'validator'
-import settings from '../../config/settings'
-import Server from '../../server'
-import { User } from '../data/user/user.entity'
+import { User } from '../src/api/data/user/user.entity'
+import settings from '../src/config/settings'
+import Server from '../src/server'
 
 describe('auth endpoint', () => {
   const ONE_MINUTE: number = 60000
@@ -17,12 +17,12 @@ describe('auth endpoint', () => {
 
   const server: Server = new Server()
 
-  beforeAll((done) => {
-    server.up(done)
+  beforeAll(async () => {
+    await server.up()
   })
 
-  afterAll((done) => {
-    server.down(done)
+  afterAll(async () => {
+    await server.down()
   })
 
   /**
@@ -35,14 +35,13 @@ describe('auth endpoint', () => {
 
   describe('POST /auth/register', () => {
     it('returns an error when email is invalid', () => {
-      request(baseUrl)
-        .post('/register')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/register')
+        .form({
           email: 'test@gmail', // invalid email
           password,
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -50,13 +49,12 @@ describe('auth endpoint', () => {
     })
 
     it("returns an error when email isn't in the body", () => {
-      request(baseUrl)
-        .post('/register')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/register')
+        .form({
           password,
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -64,13 +62,12 @@ describe('auth endpoint', () => {
     })
 
     it("returns an error when password isn't in the body", () => {
-      request(baseUrl)
-        .post('/register')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/register')
+        .form({
           email,
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -78,14 +75,13 @@ describe('auth endpoint', () => {
     })
 
     it('returns a success message when user was registered', () => {
-      request(baseUrl)
-        .post('/register')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/register')
+        .form({
           email,
           password,
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(200)
           expect(res.body).toHaveProperty('success')
@@ -94,14 +90,13 @@ describe('auth endpoint', () => {
     })
 
     it('returns an error when email is a duplicate', () => {
-      request(baseUrl)
-        .post('/register')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/register')
+        .form({
           email, // duplicate email
           password,
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -112,14 +107,13 @@ describe('auth endpoint', () => {
 
   describe('POST /auth/login', () => {
     it('returns an error when email is invalid', () => {
-      request(baseUrl)
-        .post('/login')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/login')
+        .form({
           email: 'test@gmail', // invalid email
           password,
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -127,13 +121,12 @@ describe('auth endpoint', () => {
     })
 
     it("returns an error when email isn't in the body", () => {
-      request(baseUrl)
-        .post('/login')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/login')
+        .form({
           password,
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -141,13 +134,12 @@ describe('auth endpoint', () => {
     })
 
     it("returns an error when password isn't in the body", () => {
-      request(baseUrl)
-        .post('/login')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/login')
+        .form({
           email,
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -155,14 +147,13 @@ describe('auth endpoint', () => {
     })
 
     it('returns a JWT in the auth header and response body when when email and password are valid', () => {
-      request(baseUrl)
-        .post('/login')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/login')
+        .form({
           email,
           password,
         })
-        .end((err, res) => {
+        .then((err, res) => {
           const bearerToken = res.get('Authorization').split(' ')[1]
 
           expect(err).toBeNull
@@ -179,21 +170,29 @@ describe('auth endpoint', () => {
   })
 
   describe('POST /auth/refresh', () => {
+    const requestOptions = {
+      method: 'POST',
+      uri: baseUrl + '/refresh',
+    }
+
     it('returns an error when no auth header was sent', () => {
-      request(baseUrl)
-        .post('/refresh')
-        .end((err, res) => {
+      request
+        .post(baseUrl + '/refresh')
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
         })
     })
 
-    it('returns an error when no token is included in the auth header', () => {
-      request(baseUrl)
-        .post('/refresh')
-        .set('Authorization', 'Bearer')
-        .end((err, res) => {
+    it('returns an error when no token is included in the auth header', async () => {
+      request({
+        ...requestOptions,
+        headers: {
+          Authorization: 'Bearer ',
+        },
+      })
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -201,10 +200,13 @@ describe('auth endpoint', () => {
     })
 
     it('returns an error when provided an ill-formatted token in the auth header', () => {
-      request(baseUrl)
-        .post('/refresh')
-        .set('Authorization', 'Bearer thisIsNotAToken')
-        .end((err, res) => {
+      request({
+        ...requestOptions,
+        headers: {
+          Authorization: 'Bearer thisIsNotAToken',
+        },
+      })
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -218,10 +220,13 @@ describe('auth endpoint', () => {
         { expiresIn: '5s' },
       )
 
-      request(baseUrl)
-        .post('/refresh')
-        .set('Authorization', `Bearer ${badIdToken}`)
-        .end((err, res) => {
+      request({
+        ...requestOptions,
+        headers: {
+          Authorization: `Bearer ${badIdToken}`,
+        },
+      })
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -236,10 +241,13 @@ describe('auth endpoint', () => {
       )
 
       setTimeout(() => {
-        request(baseUrl)
-          .post('/refresh')
-          .set('Authorization', `Bearer ${expiredToken}`)
-          .end((err, res) => {
+        request({
+          ...requestOptions,
+          headers: {
+            Authorization: `Bearer ${expiredToken}`,
+          },
+        })
+          .then((err, res) => {
             expect(err).toBeNull
             expect(res.status).toBe(400)
             expect(res.body).toHaveProperty('errors')
@@ -248,10 +256,13 @@ describe('auth endpoint', () => {
     })
 
     it('returns a refreshed token when provided a valid token in the auth header', () => {
-      request(baseUrl)
-        .post('/refresh')
-        .set('Authorization', `Bearer ${jwtToken}`)
-        .end((err, res) => {
+      request({
+        ...requestOptions,
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      })
+        .then((err, res) => {
           const bearerToken = res.get('Authorization').split(' ')[1]
 
           expect(err).toBeNull
@@ -268,11 +279,10 @@ describe('auth endpoint', () => {
     // TODO: test that email is sent
 
     it("returns an error when email isn't in the body", () => {
-      request(baseUrl)
-        .post('/forgot')
-        .type('form')
-        .send()
-        .end((err, res) => {
+      request
+        .post(baseUrl + '/forgot')
+        .form({})
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -280,13 +290,12 @@ describe('auth endpoint', () => {
     })
 
     it('returns an error when no user exists with that email', () => {
-      request(baseUrl)
-        .post('/forgot')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/forgot')
+        .form({
           email: 'nottherightemail@gmail.com',
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -294,13 +303,12 @@ describe('auth endpoint', () => {
     })
 
     it('sets the user.resetPasswordToken', () => {
-      request(baseUrl)
-        .post('/forgot')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/forgot')
+        .form({
           email,
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(200)
 
@@ -316,13 +324,12 @@ describe('auth endpoint', () => {
     })
 
     it('sets the user.resetPasswordExpires to one hour from now', () => {
-      request(baseUrl)
-        .post('/forgot')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/forgot')
+        .form({
           email,
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(200)
 
@@ -346,11 +353,10 @@ describe('auth endpoint', () => {
     // TODO: test that email is sent
 
     it("returns an error when password isn't in the body", () => {
-      request(baseUrl)
-        .post(`/reset/${passwordResetToken}`)
-        .type('form')
-        .send()
-        .end((err, res) => {
+      request
+        .post(baseUrl + `/reset/${passwordResetToken}`)
+        .form({})
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -358,13 +364,12 @@ describe('auth endpoint', () => {
     })
 
     it('returns an error when the password reset token is invalid', () => {
-      request(baseUrl)
-        .post('/reset/invalidToken')
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + '/reset/invalidToken')
+        .form({
           password: 'newPassword',
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(400)
           expect(res.body).toHaveProperty('errors')
@@ -372,13 +377,12 @@ describe('auth endpoint', () => {
     })
 
     it('updates the user.lastPasswordReset to now and clears user.resetPasswordToken', () => {
-      request(baseUrl)
-        .post(`/reset/${passwordResetToken}`)
-        .type('form')
-        .send({
+      request
+        .post(baseUrl + `/reset/${passwordResetToken}`)
+        .form({
           password: 'newPassword',
         })
-        .end((err, res) => {
+        .then((err, res) => {
           expect(err).toBeNull
           expect(res.status).toBe(200)
 

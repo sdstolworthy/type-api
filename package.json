@@ -14,33 +14,16 @@
     "build": "tsc",
     "heroku-postbuild": "npm run build",
     "dev": "nodemon",
-    "test": "NODE_ENV=test jest --detectOpenHandles --forceExit",
-    "test:full": "NODE_ENV=test npm run test:unit && npm run test:lint && npm run test:audit",
-    "test:unit": "jest --coverage --forceExit",
+    "test": "NODE_ENV=test jest --detectOpenHandles --forceExit --config ./src/test/jest-unit.json",
+    "test:full": "NODE_ENV=test npm run test:jest && npm run test:lint && npm run test:audit",
+    "test:jest": "jest --coverage --detectOpenHandles --forceExit --config ./src/test/jest-full.json",
+    "test:unit": "jest --coverage --detectOpenHandles --forceExit --config ./src/test/jest-unit.json",
+    "test:e2e": "jest --coverage --detectOpenHandles --forceExit --config ./src/test/jest-e2e.json",
     "test:lint": "tslint 'src/**/*.ts'",
     "test:audit": "yarn audit",
     "ts-node": "ts-node",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "cli": "ts-node -r tsconfig-paths/register src/config/cli/index.ts"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".spec.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "src/**",
-      "!**/node_modules/**",
-      "!src/config/cli/templates/**"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   },
   "dependencies": {
     "@sentry/node": "^4.5.3",
@@ -72,6 +55,7 @@
     "pg": "^7.8.0",
     "reflect-metadata": "^0.1.12",
     "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
     "tslib": "^1.9.3",
     "typeorm": "^0.2.11",
     "typescript": "^3.3.1",

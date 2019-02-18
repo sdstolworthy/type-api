@@ -18,8 +18,8 @@ test:
     POSTGRES_PASSWORD: ""
     DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
   script:
-    - yarn test:unit
-  coverage: '/(?:Statements\s+:\s)(\d+\.\d*)/'
+    - yarn test:full
+  coverage: '/(?:All files\s+\|\s+\d+\.?\d*\s\|\s*)(\d+\.?\d*)/'
 
 lint:
   stage: test
