@@ -5,7 +5,5 @@
     "testRegex": ".spec.e2e.ts$",
     "transform": {
         "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "coverageDirectory": "../coverage",
-    "coverageReporters": ["json"]
+    }
 }

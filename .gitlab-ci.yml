@@ -5,7 +5,7 @@ stages:
 image: node:latest
 
 
-test:
+test-unit:
   stage: test
   before_script:
     - yarn install
@@ -18,7 +18,23 @@ test:
     DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
     PORT: 3100
   script:
-    - yarn test:full
+    - yarn test:unit
+  coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
+
+test-e2e:
+  stage: test
+  before_script:
+    - yarn install
+  services:
+    - postgres:latest
+  variables:
+    POSTGRES_DB: postgres
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: ""
+    DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
+    PORT: 3100
+  script:
+    - yarn test:e2e
   coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
 
 lint:
