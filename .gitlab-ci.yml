@@ -8,6 +8,7 @@ image: node:latest
 test-unit:
   stage: test
   before_script:
+    - echo "Environment is set to $NODE_ENV"
     - yarn install
   services:
     - postgres:latest
@@ -23,6 +24,7 @@ test-unit:
 test-e2e:
   stage: test
   before_script:
+    - echo "Environment is set to $NODE_ENV"
     - yarn install
   services:
     - postgres:latest
@@ -38,12 +40,15 @@ test-e2e:
 lint:
   stage: test
   before_script:
+    - echo "Environment is set to $NODE_ENV"
     - yarn global add typescript tslint @altamir/standards-tslint
   script:
     - yarn test:lint
 
 audit:
   stage: test
+  before_script:
+    - echo "Environment is set to $NODE_ENV"
   script:
     - yarn test:audit
 
