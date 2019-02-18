@@ -21,7 +21,7 @@ export const logger = winston.createLogger({
 
 logger.add(new winston.transports.Console({
   handleExceptions: true,
-  silent: settings.env === 'test' ? true : false,
+  // silent: settings.env === 'test' ? true : false,
   format: winston.format.combine(
     winston.format.printf((data) => {
       let message: string = `${chalk.blue(`[${settings.name}]`)}`

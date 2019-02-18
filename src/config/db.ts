@@ -18,10 +18,12 @@ export default class Database {
    * @public
    * @memberof Database
    */
-  public async init() {
+  public async init(callback?: () => void) {
     if (!settings.dbUrl) {
       logger.warn('No DATABASE_URL environment variable is set.')
     }
+
+    logger.silly(`Opening connection to database using the "${settings.env}" environment`)
 
     const connectionOptions: ConnectionOptions = {
       type: 'postgres',
@@ -45,9 +47,17 @@ export default class Database {
     logger.silly('Database connection options:')
     logger.silly(connectionOptions)
     this.connection = await createConnection(connectionOptions)
+
+    if (typeof callback === 'function') {
+      callback()
+    }
   }
 
-  public async close() {
-    this.connection.close()
+  public async close(callback?: () => void) {
+    await this.connection.close()
+
+    if (typeof callback === 'function') {
+      callback()
+    }
   }
 }

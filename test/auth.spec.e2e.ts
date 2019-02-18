@@ -17,12 +17,12 @@ describe('auth endpoint', () => {
 
   const server: Server = new Server()
 
-  beforeAll(async () => {
-    await server.up()
+  beforeAll((done) => {
+    server.up(done)
   })
 
-  afterAll(async () => {
-    await server.down()
+  afterAll(async (done) => {
+    server.down(done)
   })
 
   /**

@@ -22,6 +22,8 @@ export default class Server {
    * @memberof Server
    */
   public async up(callback?: () => void) {
+    logger.silly('Starting app')
+
     // database must be first
     await this.db.init()
 

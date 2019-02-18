@@ -1,6 +1,7 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
 import validator from 'validator'
 import Database from '../../../config/db'
+import { logger } from '../../../config/logger'
 import settings from '../../../config/settings'
 import { User } from './user.entity'
 
@@ -13,7 +14,7 @@ describe('user entity', () => {
     password: 'password',
   }
 
-  beforeAll(async () => {
+  beforeAll((done) => {
     // connection = await createConnection({
     //   type: 'postgres',
     //   url: settings.dbTestUrl,
@@ -24,12 +25,21 @@ describe('user entity', () => {
     //   dropSchema: true, // isolate each test case
     //   synchronize: true,
     // })
-    await db.init()
-    user = await User.create(testUser).save()
+    db.init(done)
+    User.create(testUser)
+      .save()
+      .then((result) => {
+        user = result
+        done()
+      })
+      .catch((err) => {
+        logger.error(err)
+        done()
+      })
   })
 
-  beforeAll(async () => {
-    await db.close()
+  beforeAll((done) => {
+    db.close(done)
   })
 
   it('should have an id field of type number', () => {
