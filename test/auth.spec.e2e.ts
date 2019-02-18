@@ -1,12 +1,15 @@
 /* tslint:disable no-unused-expression no-var-requires newline-per-chained-call no-string-literal */
 import * as jwt from 'jsonwebtoken'
 import * as request from 'request-promise-native'
+import { Connection, createConnection } from 'typeorm'
 import validator from 'validator'
 import { User } from '../src/api/data/user/user.entity'
 import settings from '../src/config/settings'
 import Server from '../src/server'
 
 describe('auth endpoint', () => {
+  let connection: Connection
+  const dbInitializedSeparately: boolean = true
   const ONE_MINUTE: number = 60000
   const ONE_HOUR: number = 3600000
   const baseUrl: string = `http://127.0.0.1:${settings.port}/auth`
@@ -17,12 +20,22 @@ describe('auth endpoint', () => {
 
   const server: Server = new Server()
 
-  beforeAll((done) => {
-    server.up(done)
+  beforeAll(async () => {
+    connection = await createConnection({
+      type: 'postgres',
+      url: settings.dbTestUrl,
+      entities: [
+        '../src/**/*.entity.ts',
+      ],
+      logging: false,
+      dropSchema: true, // isolate each test case
+      synchronize: true,
+    })
+    await server.up(dbInitializedSeparately)
   })
 
-  afterAll(async (done) => {
-    server.down(done)
+  afterAll(async () => {
+    await server.down()
   })
 
   /**

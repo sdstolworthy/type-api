@@ -1,45 +1,34 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
+import { Connection, createConnection } from 'typeorm'
 import validator from 'validator'
-import Database from '../../../config/db'
-import { logger } from '../../../config/logger'
 import settings from '../../../config/settings'
 import { User } from './user.entity'
 
 // https://github.com/typeorm/typeorm/issues/1267#issuecomment-350724511
 describe('user entity', () => {
-  const db: Database = new Database()
+  let connection: Connection
   let user: User
   const testUser = {
     email: 'test@example.com',
     password: 'password',
   }
 
-  beforeAll((done) => {
-    // connection = await createConnection({
-    //   type: 'postgres',
-    //   url: settings.dbTestUrl,
-    //   entities: [
-    //     'src/**/*.entity.ts',
-    //   ],
-    //   logging: false,
-    //   dropSchema: true, // isolate each test case
-    //   synchronize: true,
-    // })
-    db.init(done)
-    User.create(testUser)
-      .save()
-      .then((result) => {
-        user = result
-        done()
-      })
-      .catch((err) => {
-        logger.error(err)
-        done()
-      })
+  beforeAll(async () => {
+    connection = await createConnection({
+      type: 'postgres',
+      url: settings.dbTestUrl,
+      entities: [
+        'src/**/*.entity.ts',
+      ],
+      logging: false,
+      dropSchema: true, // isolate each test case
+      synchronize: true,
+    })
+    user = await User.create(testUser).save()
   })
 
-  beforeAll((done) => {
-    db.close(done)
+  beforeAll(async () => {
+    await connection.close()
   })
 
   it('should have an id field of type number', () => {
