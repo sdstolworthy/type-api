@@ -24,7 +24,7 @@ test:
 lint:
   stage: test
   before_script:
-    - yarn global add tslint
+    - yarn global add typescript tslint
   script:
     - yarn test:lint
 
