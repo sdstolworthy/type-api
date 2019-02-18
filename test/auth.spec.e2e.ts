@@ -36,6 +36,7 @@ describe('auth endpoint', () => {
 
   afterAll(async () => {
     await server.down()
+    await connection.close()
   })
 
   /**

@@ -17,7 +17,7 @@
     "test": "NODE_ENV=test jest --detectOpenHandles --forceExit",
     "test:full": "npm run test:unit && npm run test:e2e",
     "test:unit": "NODE_ENV=test jest --coverage --detectOpenHandles --forceExit",
-    "test:e2e": "NODE_ENV=test jest --coverage --detectOpenHandles --forceExit --config ./test/jest-e2e.json",
+    "test:e2e": "NODE_ENV=test jest --detectOpenHandles --forceExit --config ./test/jest-e2e.json",
     "test:lint": "NODE_ENV=test tslint 'src/**/*.ts'",
     "test:audit": "NODE_ENV=test yarn audit",
     "ts-node": "ts-node",
