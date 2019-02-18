@@ -4,7 +4,7 @@ import * as util from 'util'
 import * as walk from 'walk'
 
 describe('all app files', () => {
-  it('should not call "console.*"', (done) => {
+  it('should not call "console.*"', () => {
     const violatingString = 'console.'
     const violatingFiles = []
     const ignoredFiles = [
@@ -56,7 +56,6 @@ describe('all app files', () => {
 
     walker.on('end', () => {
       expect(violatingFiles).toHaveLength(0)
-      done()
     })
   })
 })
@@ -66,10 +65,9 @@ describe('package.json', () => {
    * @types/validator is frequently out of date because of the number of
    * dependencies in the validator package. Do not add this to dependencies.
    */
-  it('should not contain "@types/validator"', (done) => {
+  it('should not contain "@types/validator"', () => {
     const contents: string = fs.readFileSync('package.json').toString()
     const containsString: boolean = contents.indexOf('@types/validator') >= 0 ? true : false
     expect(containsString).toBeFalsy
-    done()
   })
 })
