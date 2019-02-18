@@ -12,14 +12,13 @@ test:
   services:
     - postgres:latest
   variables:
-    IS_CI_ENVIRONMENT: 'true'
     POSTGRES_DB: postgres
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: ""
     DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
   script:
-    - yarn test
-  coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
+    - yarn test:full
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
 lint:
   stage: test

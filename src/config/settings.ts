@@ -16,14 +16,6 @@ export default {
   logLevel: process.env.LOG_LEVEL || 'warn',
 
   /**
-   * CI
-   * Used to set the local testing url for e2e testing.
-   * https://docs.gitlab.com/ee/administration/environment_variables.html
-   */
-  isCiEnvironment: (process.env.IS_CI_ENVIRONMENT === 'true') || false,
-  ciHostUrl: process.env.GITLAB_HOST,
-
-  /**
    * Authentication
    */
   tokenExpirationPeriod: '7d',
