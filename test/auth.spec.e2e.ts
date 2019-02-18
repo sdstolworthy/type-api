@@ -9,7 +9,7 @@ import Server from '../src/server'
 describe('auth endpoint', () => {
   const ONE_MINUTE: number = 60000
   const ONE_HOUR: number = 3600000
-  const baseUrl: string = `http://127.0.0.1:${settings.port}/auth`
+  const baseUrl: string = settings.isCiEnvironment ? settings.ciHostUrl : `http://127.0.0.1:${settings.port}/auth`
   const email: string = 'test@gmail.com'
   const password: string = 'testPassword'
   let jwtToken: string = ''

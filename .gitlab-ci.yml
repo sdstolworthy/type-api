@@ -12,6 +12,7 @@ test:
   services:
     - postgres:latest
   variables:
+    IS_CI_ENVIRONMENT: true
     POSTGRES_DB: postgres
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: ""
