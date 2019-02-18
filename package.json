@@ -14,7 +14,7 @@
     "build": "tsc",
     "heroku-postbuild": "npm run build",
     "dev": "nodemon",
-    "test": "NODE_ENV=test jest --detectOpenHandles --forceExit --testNamePattern='!@integration'",
+    "test": "NODE_ENV=test jest --detectOpenHandles --forceExit",
     "test:full": "npm run test:jest && npm run test:lint && npm run test:audit",
     "test:jest": "npm run test:unit",
     "test:unit": "NODE_ENV=test jest --coverage --detectOpenHandles --forceExit",
