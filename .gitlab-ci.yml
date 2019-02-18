@@ -11,12 +11,11 @@ variables:
   POSTGRES_PASSWORD: ""
   DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
 
-before_script:
-  - echo "Environment is set to $NODE_ENV"
-
 test-unit:
   stage: test
   before_script:
+    - echo "Environment is set to $NODE_ENV"
+    - echo "Database url is set to $DATABASE_TEST_URL"
     - yarn install
   services:
     - postgres:latest
@@ -27,6 +26,8 @@ test-unit:
 test-e2e:
   stage: test
   before_script:
+    - echo "Environment is set to $NODE_ENV"
+    - echo "Database url is set to $DATABASE_TEST_URL"
     - yarn install
   services:
     - postgres:latest
