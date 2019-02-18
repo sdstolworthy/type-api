@@ -3,8 +3,6 @@ import * as fs from 'fs'
 import * as util from 'util'
 import * as walk from 'walk'
 
-const readFile = util.promisify(fs.readFile)
-
 describe('all app files', () => {
   it('should not call "console.*"', (done) => {
     const violatingString = 'console.'
