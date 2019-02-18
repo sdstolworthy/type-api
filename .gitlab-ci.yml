@@ -18,7 +18,7 @@ test:
     POSTGRES_PASSWORD: ""
     DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
   script:
-    - yarn test:full
+    - yarn test
   coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
 
 lint:
