@@ -1,5 +1,4 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
-import { Connection, getConnection } from 'typeorm'
 import validator from 'validator'
 import Database from '../../../config/db'
 import settings from '../../../config/settings'
@@ -8,7 +7,6 @@ import { User } from './user.entity'
 // https://github.com/typeorm/typeorm/issues/1267#issuecomment-350724511
 describe('user entity', () => {
   const db: Database = new Database()
-  let connection: Connection
   let user: User
   const testUser = {
     email: 'test@example.com',
@@ -27,12 +25,11 @@ describe('user entity', () => {
     //   synchronize: true,
     // })
     await db.init()
-    connection = await getConnection()
     user = await User.create(testUser).save()
   })
 
   beforeAll(async () => {
-    await connection.close()
+    await db.close()
   })
 
   it('should have an id field of type number', () => {
