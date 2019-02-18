@@ -35,11 +35,7 @@
     "testRegex": ".spec.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "coverageDirectory": "../coverage",
-    "coverageReporters": [
-      "json"
-    ]
+    }
   },
   "dependencies": {
     "@sentry/node": "^4.5.3",
