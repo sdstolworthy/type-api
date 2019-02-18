@@ -4,12 +4,12 @@ stages:
 
 image: node:latest
 
-before_script:
-  - npm i -g yarn
-  - yarn install
 
 test:
   stage: test
+  before_script:
+    - npm i -g yarn
+    - yarn install
   services:
     - postgres:latest
   variables:
@@ -23,6 +23,8 @@ test:
 
 lint:
   stage: test
+  before_script:
+    - npm i -g yarn tslint
   script:
     - yarn test:lint
 
