@@ -35,6 +35,17 @@ test-e2e:
     - yarn test:e2e
   coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
 
+test-full:
+  stage: test
+  before_script:
+    - echo "Environment is set to $NODE_ENV"
+    - echo "Database url is set to $DATABASE_TEST_URL"
+    - yarn install
+  services:
+    - postgres:latest
+  script:
+    - yarn test:full
+
 lint:
   stage: test
   before_script:
