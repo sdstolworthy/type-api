@@ -8,6 +8,8 @@ import * as validator from 'validator'
 import * as walk from 'walk'
 import Handlebars from './helpers/handlebars'
 
+const templateDir: string = __dirname + '/templates'
+
 const throwError = (message: string) => {
   console.error(`${chalk.bgRed.white.bold(' ERROR ')} ${message}`)
   process.exit(1)
@@ -28,7 +30,7 @@ program
   .action((name: string, args: any) => {
     const entityName: string = name[0].toLowerCase() + name.slice(1) // make first letter lowercase
     const entityPath: string = __dirname + '/../../api/data'
-    const templateDir: string = __dirname + '/templates'
+    const entityTemplateDir: string = templateDir + '/entity'
 
     console.log(chalk.grey(`entityName: ${entityName}`))
     console.log(chalk.grey(`entityPath: ${entityPath}`))
@@ -46,7 +48,7 @@ program
       throwError("That entity (or a directory named the same thing) already exists. Please don't make me kill it")
     }
 
-    const walker = walk.walk(templateDir)
+    const walker = walk.walk(entityTemplateDir)
 
     walker.on('file', (root, fileStats, next) => {
       const source: string = fs.readFileSync(`${root}/${fileStats.name}`).toString()
@@ -76,6 +78,25 @@ program
     walker.on('end', () => {
       logSuccess('All done! Enjoy!')
     })
+  })
+
+program
+  .command('create:test <name>')
+  .description('Create a new e2e test with the given name.')
+  .action((name: string) => {
+    const testName: string = name
+    const lowercaseTestName: string = name[0].toLowerCase() + name.slice(1)
+    const testPath: string = __dirname + '/../../../test'
+    const e2eTestTemplate: string = templateDir + '/tests/spec.e2e.hbs'
+    const templateFileName: string = path.parse(e2eTestTemplate).name
+    const source: string = fs.readFileSync(e2eTestTemplate).toString()
+    const template = Handlebars.compile(source)
+
+    const targetFileName: string = `${lowercaseTestName}.${templateFileName}.ts`
+
+    fs.writeFileSync(`${testPath}/${targetFileName}`, template({ testName }))
+
+    logSuccess('Test created. Enjoy!')
   })
 
 program.parse(process.argv)
