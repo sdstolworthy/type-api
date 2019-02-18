@@ -8,7 +8,6 @@ image: node:latest
 test:
   stage: test
   before_script:
-    - npm i -g yarn
     - yarn install
   services:
     - postgres:latest
@@ -24,7 +23,7 @@ test:
 lint:
   stage: test
   before_script:
-    - npm i -g yarn tslint
+    - yarn global add tslint
   script:
     - yarn test:lint
 
