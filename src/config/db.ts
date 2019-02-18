@@ -25,7 +25,9 @@ export default class Database {
 
     const connectionOptions: ConnectionOptions = {
       type: 'postgres',
-      url: settings.env === 'test' ? settings.dbUrl : settings.dbTestUrl,
+      url: settings.env === 'test' && settings.dbTestUrl
+        ? settings.dbUrl
+        : settings.dbTestUrl,
 
       // only drop schema in test environment; this keeps tests separate
       dropSchema: settings.env === 'test' ? true : false,
