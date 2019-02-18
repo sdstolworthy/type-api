@@ -2,9 +2,9 @@
 import * as jwt from 'jsonwebtoken'
 import * as request from 'request-promise-native'
 import validator from 'validator'
-import { User } from '../src/api/data/user/user.entity'
-import settings from '../src/config/settings'
-import Server from '../src/server'
+import settings from '../../config/settings'
+import Server from '../../server'
+import { User } from '../data/user/user.entity'
 
 describe('auth endpoint', () => {
   const ONE_MINUTE: number = 60000
