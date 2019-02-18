@@ -4,19 +4,22 @@ stages:
 
 image: node:latest
 
+variables:
+  NODE_ENV: test
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: ""
+  DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
+
+before_script:
+  - echo "Environment is set to $NODE_ENV"
 
 test-unit:
   stage: test
   before_script:
-    - echo "Environment is set to $NODE_ENV"
     - yarn install
   services:
     - postgres:latest
-  variables:
-    POSTGRES_DB: postgres
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: ""
-    DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
   script:
     - yarn test:unit
   coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
@@ -24,15 +27,9 @@ test-unit:
 test-e2e:
   stage: test
   before_script:
-    - echo "Environment is set to $NODE_ENV"
     - yarn install
   services:
     - postgres:latest
-  variables:
-    POSTGRES_DB: postgres
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: ""
-    DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
   script:
     - yarn test:e2e
   coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
@@ -40,15 +37,12 @@ test-e2e:
 lint:
   stage: test
   before_script:
-    - echo "Environment is set to $NODE_ENV"
     - yarn global add typescript tslint @altamir/standards-tslint
   script:
     - yarn test:lint
 
 audit:
   stage: test
-  before_script:
-    - echo "Environment is set to $NODE_ENV"
   script:
     - yarn test:audit
 
