@@ -1,4 +1,4 @@
-import { AuthenticationError } from 'apollo-server-express'
+import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
 import { User } from '../user/user.entity'
 
 export { PermissionValues } from '../permission/permission.entity'
@@ -10,7 +10,7 @@ export { PermissionValues } from '../permission/permission.entity'
  * @param {string} permissionValue - the permission required from permission.PermissionValues
  * Checks the given user's permissions via the roles assigned to that user. If
  * the user has the permission `permissionValue` somewhere within its granted
- * permissions, return true. Otherwise, throw an AuthenticationError.
+ * permissions, return true. Otherwise, throw an ForbiddenError.
  */
 export const needsPermission = async (user: User, permissionValue: string) => {
   if (!user) {
@@ -36,7 +36,8 @@ export const needsPermission = async (user: User, permissionValue: string) => {
   })
 
   if (!permissions.includes(permissionValue)) {
-    throw new AuthenticationError("The user doesn't have permission to do that.")
+    throw new ForbiddenError("The user doesn't have permission to do that.")
   }
+
   return true
 }
