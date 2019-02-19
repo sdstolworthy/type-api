@@ -16,11 +16,6 @@ describe('authorization helper', () => {
   beforeAll(async () => {
     connection = await createConnection(connectionOptions)
 
-    user = await User.create({
-      email: 'test@example.com',
-      password: 'password',
-    }).save()
-
     readOnlyRolePermission = await Permission.findOneOrFail({
       value: PermissionValues.CAN_READ_ROLE,
     })
@@ -30,7 +25,11 @@ describe('authorization helper', () => {
       permissions: [ readOnlyRolePermission ],
     }).save()
 
-    await User.update(user.id, { roles: [ role ] })
+    user = await User.create({
+      email: 'test@example.com',
+      password: 'password',
+      roles: [ role ],
+    }).save()
   })
 
   afterAll(async () => {
