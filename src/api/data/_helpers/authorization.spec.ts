@@ -2,7 +2,6 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
 import { Connection, createConnection } from 'typeorm'
 import { connectionOptions } from '../../../config/db'
-import settings from '../../../config/settings'
 import { Permission } from '../permission/permission.entity'
 import { Role } from '../role/role.entity'
 import { User } from '../user/user.entity'
@@ -12,7 +11,7 @@ describe('authorization helper', () => {
   let connection: Connection
   let user: User
   let role: Role
-  let readRolePermission: Permission
+  let readOnlyRolePermission: Permission
 
   beforeAll(async () => {
     connection = await createConnection(connectionOptions)
@@ -22,14 +21,20 @@ describe('authorization helper', () => {
       password: 'password',
     }).save()
 
-    readRolePermission = await Permission.findOneOrFail({
+    readOnlyRolePermission = await Permission.findOneOrFail({
       value: PermissionValues.CAN_READ_ROLE,
     })
 
     role = await Role.create({
       name: 'Test role to read roles but not write them',
-      permissions: [ readRolePermission ],
+      permissions: [ readOnlyRolePermission ],
     }).save()
+
+    await User.update(user.id, { roles: [ role ] })
+  })
+
+  afterAll(async () => {
+    await connection.close()
   })
 
   it('should throw an AuthenticationError if the user is empty', async () => {
