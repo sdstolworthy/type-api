@@ -11,31 +11,7 @@ variables:
   POSTGRES_PASSWORD: ""
   DATABASE_TEST_URL: postgres://postgres@postgres:5432/postgres
 
-test-unit:
-  stage: test
-  before_script:
-    - echo "Environment is set to $NODE_ENV"
-    - echo "Database url is set to $DATABASE_TEST_URL"
-    - yarn install
-  services:
-    - postgres:latest
-  script:
-    - yarn test:unit
-  coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
-
-test-e2e:
-  stage: test
-  before_script:
-    - echo "Environment is set to $NODE_ENV"
-    - echo "Database url is set to $DATABASE_TEST_URL"
-    - yarn install
-  services:
-    - postgres:latest
-  script:
-    - yarn test:e2e
-  coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
-
-test-full:
+test:
   stage: test
   before_script:
     - echo "Environment is set to $NODE_ENV"
@@ -45,6 +21,7 @@ test-full:
     - postgres:latest
   script:
     - yarn test:full
+  coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
 
 lint:
   stage: test
