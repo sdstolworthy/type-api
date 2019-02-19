@@ -10,6 +10,7 @@
     "collectCoverageFrom": [
         "src/**/*.ts",
         "!src/**/*.spec.ts",
+        "!src/api/migrations/**",
         "!**/node_modules/**"
     ],
     "coverageDirectory": "../coverage",
