@@ -24,8 +24,7 @@
     ],
     "coverageDirectory": "../coverage",
     "coverageReporters": [
-        "json",
-        "lcov",
+        "html",
         "text",
         "text-summary"
     ]

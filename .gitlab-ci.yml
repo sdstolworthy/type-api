@@ -60,6 +60,18 @@ code_quality:
     reports:
       codequality: gl-code-quality-report.json
 
+pages:
+  stage: deploy
+  script:
+    - mv coverage/ public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
+  only:
+    - develop
+    - master
+
 staging:
   stage: deploy
   script:
