@@ -22,6 +22,9 @@ test:
   script:
     - yarn test:full
   coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
+  artifacts:
+    reports:
+      junit: junit.xml
 
 lint:
   stage: test

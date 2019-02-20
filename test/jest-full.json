@@ -6,6 +6,15 @@
     "transform": {
         "^.+\\.(t|j)s$": "ts-jest"
     },
+    "reporters": [
+        [
+            "jest-junit",
+            {
+                "ancestorSeparator": ">",
+                "output": "../junit.xml"
+            }
+        ]
+    ],
     "collectCoverage": true,
     "collectCoverageFrom": [
         "src/**/*.ts",
