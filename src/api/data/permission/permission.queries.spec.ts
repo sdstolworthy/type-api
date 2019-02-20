@@ -2,15 +2,15 @@
 import { queryResolvers, queryTypes } from './permission.queries'
 
 describe('permission queries', () => {
-  it('should export queryTypes', (done: () => void) => {
+  it('should export queryTypes', () => {
     expect(typeof queryTypes).toBe('function')
     // expect(typeof queryTypes()).toBe('array')
-    done()
   })
 
-  it('should export queryResolvers', (done: () => void) => {
+  it('should export queryResolvers', () => {
     expect(typeof queryResolvers).toBe('object')
     expect(queryResolvers).toHaveProperty('Query')
-    done()
   })
+
+  // TODO: it should have the same queries and query resolvers
 })

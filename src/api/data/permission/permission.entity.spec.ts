@@ -43,22 +43,22 @@ describe('permission entity', () => {
     await connection.close()
   })
 
-  it('should have an id field of type number', () => {
+  it('should have an id field of type number', async () => {
     expect(permission).toHaveProperty('id')
     expect(typeof permission.id).toBe('number')
   })
 
-  it('should have a createdAt field of type date', () => {
+  it('should have a createdAt field of type date', async () => {
     expect(permission).toHaveProperty('createdAt')
     expect(typeof permission.createdAt.getMonth).toBe('function')
   })
 
-  it('should have an updatedAt field of type date', () => {
+  it('should have an updatedAt field of type date', async () => {
     expect(permission).toHaveProperty('updatedAt')
     expect(typeof permission.updatedAt.getMonth).toBe('function')
   })
 
-  it('should have only unique values in the PermissionValues enum', () => {
+  it('should have only unique values in the PermissionValues enum', async () => {
     const permissionValuesArray: any[] = []
     Object.keys(PermissionValues).forEach((key) => {
       permissionValuesArray.push(PermissionValues[key])

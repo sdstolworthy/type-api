@@ -46,6 +46,10 @@ fs.readdirSync(__dirname)
   const tmp = require(path.join(__dirname, dir)).default
   resolvers = merge(resolvers, tmp.resolvers)
   typeDefs.push(tmp.types)
+  logger.error('TYPEDEFS')
+  logger.error(tmp.types()[0])
+  logger.error('RESOLVERS')
+  logger.error(tmp.resolvers)
 })
 
 export {
