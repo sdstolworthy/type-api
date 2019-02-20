@@ -15,4 +15,7 @@ describe('GraphQL server', () => {
   it('should have a subscriptions path of "/graphql"', () => {
     expect(server.subscriptionsPath).toBe('/graphql')
   })
+
+  // TODO: check request context for user
+  // TODO: check subscriptions context for user
 })
