@@ -23,6 +23,9 @@ test:
     - yarn test:full
   coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
   artifacts:
+    paths:
+      - coverage/
+      - junit.xml
     reports:
       junit: junit.xml
 
