@@ -36,6 +36,7 @@ audit:
     - yarn test:audit
 
 code_quality:
+  stage: test
   image: docker:stable
   variables:
     DOCKER_DRIVER: overlay2
