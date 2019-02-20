@@ -21,13 +21,15 @@ test:
     - postgres:latest
   script:
     - yarn test:full
+    - mv coverage/ public/
+    - mv junit.xml public/
   coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
   artifacts:
     paths:
-      - coverage/
-      - junit.xml
-    reports:
-      junit: junit.xml
+      - public/
+    expire_in: 30 days
+    # reports:
+    #   junit: junit.xml
 
 lint:
   stage: test
@@ -59,18 +61,6 @@ code_quality:
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
-
-pages:
-  stage: deploy
-  script:
-    - mv coverage/ public/
-  artifacts:
-    paths:
-      - public
-    expire_in: 30 days
-  only:
-    - develop
-    - master
 
 staging:
   stage: deploy
