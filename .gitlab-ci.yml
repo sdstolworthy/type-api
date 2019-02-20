@@ -22,14 +22,13 @@ test:
   script:
     - yarn test:full
     - mv coverage/ public/
-    - mv junit.xml public/
   coverage: '/(?:All files\s+\|\s+)(\d+\.?\d*)/'
   artifacts:
     paths:
       - public/
     expire_in: 30 days
     reports:
-      junit: coverage/junit.xml
+      junit: junit.xml
 
 lint:
   stage: test
