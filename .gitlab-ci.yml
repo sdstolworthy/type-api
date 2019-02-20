@@ -28,8 +28,8 @@ test:
     paths:
       - public/
     expire_in: 30 days
-    # reports:
-    #   junit: junit.xml
+    reports:
+      junit: coverage/junit.xml
 
 lint:
   stage: test
