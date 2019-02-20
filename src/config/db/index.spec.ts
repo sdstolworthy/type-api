@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { ConnectionOptions } from 'typeorm'
+import { Connection } from 'typeorm'
 import Database from './index'
 import { connectionOptions } from './index'
 
@@ -28,5 +28,11 @@ describe('database config', () => {
 
   it('should have a close() function', () => {
     expect(typeof database.close).toBe('function')
+  })
+
+  it('should have a connection property of type Connection', async () => {
+    await database.init()
+    expect(database.connection).toBeInstanceOf(Connection)
+    await database.close()
   })
 })

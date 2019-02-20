@@ -35,7 +35,7 @@ export const connectionOptions: ConnectionOptions = {
  * @class Database
  */
 export default class Database {
-  private connection: Connection
+  public connection: Connection
 
   /**
    * @public
