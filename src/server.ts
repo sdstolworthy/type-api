@@ -13,6 +13,7 @@ import settings from './config/settings'
 export default class Server {
   private httpServer: any
   private db: Database = new Database()
+  private dbInitializedSeparately: boolean = false
 
   /**
    * Initialize the server. This can be called from anywhere, including tests,
@@ -21,9 +22,15 @@ export default class Server {
    * @public
    * @memberof Server
    */
-  public async up(callback?: () => void) {
+  public async up(dbInitializedSeparately: boolean = false, callback?: () => void) {
+    logger.silly('Starting app')
+
     // database must be first
-    await this.db.init()
+    this.dbInitializedSeparately = dbInitializedSeparately
+    if (!this.dbInitializedSeparately) {
+      // this block exists to help with testing
+      await this.db.init()
+    }
 
     await Cron.init()
 
@@ -48,7 +55,9 @@ export default class Server {
    * @memberof Server
    */
   public async down(callback?: () => void) {
-    await this.db.close()
+    if (!this.dbInitializedSeparately) {
+      await this.db.close()
+    }
 
     this.httpServer.close(() => {
       logger.info('Server closed')

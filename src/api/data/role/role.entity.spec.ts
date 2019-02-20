@@ -27,27 +27,21 @@ describe('role entity', () => {
     await connection.close()
   })
 
-  it('should have an id field of type number', (done) => {
-    Role.create(testEntity).save().then((role) => {
-      expect(role).toHaveProperty('id')
-      expect(typeof role.id).toBe('number')
-      done()
-    })
+  it('should have an id field of type number', async () => {
+    const role: Role = await Role.create(testEntity).save()
+    expect(role).toHaveProperty('id')
+    expect(typeof role.id).toBe('number')
   })
 
-  it('should have a createdAt field of type date', (done) => {
-    Role.create(testEntity).save().then((role) => {
-      expect(role).toHaveProperty('createdAt')
-      expect(typeof role.createdAt.getMonth).toBe('function')
-      done()
-    })
+  it('should have a createdAt field of type date', async () => {
+    const role: Role = await Role.create(testEntity).save()
+    expect(role).toHaveProperty('createdAt')
+    expect(typeof role.createdAt.getMonth).toBe('function')
   })
 
-  it('should have an updatedAt field of type date', (done) => {
-    Role.create(testEntity).save().then((role) => {
-      expect(role).toHaveProperty('updatedAt')
-      expect(typeof role.updatedAt.getMonth).toBe('function')
-      done()
-    })
+  it('should have an updatedAt field of type date', async () => {
+    const role: Role = await Role.create(testEntity).save()
+    expect(role).toHaveProperty('updatedAt')
+    expect(typeof role.updatedAt.getMonth).toBe('function')
   })
 })

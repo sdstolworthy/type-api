@@ -1,7 +1,7 @@
-/* tslint:disable no-unused-expression */
-import { queryResolvers, queryTypes } from './user.queries'
+/* tslint:disable no-unused-expression newline-per-chained-call */
+import { queryResolvers, queryTypes } from './{{ entityName }}.queries'
 
-describe('user queries', () => {
+describe('{{ entityName }} queries', () => {
   it('should export queryTypes', () => {
     expect(typeof queryTypes).toBe('function')
     // expect(typeof queryTypes()).toBe('array')
