@@ -4,7 +4,8 @@
     ],
     "exclude": [
         "node_modules",
-        "**/*.spec.ts"
+        "**/*.spec.ts",
+        "test"
     ],
     "compilerOptions": {
         "lib": [
@@ -20,11 +21,11 @@
         "removeComments": true,
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
+        "rootDir": "src",
         "outDir": "dist",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "importHelpers": true,
-        "baseUrl": "./",
         "resolveJsonModule": true
     }
 }
