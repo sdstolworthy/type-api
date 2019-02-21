@@ -1,27 +1,25 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
-import { expect } from 'chai'
-import 'mocha'
 import index from './index'
 
 describe('role/index', () => {
   it('should export an object with `types` and `resolvers`', (done: () => void) => {
-    expect(index).to.haveOwnProperty('types')
-    expect(index).to.haveOwnProperty('resolvers')
+    expect(index).toHaveProperty('types')
+    expect(index).toHaveProperty('resolvers')
     done()
   })
 
   it('should have a Query property on the resolvers', (done: () => void) => {
-    expect(index.resolvers).to.haveOwnProperty('Query')
+    expect(index.resolvers).toHaveProperty('Query')
     done()
   })
 
   it('should have a Mutation property on the resolvers', (done: () => void) => {
-    expect(index.resolvers).to.haveOwnProperty('Mutation')
+    expect(index.resolvers).toHaveProperty('Mutation')
     done()
   })
 
   it('should have a Subscription property on the resolvers', (done: () => void) => {
-    expect(index.resolvers).to.haveOwnProperty('Subscription')
+    expect(index.resolvers).toHaveProperty('Subscription')
     done()
   })
 })

@@ -1,9 +1,12 @@
 /* tslint:disable no-var-requires */
+import chalk from 'chalk'
 import * as util from 'util'
 import * as winston from 'winston'
 import { Loggly } from 'winston-loggly-bulk'
 import settings from '../settings'
 import { SentryTransport } from './sentry'
+
+// const chalk: any = chalkImport // fix import error with chalk
 
 export const logger = winston.createLogger({
   level: settings.logLevel || 'warn',
@@ -18,13 +21,44 @@ export const logger = winston.createLogger({
 
 logger.add(new winston.transports.Console({
   handleExceptions: true,
+  silent: settings.env === 'test' ? true : false,
   format: winston.format.combine(
-    winston.format.colorize(),
     winston.format.printf((data) => {
-      if (typeof data.message === 'object') {
-        return `${data.level}: \n${util.inspect(data.message, false, null, true)}`
+      let message: string = `${chalk.blue(`[${settings.name}]`)}`
+
+      let level = ` ${data.level.toUpperCase()} `
+      switch (level.toLowerCase().trim()) {
+        case 'error':
+          level = chalk.bgHex('FF4136').bold(level)
+          break
+        case 'warn':
+          level = chalk.bgHex('FF851B').bold(level)
+          break
+        case 'info':
+          level = chalk.bgHex('001F3F').bold(level)
+          break
+        case 'verbose':
+          level = chalk.bgHex('FFDC00').bold(level)
+          break
+        case 'debug':
+          level = chalk.bgHex('3D9970').bold(level)
+          break
+        case 'silly':
+          level = chalk.bgHex('B10DC9').bold(level)
+          break
+        default:
+          level = chalk.bgWhite.bold(level)
+          break
       }
-      return `${data.level}: ${data.message}`
+      message = `${message} ${level}`
+
+      if (typeof data.message === 'object') {
+        message = `${message} \n${util.inspect(data.message, false, null, true)}`
+      } else {
+        message = `${message} ${data.message}`
+      }
+
+      return message
     }),
   ),
 }))

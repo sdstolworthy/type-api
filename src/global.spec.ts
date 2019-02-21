@@ -1,18 +1,15 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
-import { expect } from 'chai'
 import * as fs from 'fs'
-import 'mocha'
 import * as util from 'util'
 import * as walk from 'walk'
 
-const readFile = util.promisify(fs.readFile)
-
 describe('all app files', () => {
-  it('should not call "console.*"', (done) => {
+  it('should not call "console.*"', () => {
     const violatingString = 'console.'
     const violatingFiles = []
     const ignoredFiles = [
-      'global.spec.ts', // this file
+      './src/global.spec.ts', // this file
+      './src/config/cli/index.ts',
     ]
     const ignoredDirectories = ['node_modules']
     const walker = walk.walk('./src', {
@@ -40,7 +37,7 @@ describe('all app files', () => {
       fs.readFile(`${root}/${fileStats.name}`, (err, contents) => {
         if (err) { next() } // who cares about errors? not me.
 
-        if (ignoredFiles.indexOf(fileStats.name) > -1) {
+        if (ignoredFiles.indexOf(`${root}/${fileStats.name}`) > -1) {
           // skip ignoredFiles
           return next()
         }
@@ -58,8 +55,7 @@ describe('all app files', () => {
     })
 
     walker.on('end', () => {
-      expect(violatingFiles).to.have.lengthOf(0)
-      done()
+      expect(violatingFiles).toHaveLength(0)
     })
   })
 })
@@ -69,10 +65,9 @@ describe('package.json', () => {
    * @types/validator is frequently out of date because of the number of
    * dependencies in the validator package. Do not add this to dependencies.
    */
-  it('should not contain "@types/validator"', (done) => {
+  it('should not contain "@types/validator"', () => {
     const contents: string = fs.readFileSync('package.json').toString()
     const containsString: boolean = contents.indexOf('@types/validator') >= 0 ? true : false
-    expect(containsString).to.be.false
-    done()
+    expect(containsString).toBeFalsy
   })
 })

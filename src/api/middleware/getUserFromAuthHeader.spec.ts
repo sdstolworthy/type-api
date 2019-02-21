@@ -1,7 +1,5 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
-import { expect } from 'chai'
 import * as jwt from 'jsonwebtoken'
-import 'mocha'
 import { Connection, createConnection } from 'typeorm'
 import settings from '../../config/settings'
 import { User } from '../data/user/user.entity'
@@ -23,7 +21,7 @@ describe('getUserFromAuthHeader helper function', () => {
     password: 'password',
   }
 
-  before(async () => {
+  beforeAll(async () => {
     connection = await createConnection({
       type: 'postgres',
       url: settings.dbTestUrl,
@@ -38,14 +36,14 @@ describe('getUserFromAuthHeader helper function', () => {
     user = await User.create(testUser)
   })
 
-  after(async () => {
+  afterAll(async () => {
     await connection.close()
   })
 
   it('returns {} if bearer token is empty', async () => {
     const result: any = await getUserFromAuthHeader('')
 
-    expect(result).to.be.empty
+    expect(result).toEqual({})
   })
 
   it('returns {} if bearer token is expired', async () => {
@@ -57,7 +55,7 @@ describe('getUserFromAuthHeader helper function', () => {
     const bearerToken: string = `Bearer ${token}`
     const result: any = await getUserFromAuthHeader(bearerToken)
 
-    expect(result).to.be.empty
+    expect(result).toEqual({})
   })
 
   it('returns the user as an object if bearer token is valid', async () => {
@@ -69,6 +67,6 @@ describe('getUserFromAuthHeader helper function', () => {
     const bearerToken: string = `Bearer ${token}`
     const result: any = await getUserFromAuthHeader(bearerToken)
 
-    expect(result.id).to.equal(user.id)
+    expect(result.id).toEqual(user.id)
   })
 })

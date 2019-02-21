@@ -1,6 +1,4 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
-import { expect } from 'chai'
-import 'mocha'
 import * as validator from 'validator'
 import generateGravatarUrl from './generateGravatarUrl'
 
@@ -9,14 +7,14 @@ describe('generateGravatarUrl', () => {
   const result: string = generateGravatarUrl(email)
 
   it('should return a valid url pointing to gravatar.com', (done: () => void) => {
-    expect(result).to.be.a('string')
-    expect(validator.isURL(result)).to.be.true
-    expect(result.indexOf('www.gravatar.com')).to.be.greaterThan(-1)
+    expect(typeof result).toBe('string')
+    expect(validator.isURL(result)).toBeTruthy
+    expect(result.indexOf('www.gravatar.com')).toBeGreaterThan(-1)
     done()
   })
 
   it('should default to "identicon"', (done: () => void) => {
-    expect(result.indexOf('?d=identicon')).to.be.greaterThan(-1)
+    expect(result.indexOf('?d=identicon')).toBeGreaterThan(-1)
     done()
   })
 })

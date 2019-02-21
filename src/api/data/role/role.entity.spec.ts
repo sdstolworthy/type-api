@@ -1,6 +1,4 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
-import { expect } from 'chai'
-import 'mocha'
 import { Connection, createConnection } from 'typeorm'
 import validator from 'validator'
 import settings from '../../../config/settings'
@@ -29,27 +27,21 @@ describe('role entity', () => {
     await connection.close()
   })
 
-  it('should have an id field of type number', (done) => {
-    Role.create(testEntity).save().then((role) => {
-      expect(role).to.haveOwnProperty('id')
-      expect(role.id).to.be.a('number')
-      done()
-    })
+  it('should have an id field of type number', async () => {
+    const role: Role = await Role.create(testEntity).save()
+    expect(role).toHaveProperty('id')
+    expect(typeof role.id).toBe('number')
   })
 
-  it('should have a createdAt field of type date', (done) => {
-    Role.create(testEntity).save().then((role) => {
-      expect(role).to.haveOwnProperty('createdAt')
-      expect(role.createdAt).to.be.a('Date')
-      done()
-    })
+  it('should have a createdAt field of type date', async () => {
+    const role: Role = await Role.create(testEntity).save()
+    expect(role).toHaveProperty('createdAt')
+    expect(typeof role.createdAt.getMonth).toBe('function')
   })
 
-  it('should have an updatedAt field of type date', (done) => {
-    Role.create(testEntity).save().then((role) => {
-      expect(role).to.haveOwnProperty('updatedAt')
-      expect(role.updatedAt).to.be.a('Date')
-      done()
-    })
+  it('should have an updatedAt field of type date', async () => {
+    const role: Role = await Role.create(testEntity).save()
+    expect(role).toHaveProperty('updatedAt')
+    expect(typeof role.updatedAt.getMonth).toBe('function')
   })
 })

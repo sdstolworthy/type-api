@@ -29,7 +29,7 @@ git push --set-upstream origin master
 
 ## About this API
 
-This API generator uses [yarn](https://www.npmjs.com/package/yarn) along with [package.json](./package.json) to manage much of the scaffolding and service of the API. For example, running `yarn create:entity book` will create a GraphQL schema and a database entity for the `book` object.
+This API generator uses [yarn](https://www.npmjs.com/package/yarn) along with [package.json](./package.json) to manage much of the scaffolding and service of the API. For example, running `yarn cli create:entity book` will create a GraphQL schema and a database entity for the `book` object.
 
 This API has a number of relevant, life-enhancing features:
 

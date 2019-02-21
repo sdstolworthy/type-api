@@ -1,4 +1,5 @@
 package-lock.json
+junit.xml
 
 # sqlite db
 db.sql

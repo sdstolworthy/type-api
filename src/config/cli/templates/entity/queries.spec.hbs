@@ -1,16 +1,14 @@
 /* tslint:disable no-unused-expression newline-per-chained-call */
-import { queryResolvers, queryTypes } from './role.queries'
+import { queryResolvers, queryTypes } from './{{ entityName }}.queries'
 
-describe('role queries', () => {
-  it('should export queryTypes', (done: () => void) => {
+describe('{{ entityName }} queries', () => {
+  it('should export queryTypes', () => {
     expect(typeof queryTypes).toBe('function')
     // expect(typeof queryTypes()).toBe('array')
-    done()
   })
 
-  it('should export queryResolvers', (done: () => void) => {
+  it('should export queryResolvers', () => {
     expect(typeof queryResolvers).toBe('object')
     expect(queryResolvers).toHaveProperty('Query')
-    done()
   })
 })
