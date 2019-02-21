@@ -24,7 +24,7 @@ logger.add(new winston.transports.Console({
   silent: settings.env === 'test' ? true : false,
   format: winston.format.combine(
     winston.format.printf((data) => {
-      let message: string
+      let message: string = `${chalk.blue(`[${settings.name}]`)}`
 
       let level = ` ${data.level.toUpperCase()} `
       switch (level.toLowerCase().trim()) {
