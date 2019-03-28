@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(passport.initialize())
 app.use(morgan('tiny', { stream }))
 app.use(cors({
-  origin: false,
+  origin: '*',
 }))
 
 // initialize custom errors
