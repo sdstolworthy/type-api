@@ -5,7 +5,7 @@
   "private": true,
   "author": "Altamir Consulting, LLC",
   "engines": {
-    "node": ">=11.0.0"
+    "node": ">=10.0.0"
   },
   "scripts": {
     "prestart": "if [ ! -d node_modules ]; then npm install; fi && npm run build",
@@ -47,6 +47,7 @@
     "class-validator": "^0.9.1",
     "commander": "^2.19.0",
     "compression": "^1.7.3",
+    "cors": "^2.8.5",
     "cron": "^1.6.0",
     "dotenv": "^6.2.0",
     "errorhandler": "^1.5.0",
