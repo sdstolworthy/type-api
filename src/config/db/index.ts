@@ -8,16 +8,14 @@ import { TypeORMLogger } from '../logger/typeorm'
 import settings from '../settings'
 import { permissionValuesCheck } from './hooks/permissionValuesCheck'
 
-const isTestDb: boolean = settings.env === 'test' && settings.dbTestUrl
-  ? true
-  : false
+const isTestDb: boolean = settings.env === 'test' && settings.dbTestUrl ? true : false
 
 export const connectionOptions: ConnectionOptions = {
   type: 'postgres',
   url: isTestDb ? settings.dbTestUrl : settings.dbUrl,
 
   // only drop schema in test environment; this keeps tests separate
-  dropSchema: isTestDb ? true : false,
+  dropSchema: isTestDb,
 
   synchronize: false,
   migrationsRun: true,

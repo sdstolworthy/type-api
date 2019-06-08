@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:lts
 ADD package.json /home/package.json
 WORKDIR /home
 RUN yarn install
