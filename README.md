@@ -1,4 +1,4 @@
-# Altamir API
+# Type API
 
 Welcome to your new API! [**Read the docs.**](./docs/)
 
