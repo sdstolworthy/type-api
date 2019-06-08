@@ -40,6 +40,7 @@
   "dependencies": {
     "@sentry/node": "^4.5.3",
     "apollo-server-express": "^2.3.1",
+    "awesome-typescript-loader": "^5.2.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "chalk": "^2.4.2",
