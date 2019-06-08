@@ -5,7 +5,7 @@
   "private": true,
   "author": "Altamir Consulting, LLC",
   "engines": {
-    "node": ">=11.0.0"
+    "node": ">=10.0.0"
   },
   "scripts": {
     "prestart": "if [ ! -d node_modules ]; then npm install; fi && npm run build",
@@ -22,8 +22,7 @@
     "test:audit": "NODE_ENV=test yarn audit",
     "ts-node": "ts-node",
     "jest": "jest",
-    "typeorm": "ts-node ./node_modules/.bin/typeorm",
-    "cli": "ts-node -r tsconfig-paths/register src/config/cli/index.ts"
+    "typeorm": "ts-node ./node_modules/.bin/typeorm"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -41,12 +40,14 @@
   "dependencies": {
     "@sentry/node": "^4.5.3",
     "apollo-server-express": "^2.3.1",
+    "awesome-typescript-loader": "^5.2.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "chalk": "^2.4.2",
     "class-validator": "^0.9.1",
     "commander": "^2.19.0",
     "compression": "^1.7.3",
+    "cors": "^2.8.5",
     "cron": "^1.6.0",
     "dotenv": "^6.2.0",
     "errorhandler": "^1.5.0",
@@ -70,8 +71,8 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "tslib": "^1.9.3",
-    "typeorm": "^0.2.11",
-    "typescript": "^3.3.1",
+    "typeorm": "^0.2.18",
+    "typescript": "^3.5.1",
     "validator": "^10.11.0",
     "winston": "^3.1.0",
     "winston-loggly-bulk": "^3.0.0",
@@ -79,7 +80,7 @@
   },
   "devDependencies": {
     "@altamir/standards-tsconfig": "^1.0.3",
-    "@altamir/standards-tslint": "^1.0.4",
+    "@altamir/standards-tslint": "^1.0.6",
     "@types/bcrypt": "^3.0.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/chai": "^4.1.7",
@@ -99,18 +100,18 @@
     "chai-uuid": "^1.0.6",
     "istanbul-api": "^2.1.1",
     "istanbul-lib-coverage": "^2.0.3",
-    "jest": "^24.1.0",
+    "jest": "^24.8.0",
     "jest-junit": "^6.3.0",
-    "js-yaml": "^3.12.1",
+    "js-yaml": "^3.13.1",
     "mkdirp": "^0.5.1",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.9",
-    "nyc": "^13.3.0",
+    "nyc": "^14.1.1",
     "oclif": "^1.12.8",
     "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.8.0",
-    "tslint": "^5.12.1",
+    "tslint": "^5.17.0",
     "walk": "^2.3.14"
   }
 }

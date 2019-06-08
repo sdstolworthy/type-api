@@ -1,13 +1,6 @@
-FROM node:latest
-
-RUN node -v
-RUN npm i -g npm yarn
-RUN mkdir /app
-WORKDIR /app
-COPY . /app
-RUN cd /app
-RUN yarn
-
-EXPOSE 3100
-
-CMD ["npm", "start"]
+FROM node:lts
+ADD package.json /home/package.json
+WORKDIR /home
+RUN yarn install
+EXPOSE 3000
+CMD ["npm", "start:prod"]

@@ -28,5 +28,9 @@
         "experimentalDecorators": true,
         "importHelpers": true,
         "resolveJsonModule": true
+    },
+    "awesomeTypescriptLoaderOptions": {
+        "useCache": true,
+        "transpileOnly": true
     }
 }

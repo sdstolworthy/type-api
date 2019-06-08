@@ -37,10 +37,10 @@ lint:
   script:
     - yarn test:lint
 
-audit:
-  stage: test
-  script:
-    - yarn test:audit
+# audit:
+#   stage: test
+#   script:
+#     - yarn test:audit
 
 code_quality:
   stage: test

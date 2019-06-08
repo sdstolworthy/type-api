@@ -28,12 +28,7 @@ export default new ApolloServer({
       logger.debug('Disconnected from subscription websocket.')
     },
   },
-  context: async ({ req, connection }) => {
-    // https://www.apollographql.com/docs/apollo-server/features/subscriptions.html#Context-with-Subscriptions
-    if (connection) {
-      return connection.context
-    }
-
+  context: async ({ req }) => {
     // add currently auth'd user to context
     let user = req.headers.authorization || ''
     user = await getUserFromAuthHeader(user)

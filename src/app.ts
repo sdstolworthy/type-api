@@ -2,6 +2,7 @@ import 'reflect-metadata'
 
 import * as bodyParser from 'body-parser'
 import * as compression from 'compression'
+import * as cors from 'cors'
 import * as express from 'express'
 import * as helmet from 'helmet'
 import * as morgan from 'morgan'
@@ -25,6 +26,9 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(passport.initialize())
 app.use(morgan('tiny', { stream }))
+app.use(cors({
+  origin: '*',
+}))
 
 // initialize custom errors
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
