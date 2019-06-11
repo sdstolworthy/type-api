@@ -23,7 +23,8 @@
     "test:audit": "NODE_ENV=test yarn audit",
     "ts-node": "ts-node",
     "jest": "jest",
-    "typeorm": "ts-node ./node_modules/.bin/typeorm"
+    "typeorm": "ts-node ./node_modules/.bin/typeorm",
+    "cli": "ts-node -r tsconfig-paths/register src/config/cli/index.ts"
   },
   "jest": {
     "moduleFileExtensions": [
