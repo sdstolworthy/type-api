@@ -1,14 +1,11 @@
-import {
-  Connection,
-  ConnectionOptions,
-  createConnection,
-} from 'typeorm'
+import { Connection, ConnectionOptions, createConnection } from 'typeorm'
 import { logger } from '../logger'
 import { TypeORMLogger } from '../logger/typeorm'
 import settings from '../settings'
 import { permissionValuesCheck } from './hooks/permissionValuesCheck'
 
-const isTestDb: boolean = settings.env === 'test' && settings.dbTestUrl ? true : false
+const isTestDb: boolean =
+  settings.env === 'test' && settings.dbTestUrl ? true : false
 
 export const connectionOptions: ConnectionOptions = {
   type: 'postgres',
@@ -44,7 +41,9 @@ export default class Database {
       logger.warn('No DATABASE_URL environment variable is set.')
     }
 
-    logger.silly(`Opening connection to database using the "${settings.env}" environment`)
+    logger.silly(
+      `Opening connection to database using the "${settings.env}" environment`,
+    )
     logger.silly('Database connection options:')
     logger.silly(connectionOptions)
     this.connection = await createConnection(connectionOptions)

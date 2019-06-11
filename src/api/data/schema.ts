@@ -28,27 +28,24 @@ let resolvers = {
   },
 }
 
-const typeDefs = [ Query, Mutation, Subscription ]
+const typeDefs = [Query, Mutation, Subscription]
 
 // Read the current directory and load types and resolvers automatically
 // https://medium.com/@xoor/coding-a-graphql-api-with-node-js-c02d617f49f4
 fs.readdirSync(__dirname)
-.filter((dir) => (dir.indexOf('.') < 0))
-.forEach((dir) => {
-  // don't parse these directories
-  const ignoredDirs = [
-    '_helpers',
-  ]
-  if (ignoredDirs.indexOf(dir) > -1) { return }
+  .filter((dir) => dir.indexOf('.') < 0)
+  .forEach((dir) => {
+    // don't parse these directories
+    const ignoredDirs = ['_helpers']
+    if (ignoredDirs.indexOf(dir) > -1) {
+      return
+    }
 
-  logger.debug(`Adding ${dir} to GraphQL`)
+    logger.debug(`Adding ${dir} to GraphQL`)
 
-  const tmp = require(path.join(__dirname, dir)).default
-  resolvers = merge(resolvers, tmp.resolvers)
-  typeDefs.push(tmp.types)
-})
+    const tmp = require(path.join(__dirname, dir)).default
+    resolvers = merge(resolvers, tmp.resolvers)
+    typeDefs.push(tmp.types)
+  })
 
-export {
-  typeDefs,
-  resolvers,
-}
+export { typeDefs, resolvers }

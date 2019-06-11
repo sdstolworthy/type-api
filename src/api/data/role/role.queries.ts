@@ -5,14 +5,11 @@ import { Role } from './role.entity'
 const Query = gql`
   extend type Query {
     role(id: ID!): Role
-    roles(
-      take: Int,
-      skip: Int,
-    ): [Role]
+    roles(take: Int, skip: Int): [Role]
   }
 `
 
-export const queryTypes = () => [ Query ]
+export const queryTypes = () => [Query]
 
 export const queryResolvers = {
   Query: {
@@ -23,7 +20,9 @@ export const queryResolvers = {
 
     async roles(obj, { take, skip }, context, info) {
       take = take || 10 // default query limit to 10
-      if (take > 50) { take = 50 } // limit query to 50 max
+      if (take > 50) {
+        take = 50
+      } // limit query to 50 max
       skip = skip || 0 // default to none skipped
 
       await needsPermission(context.user, PermissionValues.CAN_READ_ROLE)

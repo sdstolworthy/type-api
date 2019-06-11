@@ -5,6 +5,17 @@ import { subscriptionResolvers, subscriptionTypes } from './role.subscriptions'
 import { typeResolvers, types } from './role.type'
 
 export default {
-  types: () => [types, queryTypes, inputTypes, mutationTypes, subscriptionTypes],
-  resolvers: Object.assign(queryResolvers, mutationResolvers, subscriptionResolvers, typeResolvers),
+  types: () => [
+    types,
+    queryTypes,
+    inputTypes,
+    mutationTypes,
+    subscriptionTypes,
+  ],
+  resolvers: Object.assign(
+    queryResolvers,
+    mutationResolvers,
+    subscriptionResolvers,
+    typeResolvers,
+  ),
 }

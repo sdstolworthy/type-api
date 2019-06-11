@@ -12,7 +12,7 @@ const Subscription = gql`
   }
 `
 
-export const subscriptionTypes = () => [ Subscription ]
+export const subscriptionTypes = () => [Subscription]
 
 export const subscriptionResolvers = {
   Subscription: {

@@ -25,9 +25,7 @@ describe('getUserFromAuthHeader helper function', () => {
     connection = await createConnection({
       type: 'postgres',
       url: settings.dbTestUrl,
-      entities: [
-        'src/**/*.entity.ts',
-      ],
+      entities: ['src/**/*.entity.ts'],
       logging: false,
       dropSchema: true, // isolate each test case
       synchronize: true,
@@ -59,11 +57,9 @@ describe('getUserFromAuthHeader helper function', () => {
   })
 
   it('returns the user as an object if bearer token is valid', async () => {
-    const token: string = jwt.sign(
-      { id: user.id },
-      settings.secretKey,
-      { expiresIn: '1d' },
-    )
+    const token: string = jwt.sign({ id: user.id }, settings.secretKey, {
+      expiresIn: '1d',
+    })
     const bearerToken: string = `Bearer ${token}`
     const result: any = await getUserFromAuthHeader(bearerToken)
 

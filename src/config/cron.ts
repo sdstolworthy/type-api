@@ -24,8 +24,13 @@ export default class Cron {
   private static testCron(): void {
     const TEST_CRON_INTERVAL = '0 * * * * *' // every minute
 
-    new CronJob(TEST_CRON_INTERVAL, (): void => {
-      logger.info('Hello, I am Cron! Please see /src/config/cron.ts')
-    }, null, true)
+    new CronJob(
+      TEST_CRON_INTERVAL,
+      (): void => {
+        logger.info('Hello, I am Cron! Please see /src/config/cron.ts')
+      },
+      null,
+      true,
+    )
   }
 }

@@ -19,6 +19,9 @@ export function hashPassword(password: string) {
  * @param {string} userPassword
  * @returns {boolean}
  */
-export function validatePassword(plaintextPassword: string, userPassword: string): boolean {
+export function validatePassword(
+  plaintextPassword: string,
+  userPassword: string,
+): boolean {
   return bcrypt.compareSync(plaintextPassword, userPassword)
 }

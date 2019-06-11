@@ -7,8 +7,6 @@ const Permission = gql`
   }
 `
 
-export const types = () => [ Permission ]
+export const types = () => [Permission]
 
-export const typeResolvers = {
-
-}
+export const typeResolvers = {}

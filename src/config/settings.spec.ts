@@ -11,10 +11,7 @@ describe('config/settings', () => {
   it('should be the only file that contains "process.env.*"', (done) => {
     const violatingString = 'process.env.'
     const violatingFiles = []
-    const ignoredFiles = [
-      'settings.ts',
-      'settings.spec.ts',
-    ]
+    const ignoredFiles = ['settings.ts', 'settings.spec.ts']
     const ignoredDirectories = ['node_modules']
     const walker = walk.walk('./src', {
       filters: ignoredDirectories,
@@ -22,8 +19,12 @@ describe('config/settings', () => {
 
     walker.on('names', (root, nodeNamesArray) => {
       nodeNamesArray.sort((a, b) => {
-        if (a > b) { return 1 }
-        if (a < b) { return -1 }
+        if (a > b) {
+          return 1
+        }
+        if (a < b) {
+          return -1
+        }
         return 0
       })
     })
@@ -39,7 +40,9 @@ describe('config/settings', () => {
 
     walker.on('file', (root, fileStats, next) => {
       fs.readFile(`${root}/${fileStats.name}`, (err, contents) => {
-        if (err) { next() } // who cares about errors? not me.
+        if (err) {
+          next()
+        } // who cares about errors? not me.
 
         if (ignoredFiles.indexOf(fileStats.name) > -1) {
           // skip ignoredFiles
@@ -49,7 +52,7 @@ describe('config/settings', () => {
         if (contents.indexOf(violatingString) >= 0) {
           // add the violating file name to violatingFiles
           violatingFiles.push(`${root}/${fileStats.name}`)
-         }
+        }
         next()
       })
     })

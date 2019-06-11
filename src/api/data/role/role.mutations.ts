@@ -10,7 +10,7 @@ const Mutation = gql`
   }
 `
 
-export const mutationTypes = () => [ Mutation ]
+export const mutationTypes = () => [Mutation]
 
 export const mutationResolvers = {
   Mutation: {

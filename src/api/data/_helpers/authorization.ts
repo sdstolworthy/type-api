@@ -14,15 +14,15 @@ export { PermissionValues } from '../permission/permission.entity'
  */
 export const needsPermission = async (user: User, permissionValue: string) => {
   if (!user) {
-    throw new AuthenticationError('No user was provided for authentication on a protected resource.')
+    throw new AuthenticationError(
+      'No user was provided for authentication on a protected resource.',
+    )
   }
 
   const permissionsRaw: any[] = await User.createQueryBuilder('user')
     .leftJoin('user.roles', 'role')
     .leftJoin('role.permissions', 'permission')
-    .select([
-      'permission.value',
-    ])
+    .select(['permission.value'])
     .where('user.id = :id', { id: user.id })
     .getRawMany()
 
@@ -32,7 +32,7 @@ export const needsPermission = async (user: User, permissionValue: string) => {
    */
   const permissions: string[] = []
   permissionsRaw.forEach((p) => {
-      permissions.push(p.permission_value)
+    permissions.push(p.permission_value)
   })
 
   if (!permissions.includes(permissionValue)) {

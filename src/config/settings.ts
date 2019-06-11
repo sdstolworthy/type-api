@@ -10,7 +10,9 @@ export default {
   name: 'type-api',
   port: parseInt(process.env.PORT, 10) || 3100,
   env: process.env.NODE_ENV || 'development',
-  secretKey: process.env.SECRET_KEY || 'replace_this_key_474@itys*-gng^0phyeohag)qxa9$3v64+h^ze#',
+  secretKey:
+    process.env.SECRET_KEY ||
+    'replace_this_key_474@itys*-gng^0phyeohag)qxa9$3v64+h^ze#',
   logLevel: process.env.LOG_LEVEL || 'warn',
 
   /**
@@ -22,7 +24,8 @@ export default {
    * Apollo Server settings
    */
   apolloEngineApiKey: process.env.ENGINE_API_KEY,
-  apolloForcePlayground: (process.env.APOLLO_FORCE_PLAYGROUND === 'true') || false,
+  apolloForcePlayground:
+    process.env.APOLLO_FORCE_PLAYGROUND === 'true' || false,
 
   /**
    * Database
@@ -46,7 +49,7 @@ export default {
    */
   mailHost: process.env.MAIL_HOST || 'smtp.ethereal.email',
   mailPort: parseInt(process.env.MAIL_PORT, 10) || 587,
-  mailSecure: (process.env.MAIL_SECURE === 'true') || false,
+  mailSecure: process.env.MAIL_SECURE === 'true' || false,
   mailUser: process.env.MAIL_USER || 'tpll5wiiajplpxd6@ethereal.email',
   mailPass: process.env.MAIL_PASS || 'KPh5WESzRuQETtRgHq',
   mailFrom: process.env.MAIL_FROM || 'noreply@example.com',

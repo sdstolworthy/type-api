@@ -8,8 +8,10 @@ export default new ApolloServer({
   typeDefs,
   resolvers,
   tracing: settings.env === 'development' ? true : false,
-  playground: settings.env === 'development' ? true : settings.apolloForcePlayground,
-  introspection: settings.env === 'development' ? true : settings.apolloForcePlayground,
+  playground:
+    settings.env === 'development' ? true : settings.apolloForcePlayground,
+  introspection:
+    settings.env === 'development' ? true : settings.apolloForcePlayground,
   subscriptions: {
     onConnect: async (connectionParams: any, websocket: any) => {
       logger.debug('Connected to subscription websocket.')

@@ -14,9 +14,7 @@ describe('role entity', () => {
     connection = await createConnection({
       type: 'postgres',
       url: settings.dbTestUrl,
-      entities: [
-        'src/**/*.entity.ts',
-      ],
+      entities: ['src/**/*.entity.ts'],
       logging: false,
       dropSchema: true, // isolate each test case
       synchronize: true,
