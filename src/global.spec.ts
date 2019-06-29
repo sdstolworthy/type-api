@@ -18,8 +18,12 @@ describe('all app files', () => {
 
     walker.on('names', (root, nodeNamesArray) => {
       nodeNamesArray.sort((a, b) => {
-        if (a > b) { return 1 }
-        if (a < b) { return -1 }
+        if (a > b) {
+          return 1
+        }
+        if (a < b) {
+          return -1
+        }
         return 0
       })
     })
@@ -35,7 +39,9 @@ describe('all app files', () => {
 
     walker.on('file', (root, fileStats, next) => {
       fs.readFile(`${root}/${fileStats.name}`, (err, contents) => {
-        if (err) { next() } // who cares about errors? not me.
+        if (err) {
+          next()
+        } // who cares about errors? not me.
 
         if (ignoredFiles.indexOf(`${root}/${fileStats.name}`) > -1) {
           // skip ignoredFiles
@@ -45,7 +51,7 @@ describe('all app files', () => {
         if (contents.indexOf(violatingString) >= 0) {
           // add the violating file name to violatingFiles
           violatingFiles.push(`${root}/${fileStats.name}`)
-          }
+        }
         next()
       })
     })
@@ -67,7 +73,8 @@ describe('package.json', () => {
    */
   it('should not contain "@types/validator"', () => {
     const contents: string = fs.readFileSync('package.json').toString()
-    const containsString: boolean = contents.indexOf('@types/validator') >= 0 ? true : false
+    const containsString: boolean =
+      contents.indexOf('@types/validator') >= 0 ? true : false
     expect(containsString).toBeFalsy
   })
 })

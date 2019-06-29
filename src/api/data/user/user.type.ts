@@ -7,8 +7,6 @@ const User = gql`
   }
 `
 
-export const types = () => [ User ]
+export const types = () => [User]
 
-export const typeResolvers = {
-
-}
+export const typeResolvers = {}

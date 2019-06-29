@@ -1,8 +1,5 @@
 /* tslint:disable no-unused-expression */
-import {
-  resolvers,
-  typeDefs,
-} from './schema'
+import { resolvers, typeDefs } from './schema'
 
 describe('GraphQL schema', () => {
   it('should export resolvers', () => {

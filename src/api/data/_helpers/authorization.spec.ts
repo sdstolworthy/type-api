@@ -22,13 +22,13 @@ describe('authorization helper', () => {
 
     role = await Role.create({
       name: 'Test role to read roles but not write them',
-      permissions: [ readOnlyRolePermission ],
+      permissions: [readOnlyRolePermission],
     }).save()
 
     user = await User.create({
       email: 'test@example.com',
       password: 'password',
-      roles: [ role ],
+      roles: [role],
     }).save()
   })
 
@@ -55,8 +55,7 @@ describe('authorization helper', () => {
   })
 
   it('should return "true" if a user has the proper permission', async () => {
-    await expect(needsPermission(user, PermissionValues.CAN_READ_ROLE))
-      .resolves
+    await expect(needsPermission(user, PermissionValues.CAN_READ_ROLE)).resolves
       .toBeTruthy
   })
 })

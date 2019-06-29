@@ -7,8 +7,6 @@ const Role = gql`
   }
 `
 
-export const types = () => [ Role ]
+export const types = () => [Role]
 
-export const typeResolvers = {
-
-}
+export const typeResolvers = {}

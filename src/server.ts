@@ -22,7 +22,10 @@ export default class Server {
    * @public
    * @memberof Server
    */
-  public async up(dbInitializedSeparately: boolean = false, callback?: () => void) {
+  public async up(
+    dbInitializedSeparately: boolean = false,
+    callback?: () => void,
+  ) {
     logger.silly('Starting app')
 
     // database must be first
@@ -39,8 +42,12 @@ export default class Server {
     await graphql.installSubscriptionHandlers(this.httpServer)
 
     this.httpServer.listen(settings.port, () => {
-      logger.info(`Server ready at http://127.0.0.1:${settings.port}${graphql.graphqlPath} 🚀`)
-      logger.info(`Subscriptions ready at ws://127.0.0.1:${settings.port}${graphql.subscriptionsPath} 🚀`)
+      logger.info(
+        `Server ready at http://127.0.0.1:${settings.port}${graphql.graphqlPath} 🚀`,
+      )
+      logger.info(
+        `Subscriptions ready at ws://127.0.0.1:${settings.port}${graphql.subscriptionsPath} 🚀`,
+      )
 
       if (typeof callback === 'function') {
         callback()

@@ -17,9 +17,7 @@ describe('user entity', () => {
     connection = await createConnection({
       type: 'postgres',
       url: settings.dbTestUrl,
-      entities: [
-        'src/**/*.entity.ts',
-      ],
+      entities: ['src/**/*.entity.ts'],
       logging: false,
       dropSchema: true, // isolate each test case
       synchronize: true,
@@ -41,25 +39,25 @@ describe('user entity', () => {
 
   it('should have a createdAt field of type date', () => {
     // User.create(testUser).save().then((user) => {
-      expect(user).toHaveProperty('createdAt')
-      expect(typeof user.createdAt.getMonth).toBe('function')
+    expect(user).toHaveProperty('createdAt')
+    expect(typeof user.createdAt.getMonth).toBe('function')
     //   done()
     // })
   })
 
   it('should have an updatedAt field of type date', () => {
     // User.create(testUser).save().then((user) => {
-      expect(user).toHaveProperty('updatedAt')
-      expect(typeof user.updatedAt.getMonth).toBe('function')
+    expect(user).toHaveProperty('updatedAt')
+    expect(typeof user.updatedAt.getMonth).toBe('function')
     //   done()
     // })
   })
 
   it('should have an email field of type string and is an email', () => {
     // User.create(testUser).save().then((user) => {
-      expect(user).toHaveProperty('email')
-      expect(typeof user.email).toBe('string')
-      expect(validator.isEmail(user.email)).toBeTruthy
+    expect(user).toHaveProperty('email')
+    expect(typeof user.email).toBe('string')
+    expect(validator.isEmail(user.email)).toBeTruthy
     //   done()
     // })
   })

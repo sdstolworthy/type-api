@@ -19,66 +19,77 @@ export const logger = winston.createLogger({
   exitOnError: false,
 })
 
-logger.add(new winston.transports.Console({
-  handleExceptions: true,
-  silent: settings.env === 'test' ? true : false,
-  format: winston.format.combine(
-    winston.format.printf((data) => {
-      let message: string = `${chalk.blue(`[${settings.name}]`)}`
+logger.add(
+  new winston.transports.Console({
+    handleExceptions: true,
+    silent: settings.env === 'test' ? true : false,
+    format: winston.format.combine(
+      winston.format.printf((data) => {
+        let message: string = `${chalk.blue(`[${settings.name}]`)}`
 
-      let level = ` ${data.level.toUpperCase()} `
-      switch (level.toLowerCase().trim()) {
-        case 'error':
-          level = chalk.bgHex('FF4136').bold(level)
-          break
-        case 'warn':
-          level = chalk.bgHex('FF851B').bold(level)
-          break
-        case 'info':
-          level = chalk.bgHex('001F3F').bold(level)
-          break
-        case 'verbose':
-          level = chalk.bgHex('FFDC00').bold(level)
-          break
-        case 'debug':
-          level = chalk.bgHex('3D9970').bold(level)
-          break
-        case 'silly':
-          level = chalk.bgHex('B10DC9').bold(level)
-          break
-        default:
-          level = chalk.bgWhite.bold(level)
-          break
-      }
-      message = `${message} ${level}`
+        let level = ` ${data.level.toUpperCase()} `
+        switch (level.toLowerCase().trim()) {
+          case 'error':
+            level = chalk.bgHex('FF4136').bold(level)
+            break
+          case 'warn':
+            level = chalk.bgHex('FF851B').bold(level)
+            break
+          case 'info':
+            level = chalk.bgHex('001F3F').bold(level)
+            break
+          case 'verbose':
+            level = chalk.bgHex('FFDC00').bold(level)
+            break
+          case 'debug':
+            level = chalk.bgHex('3D9970').bold(level)
+            break
+          case 'silly':
+            level = chalk.bgHex('B10DC9').bold(level)
+            break
+          default:
+            level = chalk.bgWhite.bold(level)
+            break
+        }
+        message = `${message} ${level}`
 
-      if (typeof data.message === 'object') {
-        message = `${message} \n${util.inspect(data.message, false, null, true)}`
-      } else {
-        message = `${message} ${data.message}`
-      }
+        if (typeof data.message === 'object') {
+          message = `${message} \n${util.inspect(
+            data.message,
+            false,
+            null,
+            true,
+          )}`
+        } else {
+          message = `${message} ${data.message}`
+        }
 
-      return message
-    }),
-  ),
-}))
+        return message
+      }),
+    ),
+  }),
+)
 
 if (settings.sentry.dsn) {
   logger.info('Adding Sentry logger')
-  logger.add(new SentryTransport({
-    level: settings.sentry.logLevel || 'warn',
-  }))
+  logger.add(
+    new SentryTransport({
+      level: settings.sentry.logLevel || 'warn',
+    }),
+  )
 }
 
 if (settings.loggly.token && settings.loggly.subdomain) {
   logger.info('Adding Loggly logger')
-  logger.add(new Loggly({
-    level: settings.loggly.logLevel || 'warn',
-    token: settings.loggly.token,
-    subdomain: settings.loggly.subdomain,
-    tags: ['Winston-NodeJS'],
-    json: true,
-  }))
+  logger.add(
+    new Loggly({
+      level: settings.loggly.logLevel || 'warn',
+      token: settings.loggly.token,
+      subdomain: settings.loggly.subdomain,
+      tags: ['Winston-NodeJS'],
+      json: true,
+    }),
+  )
 }
 
 class Stream {

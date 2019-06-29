@@ -1,0 +1,19 @@
+import { mutationResolvers, mutationTypes } from './{{ entityName }}.mutations'
+import { queryResolvers, queryTypes } from './{{ entityName }}.queries'
+import { subscriptionResolvers, subscriptionTypes } from './{{ entityName }}.subscriptions'
+import { typeResolvers, types } from './{{ entityName }}.type'
+
+export default {
+  types: () => [
+    types,
+    queryTypes,
+    mutationTypes,
+    subscriptionTypes,
+  ],
+  resolvers: Object.assign(
+    queryResolvers,
+    mutationResolvers,
+    subscriptionResolvers,
+    typeResolvers,
+  ),
+}

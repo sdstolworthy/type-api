@@ -4,7 +4,11 @@ import { logger } from './index'
 
 // https://github.com/typeorm/typeorm/issues/2324#issue-331321597
 export class TypeORMLogger implements Logger {
-  public log(level: 'log' | 'info' | 'warn', message: any, queryRunner?: QueryRunner): any {
+  public log(
+    level: 'log' | 'info' | 'warn',
+    message: any,
+    queryRunner?: QueryRunner,
+  ): any {
     let l
     switch (level) {
       case 'log':
@@ -23,7 +27,11 @@ export class TypeORMLogger implements Logger {
     l(message)
   }
 
-  public logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+  public logQuery(
+    query: string,
+    parameters?: any[],
+    queryRunner?: QueryRunner,
+  ): any {
     logger.debug('Executing query:')
     logger.debug({ query, parameters })
   }
@@ -32,12 +40,22 @@ export class TypeORMLogger implements Logger {
     logger.debug(`Executing migration: ${message}`)
   }
 
-  public logQueryError(error: string, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+  public logQueryError(
+    error: string,
+    query: string,
+    parameters?: any[],
+    queryRunner?: QueryRunner,
+  ): any {
     logger.error('Query error:')
     logger.error({ query, parameters })
   }
 
-  public logQuerySlow(time: number, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+  public logQuerySlow(
+    time: number,
+    query: string,
+    parameters?: any[],
+    queryRunner?: QueryRunner,
+  ): any {
     logger.warn(`Slow query [${time.toString()}]:`)
     logger.warn({ query, parameters, time })
   }

@@ -9,17 +9,16 @@ import parse from './templateParser'
  * https://stackoverflow.com/a/37688375/5623385
  */
 interface IMailer {
-  to: string,
-  from?: string,
-  subject: string,
-
+  to: string
+  from?: string
+  subject: string
 }
 interface IMailerText extends IMailer {
-  text: string,
+  text: string
 }
 interface IMailerHTML extends IMailer {
-  template: string,
-  link: string,
+  template: string
+  link: string
 }
 type MailerArgs = IMailerText | IMailerHTML
 
@@ -40,10 +39,7 @@ const transporter = nodemailer.createTransport(transporterConfig)
 /**
  *
  */
-export default (
-  opts: MailerArgs,
-  done?: CallableFunction,
-) => {
+export default (opts: MailerArgs, done?: CallableFunction) => {
   const data: any = opts
   logger.silly('Email config:')
   logger.silly(transporterConfig)

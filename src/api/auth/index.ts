@@ -20,11 +20,9 @@ const router: Router = Router()
  *  email: req.body.email
  *  password: req.body.password
  */
-router.post('/register',
-  [
-    check('email').isEmail(),
-    check('password').isString(),
-  ],
+router.post(
+  '/register',
+  [check('email').isEmail(), check('password').isString()],
   async (req: Request, res: Response, next: NextFunction) => {
     const errors: any = validationResult(req)
     if (!errors.isEmpty()) {
@@ -57,7 +55,8 @@ router.post('/register',
  * /auth/login
  * Log an existing user in and return a valid, signed JWT.
  */
-router.post('/login',
+router.post(
+  '/login',
   [check('email').exists(), check('password').exists()],
   passport.authenticate('local', { session: false, failWithError: true }),
   (req: any, res: Response, next: NextFunction) => {
@@ -68,14 +67,12 @@ router.post('/login',
       return next(errors.array())
     }
 
-    const token = jwt.sign(
-      { id: req.user.id },
-      settings.secretKey,
-      { expiresIn: settings.tokenExpirationPeriod },
-    )
+    const token = jwt.sign({ id: req.user.id }, settings.secretKey, {
+      expiresIn: settings.tokenExpirationPeriod,
+    })
 
     res.set({
-      Authorization : `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     })
 
     return res.json({ token })
@@ -88,14 +85,12 @@ router.post('/login',
  * https://stackoverflow.com/a/26834685
  */
 router.post('/refresh', isAuthenticated, (req: any, res: Response) => {
-  const token = jwt.sign(
-    { id: req.user.id },
-    settings.secretKey,
-    { expiresIn: settings.tokenExpirationPeriod },
-  )
+  const token = jwt.sign({ id: req.user.id }, settings.secretKey, {
+    expiresIn: settings.tokenExpirationPeriod,
+  })
 
   res.set({
-    Authorization : `Bearer ${token}`,
+    Authorization: `Bearer ${token}`,
   })
 
   return res.json({ token })
@@ -105,70 +100,78 @@ router.post('/refresh', isAuthenticated, (req: any, res: Response) => {
  * POST /auth/forgot
  * Send email to user email address with password reset token.
  */
-router.post('/forgot', [check('email').exists()], (req: Request, res: Response, next: NextFunction) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    logger.debug(errors.array())
-    res.locals.errors.push.apply(res.locals.errors, errors.array())
-    return next(errors.array())
-  }
+router.post(
+  '/forgot',
+  [check('email').exists()],
+  (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      logger.debug(errors.array())
+      res.locals.errors.push.apply(res.locals.errors, errors.array())
+      return next(errors.array())
+    }
 
-  async.waterfall([
-    (done: CallableFunction) => {
-      crypto.randomBytes(20, (err, buf) => {
-        const token = buf.toString('hex')
-        done(err, token)
-      })
-    },
-    async (token: string, done: CallableFunction) => {
-      const user: User = await User.findOne({ email: req.body.email })
+    async.waterfall(
+      [
+        (done: CallableFunction) => {
+          crypto.randomBytes(20, (err, buf) => {
+            const token = buf.toString('hex')
+            done(err, token)
+          })
+        },
+        async (token: string, done: CallableFunction) => {
+          const user: User = await User.findOne({ email: req.body.email })
 
-      if (!user) {
-        const error = {
-          msg: 'No user was found with that email.',
-        }
-        res.locals.errors.push(error)
-        return next(error)
-      }
+          if (!user) {
+            const error = {
+              msg: 'No user was found with that email.',
+            }
+            res.locals.errors.push(error)
+            return next(error)
+          }
 
-      user.resetPasswordToken = token
-      user.resetPasswordExpires = new Date(Date.now() + ONE_HOUR)
+          user.resetPasswordToken = token
+          user.resetPasswordExpires = new Date(Date.now() + ONE_HOUR)
 
-      await user.save()
+          await user.save()
 
-      const data = {
-        to: user.email,
-        subject: 'Password reset',
-        template: 'passwordResetRequest',
-        link: `http://${req.headers.host}/auth/reset/${token}`,
-      }
+          const data = {
+            to: user.email,
+            subject: 'Password reset',
+            template: 'passwordResetRequest',
+            link: `http://${req.headers.host}/auth/reset/${token}`,
+          }
 
-      sendMail(data, (err: any, body: any) => {
+          sendMail(data, (err: any, body: any) => {
+            if (err) {
+              logger.error(err)
+            }
+
+            res.send({
+              success: true,
+              msg: 'Password reset message sent.',
+            })
+            return done(err, 'done')
+          })
+        },
+      ],
+      (err: any) => {
         if (err) {
           logger.error(err)
+          return next(err)
         }
-
-        res.send({
-          success: true,
-          msg: 'Password reset message sent.',
-        })
-        return done(err, 'done')
-      })
-    },
-  ], (err: any) => {
-    if (err) {
-      logger.error(err)
-      return next(err)
-    }
-    return { success: true }
-  })
-})
+        return { success: true }
+      },
+    )
+  },
+)
 
 /**
  * POST /auth/reset/:token
  * Flow to reset a user's password given a token.
  */
-router.post('/reset/:token',
+router.post(
+  '/reset/:token',
   [check('password').exists()],
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req)
@@ -179,7 +182,6 @@ router.post('/reset/:token',
     }
 
     try {
-
       const user: User = await User.createQueryBuilder('user')
         .addSelect('user.password')
         .where('user.resetPasswordToken = :token', { token: req.params.token })
